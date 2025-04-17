@@ -1,6 +1,7 @@
 // src/components/BiblePracticePage.js
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   getBibleBooks,
   getBibleProgress,
@@ -16,35 +17,45 @@ function BiblePracticePage() {
   const [currentVerse, setCurrentVerse] = useState(null);
   const [input, setInput] = useState('');
   const [isCorrect, setIsCorrect] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+    const navigate = useNavigate();
 
-  // 1) 책 목록 한 번만 불러오기
+    useEffect(() => {
+      const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+      if (!isLoggedIn) {
+        navigate('/login'); // ✅ 비회원이면 로그인 페이지로 리다이렉트
+      }
+    }, []);
+    
+  const lockRef = useRef(false);             // 호출 중 복귀 방지
+  const lastInvokeRef = useRef(0);           // 스로틀 타임스탬프
+  const THROTTLE_DELAY = 300;                // 최소 300ms 간격
+
+  // 1) 책 목록 로드
   useEffect(() => {
     getBibleBooks()
       .then(setBooks)
       .catch(err => console.error('책 목록 불러오기 실패', err));
   }, []);
 
-  // 2) 책을 선택하면: 저장된 진행 위치 조회 → 해당 위치 구절 불러오기
+  // 2) 책 선택 시 진행 위치 로드
   useEffect(() => {
     if (!selectedBook) return;
-
     getBibleProgress(selectedBook)
-      .then(progress => {
-        const { chapter, verse } = progress;
+      .then(({ chapter, verse }) => {
         setCurrentChapter(chapter);
         setCurrentVerseNumber(verse);
         fetchAndReset(selectedBook, chapter, verse);
       })
       .catch(err => {
         console.error('진행 위치 불러오기 실패', err);
-        // 기본값 1:1 로 시작
         setCurrentChapter(1);
         setCurrentVerseNumber(1);
         fetchAndReset(selectedBook, 1, 1);
       });
   }, [selectedBook]);
 
-  // 구절 불러오고 입력창 초기화
+  // 구절 호출 & 입력창 초기화
   const fetchAndReset = (bookCode, chap, verse) => {
     getVerse(bookCode, chap, verse)
       .then(data => {
@@ -55,7 +66,7 @@ function BiblePracticePage() {
       .catch(err => console.error('구절 불러오기 실패', err));
   };
 
-  // 입력 체크
+  // 입력값 비교
   const handleInputChange = e => {
     const val = e.target.value;
     setInput(val);
@@ -63,27 +74,39 @@ function BiblePracticePage() {
     setIsCorrect(val === currentVerse.text);
   };
 
-  // “다음” 버튼 또는 Enter 키 → 진행 위치 저장 후 다음 구절 로드
-    const handleNextVerse = async () => {
-      if (!isCorrect) return;
+  // 다음 절 저장 + 호출 (중복/스킵 방지)
+  const handleNextVerse = async () => {
+    if (!isCorrect) return;
 
-      const next = currentVerseNumber + 1;
+    const now = Date.now();
+    if (lockRef.current || now - lastInvokeRef.current < THROTTLE_DELAY) {
+      return;
+    }
+    lockRef.current = true;
+    lastInvokeRef.current = now;
+    setIsSubmitting(true);
 
-      try {
-        // ✅ '다음 절 번호'를 저장 (즉, 다음에 시작할 위치)
-        await saveBibleProgress(
-          selectedBook,
-          currentChapter,
-          next
-        );
+    const next = currentVerseNumber + 1;
+    try {
+      await saveBibleProgress(selectedBook, currentChapter, next);
+      setCurrentVerseNumber(next);
+      fetchAndReset(selectedBook, currentChapter, next);
+    } catch (err) {
+      console.error('진행 위치 저장 실패', err);
+      alert('진행 위치 저장 중 오류가 발생했습니다.');
+    } finally {
+      lockRef.current = false;
+      setIsSubmitting(false);
+    }
+  };
 
-        setCurrentVerseNumber(next);
-        fetchAndReset(selectedBook, currentChapter, next);
-      } catch (err) {
-        console.error('진행 위치 저장 실패', err);
-        alert('진행 위치 저장 중 오류가 발생했습니다.');
-      }
-    };
+  // 엔터키 처리
+  const handleKeyDown = e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleNextVerse();
+    }
+  };
 
   // 오타 비교 렌더링
   const renderComparison = () => {
@@ -114,6 +137,7 @@ function BiblePracticePage() {
         <select
           value={selectedBook}
           onChange={e => setSelectedBook(e.target.value)}
+          disabled={isSubmitting}
         >
           <option value="">-- 선택 --</option>
           {books.map((b, i) => (
@@ -142,16 +166,15 @@ function BiblePracticePage() {
         type="text"
         value={input}
         onChange={handleInputChange}
-        onKeyDown={e => {
-          if (e.key === 'Enter') handleNextVerse();
-        }}
+        onKeyDown={handleKeyDown}
         placeholder="본문을 그대로 입력하세요"
         style={{ width: '100%', padding: '0.5rem', fontSize: '1rem' }}
+        disabled={isSubmitting}
       />
 
       {/* 5. 다음 절 버튼 */}
       <div style={{ marginTop: '1rem' }}>
-        <button onClick={handleNextVerse} disabled={!isCorrect}>
+        <button onClick={handleNextVerse} disabled={!isCorrect || isSubmitting}>
           다음 절 ▶
         </button>
       </div>
