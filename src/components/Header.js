@@ -1,38 +1,32 @@
-import { useEffect, useState } from 'react';
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
 
-function Header() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+function Header({ isLoggedIn, userName, setIsLoggedIn }) {
   const navigate = useNavigate();
-
-  // ✅ 로그인 상태 확인 (간단하게 localStorage 사용 예시)
-  useEffect(() => {
-    const loggedIn = localStorage.getItem("isLoggedIn");
-    setIsLoggedIn(loggedIn === "true");
-  }, []);
+//  const userRole = localStorage.getItem('userRole');
 
   const handleLogout = async () => {
-    try {
-      await axios.post('/api/auth/logout');
-      localStorage.removeItem("isLoggedIn"); // ✅ 로그아웃 시 제거
-      setIsLoggedIn(false);
-      alert('로그아웃 되었습니다.');
-      navigate('/');
-    } catch (err) {
-      console.error(err);
-      alert('로그아웃 실패');
-    }
+    await axios.post('/api/auth/logout');
+    localStorage.clear();
+    setIsLoggedIn(false);
+    navigate('/');
+    alert('로그아웃 되었습니다.');
   };
 
   return (
-    <header style={{ padding: '1rem', background: '#eee' }}>
+    <header>
       <nav>
-        <Link to="/">🏠 홈</Link> |{' '}
+        <Link to="/">🏠 홈</Link> |{" "}
         {isLoggedIn ? (
-          <button onClick={handleLogout}>🚪 로그아웃</button>
+          <>
+            <span style={{ marginRight: '1rem' }}>👋 {userName}님</span>
+            <button onClick={handleLogout}>로그아웃</button>
+          </>
         ) : (
-          <Link to="/login">🔐 로그인</Link>
+          <>
+            <Link to="/login">로그인</Link> | <Link to="/signup">회원가입</Link>
+          </>
         )}
       </nav>
     </header>

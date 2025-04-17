@@ -1,4 +1,3 @@
-// [파일] src/components/PostList.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -6,7 +5,9 @@ import { Link } from 'react-router-dom';
 const PostList = () => {
   const [posts, setPosts] = useState([]);
 
-  // [기능] 컴포넌트가 마운트될 때 게시글 목록 불러오기
+  // 📌 localStorage에서 사용자 역할 확인
+  const userRole = localStorage.getItem('userRole');
+
   useEffect(() => {
     axios.get('/api/posts')
       .then(response => {
@@ -20,7 +21,15 @@ const PostList = () => {
   return (
     <div className="container mt-4">
       <h2>📋 게시글 목록</h2>
-      <table className="table table-bordered mt-3">
+
+      {/* ✍ 관리자만 글쓰기 버튼 표시 */}
+      {userRole === 'ADMIN' && (
+        <div className="mb-3 text-end">
+          <Link to="/posts/new" className="btn btn-primary">✍ 글쓰기</Link>
+        </div>
+      )}
+
+      <table className="table table-bordered">
         <thead>
           <tr>
             <th>ID</th>

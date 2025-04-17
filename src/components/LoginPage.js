@@ -1,60 +1,48 @@
-// src/components/LoginPage.js
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-function LoginPage() {
-  const [form, setForm] = useState({
-    email: '',
-    password: ''
-  });
-
-  const [error, setError] = useState('');
+function LoginPage({ setIsLoggedIn, setUserName }) {
+  const [form, setForm] = useState({ username: '', password: '' });
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-
     try {
-      const res = await axios.post('/api/auth/login', form);
-      alert(res.data); // "로그인 성공"
-      window.location.href = '/';
-      localStorage.setItem("isLoggedIn", "true");
+      await axios.post('/api/auth/login', form);
+      const res = await axios.get('/api/auth/me');
+
+      localStorage.setItem('isLoggedIn', 'true');
+      localStorage.setItem('userName', res.data.name);
+      localStorage.setItem('userRole', res.data.role);
+
+      setIsLoggedIn(true);
+      setUserName(res.data.name);
+
+      alert('로그인 성공!');
+      navigate('/');
     } catch (err) {
-      console.error(err);
-      setError(err.response?.data?.message || "로그인 실패");
+      alert(err.response?.data?.message || '로그인 실패');
     }
   };
 
   return (
-    <div style={{ padding: '2rem' }}>
+    <div>
       <h2>로그인</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>이메일</label>
-          <input
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            required
-          />
+          <label>아이디</label>
+          <input type="text" name="username" value={form.username} onChange={handleChange} required />
         </div>
         <div>
           <label>비밀번호</label>
-          <input
-            type="password"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            required
-          />
+          <input type="password" name="password" value={form.password} onChange={handleChange} required />
         </div>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
         <button type="submit">로그인</button>
       </form>
     </div>
