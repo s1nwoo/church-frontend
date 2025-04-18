@@ -12,6 +12,10 @@ import BiblePracticePage from './components/BiblePracticePage';
 import LocationPage from './components/LocationPage';
 import SignupPage from './components/SignupPage';
 import LoginPage from './components/LoginPage';
+import SermonListPage from './components/SermonListPage';
+import SermonCreatePage from './components/SermonCreatePage';
+import SermonDetailPage from './components/SermonDetailPage';
+
 import './App.css';
 
 function App() {
@@ -31,6 +35,9 @@ function App() {
         <Route path="/location" element={<LocationPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage setIsLoggedIn={setIsLoggedIn} setUserName={setUserName} />} />
+        <Route path="/sermons" element={<SermonListPage />} />
+        <Route path="/admin/sermons/new" element={<SermonCreatePage />} />
+        <Route path="/sermons/:id" element={<SermonDetailPage />} />
       </Routes>
     </BrowserRouter>
   );
