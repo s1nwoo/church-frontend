@@ -11,6 +11,8 @@ import Footer from './components/Footer';
 
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import SignupRealNamePage from './pages/SignupRealNamePage'
+import SignupExtraInfoPage from './pages/SignupExtraInfoPage';
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
           />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/signup/realname" element={<SignupRealNamePage />} />
+          <Route path="/signup/extra" element={<SignupExtraInfoPage />} />
         </Routes>
         <Footer />
       </BrowserRouter>

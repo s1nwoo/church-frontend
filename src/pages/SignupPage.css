@@ -3,6 +3,7 @@
   margin: 0 auto;
   padding: 40px 20px;
   background-color: #fff;
+  padding-top: 120px;
 }
 
 .signup-title {
@@ -153,4 +154,85 @@
 .next-btn {
   background-color: #0033cc;
   color: white;
+}
+
+.signup-page .main-title {
+  font-size: 36px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 40px;
+  color: #1a1a1a;
+}
+
+.terms-box {
+  width: 100%;
+  height: 160px;
+  padding: 12px;
+  font-size: 13px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  resize: none;
+  background: #f9f9f9;
+  overflow-y: scroll;
+  margin-bottom: 16px;
+}
+
+.step.active .circle {
+  background-color: #002B80; /* 진한 파랑 */
+  color: white;
+}
+
+/* 텍스트 강조를 위해 추가 */
+.step.active .label {
+  font-weight: bold;
+  color: #002B80; /* 진한 파랑 텍스트 */
+}
+
+/* 비활성 단계 스타일 약간 보정 */
+.step .label {
+  color: #888; /* 기본은 흐리게 */
+}
+
+.login-input.selected {
+  background-color: #002B80;
+  color: white;
+  border: 1px solid #002B80;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.status-icon {
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  pointer-events: none;
+  line-height: 1;
+  color: #2e7d32;
+}
+
+.input-error {
+  font-size: 13px;
+  color: #d32f2f;
+  margin-top: -8px;
+  margin-bottom: 8px;
+}
+
+.input-wrapper.invalid .login-input {
+  border: 2px solid #d32f2f;
+  background-color: #fff0f0;
+}
+
+.input-wrapper.valid .login-input {
+  border: 2px solid #2e7d32;
+  background-color: #f0fff0;
+}
+
+.full-width-btn {
+  width: 100%;
+  height: 44px;
+  font-size: 15px;
 }

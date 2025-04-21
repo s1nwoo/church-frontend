@@ -1,90 +1,95 @@
-import React, { useState } from 'react';
-import './SignupPage.css';
+import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { AuthContext } from '../context/AuthContext';
+import './LoginPage.css';
 
-const SignupPage = () => {
-  const [agreeAll, setAgreeAll] = useState(false);
-  const [agreeTerms, setAgreeTerms] = useState(false);
-  const [agreePrivacy, setAgreePrivacy] = useState(false);
-  const [showError, setShowError] = useState(false);
+const LoginPage = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleAllChange = () => {
-    const newValue = !agreeAll;
-    setAgreeAll(newValue);
-    setAgreeTerms(newValue);
-    setAgreePrivacy(newValue);
-  };
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  const handleSubmit = () => {
-    if (!agreeTerms || !agreePrivacy) {
-      setShowError(true);
-    } else {
-      alert('다음 단계로 이동!');
-      // navigate('/signup/step2') 등으로 이동 가능
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post('/api/auth/login', {
+        username,
+        password,
+      });
+
+      const { token, user } = response.data;
+
+      // ✅ 토큰과 유저 정보 모두 localStorage에 저장
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user)); // ⭐ 이 줄이 핵심
+
+      login(user); // ✅ 전역 상태로도 저장 (Header에서 name 보이도록)
+
+      alert('로그인 성공!');
+      navigate('/');
+    } catch (error) {
+      console.error(error);
+      alert('로그인 실패: 아이디 또는 비밀번호를 확인해주세요.');
     }
   };
 
   return (
-    <div className="signup-page">
-      <h1 className="signup-title">회원가입</h1>
+    <div className="login-page">
+      <div className="login-box">
+        <h2>로그인</h2>
+        <p className="welcome">
+          사랑의교회 홈페이지에 오신 것을 환영합니다.<br />
+          가입하신 아이디와 비밀번호를 입력해주세요
+        </p>
 
-      <div className="step-indicator">
-        <div className="step active">
-          <div className="circle">01</div>
-          <div className="label">약관동의</div>
-        </div>
-        <div className="step">
-          <div className="circle">02</div>
-          <div className="label">실명확인</div>
-        </div>
-        <div className="step">
-          <div className="circle">03</div>
-          <div className="label">추가입력정보</div>
-        </div>
-        <div className="step">
-          <div className="circle">04</div>
-          <div className="label">가입완료</div>
-        </div>
-      </div>
+        <form className="login-form" onSubmit={handleLogin}>
+          <input
+            type="text"
+            placeholder="아이디"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="login-input"
+          />
 
-      <p className="agreement-guide">
-        방화침례교회 홈페이지의 이용약관, 개인정보보호정책에 관한 사항을 잘 읽어보시고 동의해주세요!
-      </p>
+          <div className="password-field">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="비밀번호"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="login-input"
+            />
+            <button
+              type="button"
+              className="toggle-password"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? '🙈' : '👁️'}
+            </button>
+          </div>
 
-      {/* 전체 동의 */}
-      <label className="check-row">
-        <input type="checkbox" checked={agreeAll} onChange={handleAllChange} />
-        <span className="checkmark"></span>
-        방화침례교회의 이용약관, 개인정보보호방침에 모두 동의 합니다.
-      </label>
+          <button type="submit" className="login-btn">로그인</button>
 
-      <hr />
+          <div className="sub-buttons">
+            <button type="button">아이디 찾기</button>
+            <button type="button">비밀번호 찾기</button>
+          </div>
 
-      {/* 이용약관 동의 */}
-      <label className={`check-row ${!agreeTerms && showError ? 'invalid' : agreeTerms ? 'valid' : ''}`}>
-        <input type="checkbox" checked={agreeTerms} onChange={() => setAgreeTerms(!agreeTerms)} />
-        <span className="checkmark"></span>
-        이용약관 동의
-      </label>
-      {!agreeTerms && showError && (
-        <p className="check-error">필수 선택 사항입니다.</p>
-      )}
-
-      {/* 개인정보 수집 동의 */}
-      <label className={`check-row ${!agreePrivacy && showError ? 'invalid' : agreePrivacy ? 'valid' : ''}`}>
-        <input type="checkbox" checked={agreePrivacy} onChange={() => setAgreePrivacy(!agreePrivacy)} />
-        <span className="checkmark"></span>
-        개인정보 수집 및 이용 동의
-      </label>
-      {!agreePrivacy && showError && (
-        <p className="check-error">필수 선택 사항입니다.</p>
-      )}
-
-      <div className="button-wrap">
-        <button className="cancel-btn">취소</button>
-        <button className="next-btn" onClick={handleSubmit}>다음</button>
+          <button
+            type="button"
+            className="register-btn"
+            onClick={() => navigate('/signup')}
+          >
+            회원가입
+          </button>
+        </form>
       </div>
     </div>
   );
 };
 
-export default SignupPage;
+export default LoginPage;
