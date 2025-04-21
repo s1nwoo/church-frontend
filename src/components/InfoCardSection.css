@@ -1,0 +1,46 @@
+.info-card-section {
+  background-color: #f7f8fa;
+  padding: 60px 40px;
+}
+
+.info-card-container {
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.info-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 40px 24px;
+  text-align: center;
+  width: 200px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-4px);
+}
+
+.info-icon {
+  background-color: #0033cc;
+  color: white;
+  font-size: 32px;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+}
+
+.info-label {
+  font-size: 16px;
+  font-weight: bold;
+  color: #222;
+}
