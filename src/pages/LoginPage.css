@@ -1,0 +1,96 @@
+.login-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #002B80 0%, #0033cc 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.login-box {
+  background: white;
+  padding: 40px 30px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.login-box h2 {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.welcome {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login-input {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  width: 93.5%;
+}
+
+.password-field {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.login-btn {
+  color: black;
+  padding: 12px;
+  border-radius: 6px;
+  border: none;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.sub-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.sub-buttons button {
+  flex: 1;
+  padding: 10px;
+  background-color: #0033cc;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.register-btn {
+  margin-top: 8px;
+  padding: 12px;
+  background-color: #c8d9f7;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
