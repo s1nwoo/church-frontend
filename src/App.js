@@ -2,6 +2,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import './App.css';
 
 import Header from './components/Header';
 import MainIntroSection from './components/MainIntroSection';
@@ -18,27 +19,28 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Header />
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <MainIntroSection />
-                <SermonSection />
-                <InfoCardSection />
-              </>
-            }
-          />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/signup/realname" element={<SignupRealNamePage />} />
-          <Route path="/signup/extra" element={<SignupExtraInfoPage />} />
-        </Routes>
-        <Footer />
+        <div className="app-wrapper">
+          <Header />
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <>
+                  <MainIntroSection />
+                  <SermonSection />
+                  <InfoCardSection />
+                </>
+              }
+            />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/signup/realname" element={<SignupRealNamePage />} />
+            <Route path="/signup/extra" element={<SignupExtraInfoPage />} />
+          </Routes>
+          <Footer />
+        </div>
       </BrowserRouter>
     </AuthProvider>
   );
 }
-
 export default App;

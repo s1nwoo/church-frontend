@@ -5,16 +5,17 @@ import './MainIntroSection.css';
 const MainIntroSection = () => {
   return (
     <section className="main-intro">
-      <div className="hero" style={{ backgroundImage: `url("/images/main.jpg")` }}>
-        <div className="overlay"></div>
-
-        <div className="hero-text">
-          <p className="subtitle">2025년 사역표어</p>
-          <h1>“성령충만을 받으라!"</h1>
-          <p className="verse">또 새 영을 너희 속에 두고 새 마음을 너희에게 주되 <br />
-          너희 육신에서 굳은 마음을 제거하고 부드러운 마음을 줄 것 이며,<br />
-          에스겔 36:26
-          </p>
+        <div className="hero">
+          {/* 이미지 교체 */}
+          <img src="/images/main.jpg" alt="인트로 이미지" className="hero-bg-img" />
+          <div className="overlay"></div>
+            <div className="hero-text">
+              <p className="subtitle">2025년 사역표어</p>
+              <h1>“성령충만을 받으라!"</h1>
+              <p className="verse">또 새 영을 너희 속에 두고 새 마음을 너희에게 주되 <br />
+              너희 육신에서 굳은 마음을 제거하고 부드러운 마음을 줄 것 이며,<br />
+              에스겔 36:26
+              </p>
 
         </div>
 
