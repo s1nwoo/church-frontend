@@ -8,15 +8,23 @@ const PostList = () => {
   // 📌 localStorage에서 사용자 역할 확인
   const userRole = localStorage.getItem('userRole');
 
-  useEffect(() => {
-    axios.get('/api/posts')
-      .then(response => {
-        setPosts(response.data);
-      })
-      .catch(error => {
-        console.error('게시글을 불러오는 중 오류 발생:', error);
-      });
-  }, []);
+    useEffect(() => {
+      axios.get('/api/posts', { withCredentials: true })
+        .then(res => {
+          console.log('📦 서버 응답:', res.data); // ← 콘솔 확인!
+          const data = res.data;
+
+          // 유연하게 처리: content가 있으면 그걸, 아니면 그냥 배열
+          const list = Array.isArray(data.content) ? data.content : (
+            Array.isArray(data) ? data : []
+          );
+
+          setPosts(list);
+        })
+        .catch(err => {
+          console.error("게시글 목록 오류 발생:", err);
+        });
+    }, []);
 
   return (
     <div className="container mt-4">
