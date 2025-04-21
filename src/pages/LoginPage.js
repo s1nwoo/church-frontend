@@ -21,13 +21,12 @@ const LoginPage = () => {
         password,
       });
 
-      const { token, user } = response.data;
+console.log('response.data:', response.data);
+console.log('typeof response.data:', typeof response.data);
 
-      // ✅ 토큰과 유저 정보 모두 localStorage에 저장
-      localStorage.setItem('token', token);
-      localStorage.setItem('user', JSON.stringify(user)); // ⭐ 이 줄이 핵심
-
-      login(user); // ✅ 전역 상태로도 저장 (Header에서 name 보이도록)
+    const user = response.data;
+    localStorage.setItem('user', JSON.stringify(user));
+    login(user); // Header에서 user.name 접근 가능
 
       alert('로그인 성공!');
       navigate('/');
