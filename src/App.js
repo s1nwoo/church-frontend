@@ -23,29 +23,36 @@ function App() {
       <BrowserRouter>
         <div className="app-wrapper">
           <Header />
+
+          {/* ✅ 메인인트로는 따로 렌더링 */}
           <Routes>
             <Route
               path="/"
               element={
                 <>
                   <MainIntroSection />
-                  <SermonSection />
+
+                  {/* ✅ 이후 섹션만 여백 적용 */}
+                  <div className="page-container">
+                    <SermonSection />
+                  </div>
                   <InfoCardSection />
                 </>
               }
             />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
-            <Route path="/signup/realname" element={<SignupRealNamePage />} />
-            <Route path="/signup/extra" element={<SignupExtraInfoPage />} />
-
-            <Route path="/location" element={<LocationPage />} />
-
+            <Route path="/login" element={<div className="page-container"><LoginPage /></div>} />
+            <Route path="/signup" element={<div className="page-container"><SignupPage /></div>} />
+            <Route path="/signup/realname" element={<div className="page-container"><SignupRealNamePage /></div>} />
+            <Route path="/signup/extra" element={<div className="page-container"><SignupExtraInfoPage /></div>} />
+            <Route path="/location" element={<div className="page-container"><LocationPage /></div>} />
           </Routes>
+
           <Footer />
         </div>
       </BrowserRouter>
     </AuthProvider>
   );
 }
+
+
 export default App;

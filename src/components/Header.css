@@ -9,17 +9,18 @@
 }
 
 .header-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px 40px;
+  height: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  padding: 20px 0;
 }
 
 .logo img {
-  height: 36px;
+  height: auto;
+  max-height: 100px;
+  transform: scale(2.5);
+  transform-origin: left;
 }
 
 .nav {
@@ -34,7 +35,7 @@
   gap: 40px;
   padding: 0;
   margin: 0;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 500;
 }
 
@@ -57,7 +58,7 @@
 .user-info {
   display: flex;
   align-items: center;
-  gap: 12px; /* 👈 이름과 버튼 사이 간격 */
+  gap: 12px;
 }
 
 .logout-btn {
@@ -68,19 +69,4 @@
   border-radius: 20px;
   cursor: pointer;
   font-size: 13px;
-}
-
-.logo img {
-  max-height: 100px;         /* 실제 이미지 크기 */
-  height: auto;
-  transform: scale(2.5);     /* 로고만 키우기 */
-  transform-origin: left;    /* 왼쪽 기준으로 확대 */
-}
-
-.header-inner {
-  height: 72px;               /* 고정된 헤더 높이 유지 */
-  overflow: hidden;           /* 로고가 넘쳐도 잘라냄 */
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }

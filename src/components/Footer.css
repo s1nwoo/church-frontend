@@ -1,73 +1,49 @@
 .footer {
-  background: white;
-  border-top: 1px solid #eee;
-  padding: 40px 20px;
+  background-color: #fff;
+  padding: 40px 0;
+  width: 100%;
   font-size: 14px;
+  color: #555;
+  border-top: 1px solid #ddd;
 }
 
-.footer-inner {
-  max-width: 1200px;
-  margin: 0 auto;
+.footer .page-container {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 20px;
 }
 
-.footer-left p {
-  margin-bottom: 12px;
-  color: #444;
-}
-
-.social-icons a {
-  margin-right: 12px;
-  text-decoration: none;
-  font-size: 20px;
-}
-
-.footer-right {
-  text-align: right;
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .footer-links {
-  margin-bottom: 10px;
+  display: flex;
+  gap: 16px;
 }
 
 .footer-links a {
-  margin-left: 12px;
-  color: #333;
+  color: #555;
   text-decoration: none;
-  font-weight: 500;
 }
 
-.footer-buttons {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-  align-items: center;
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  text-align: right;
 }
 
 .global-btn {
   background-color: #0033cc;
   color: white;
   border: none;
-  padding: 6px 16px;
+  padding: 8px 16px;
   border-radius: 20px;
-  font-size: 12px;
+  font-size: 13px;
   cursor: pointer;
-}
-
-.top-btn {
-  background: white;
-  border: 1px solid #0033cc;
-  color: #0033cc;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  font-size: 18px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }

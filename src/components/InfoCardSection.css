@@ -1,14 +1,35 @@
 .info-card-section {
   background-color: #f7f8fa;
-  padding: 60px 40px;
+  padding: 60px 0; /* 좌우 패딩 제거 → 전체 배경 채우기 */
+  width: 100%;
+}
+
+.page-container {
+  margin: 0 200px;
+}
+
+@media screen and (max-width: 1024px) {
+  .page-container {
+    margin: 0 100px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .page-container {
+    margin: 0 40px;
+  }
+}
+@media screen and (max-width: 480px) {
+  .page-container {
+    margin: 0 20px;
+  }
 }
 
 .info-card-container {
   display: flex;
   gap: 32px;
-  justify-content: center;
+  justify-content: space-between; /* ✅ 중앙 정렬 대신 시작/끝 정렬 */
   flex-wrap: wrap;
-  max-width: 1200px;
+  width: 100%;                    /* ✅ max-width 제거 */
   margin: 0 auto;
 }
 

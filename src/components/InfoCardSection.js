@@ -21,18 +21,21 @@ const InfoCardSection = () => {
 
   return (
     <section className="info-card-section">
-      <div className="info-card-container">
-        {cards.map((card, idx) => (
-          <div
-            className="info-card"
-            key={idx}
-            onClick={() => handleClick(card.label)}
-            style={{ cursor: 'pointer' }}
-          >
-            <div className="info-icon">{card.icon}</div>
-            <p className="info-label">{card.label}</p>
-          </div>
-        ))}
+      {/* ✅ 내용은 .page-container 안에서 정렬 */}
+      <div className="page-container">
+        <div className="info-card-container">
+          {cards.map((card, idx) => (
+            <div
+              className="info-card"
+              key={idx}
+              onClick={() => handleClick(card.label)}
+              style={{ cursor: 'pointer' }}
+            >
+              <div className="info-icon">{card.icon}</div>
+              <p className="info-label">{card.label}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
