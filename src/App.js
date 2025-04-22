@@ -15,6 +15,8 @@ import SignupPage from './pages/SignupPage';
 import SignupRealNamePage from './pages/SignupRealNamePage'
 import SignupExtraInfoPage from './pages/SignupExtraInfoPage';
 
+import LocationPage from './pages/LocationPage';
+
 function App() {
   return (
     <AuthProvider>
@@ -36,6 +38,9 @@ function App() {
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/signup/realname" element={<SignupRealNamePage />} />
             <Route path="/signup/extra" element={<SignupExtraInfoPage />} />
+
+            <Route path="/location" element={<LocationPage />} />
+
           </Routes>
           <Footer />
         </div>

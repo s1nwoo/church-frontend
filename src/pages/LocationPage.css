@@ -1,0 +1,137 @@
+/* ===== 전체 컨테이너 ===== */
+.location-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Pretendard', sans-serif;
+  color: #222;
+}
+
+/* 제목 */
+.location-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 24px;
+  border-left: 4px solid #ff4081;
+  padding-left: 10px;
+}
+
+/* 카카오맵 */
+.location-map {
+  width: 100%;
+  height: 400px;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 32px;
+  border: 1px solid #ccc;
+}
+
+/* 한 줄 정보 블록 */
+.info-row {
+  display: flex;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.info-row.no-border {
+  border-bottom: none;
+}
+
+/* 아이콘 wrapper */
+.icon-wrapper {
+  width: 48px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 16px;
+}
+
+.icon-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* 텍스트 wrapper */
+.inline-text {
+  flex: 1;
+  font-size: 1.1em;
+  line-height: 1.6;
+}
+
+/* 라벨 */
+.inline-text .label {
+  display: inline-block;
+  font-weight: bold;
+  min-width: 120px;
+  font-size: 1.15em;
+  vertical-align: top;
+}
+
+/* 본문 텍스트 */
+.inline-text .content {
+  display: inline-block;
+  color: #333;
+}
+
+/* 지하철 태그 */
+.subway-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.line5 {
+  background-color: #8B50A4;
+}
+
+.line9 {
+  background-color: #C09A00;
+}
+
+/* 버스 숫자 */
+.bus-number {
+  display: inline-block;
+  font-size: 1.1em;
+  margin-right: 6px;
+  font-weight: 400;
+  color: #222;
+  line-height: 1.6;
+}
+
+/* 간선/지선 앞 원형 */
+.bus-type {
+  display: inline-flex;
+  align-items: center;
+  font-weight: bold;
+  margin-right: 8px;
+  font-size: 15px;
+}
+
+.bus-dot {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.bus-dot.blue {
+  background-color: #34AAFF;
+}
+
+.bus-dot.green {
+  background-color: #34CA27;
+}
+
+.bus-stop {
+  margin-bottom: 14px;
+}

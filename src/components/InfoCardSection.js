@@ -1,6 +1,7 @@
 // src/components/InfoCardSection.js
 import React from 'react';
 import './InfoCardSection.css';
+import { useNavigate } from 'react-router-dom';
 
 const cards = [
   { icon: '🖋️', label: '새가족 등록' },
@@ -10,11 +11,24 @@ const cards = [
 ];
 
 const InfoCardSection = () => {
+  const navigate = useNavigate();
+
+  const handleClick = (label) => {
+    if (label === '약도 · 주차') {
+      navigate('/location');
+    }
+  };
+
   return (
     <section className="info-card-section">
       <div className="info-card-container">
         {cards.map((card, idx) => (
-          <div className="info-card" key={idx}>
+          <div
+            className="info-card"
+            key={idx}
+            onClick={() => handleClick(card.label)}
+            style={{ cursor: 'pointer' }}
+          >
             <div className="info-icon">{card.icon}</div>
             <p className="info-label">{card.label}</p>
           </div>
