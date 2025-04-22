@@ -1,7 +1,6 @@
 /* ===== 전체 컨테이너 ===== */
 .location-container {
-  max-width: 1000px;
-  margin: 0 auto;
+  /* 기존 max-width, margin 제거 */
   padding: 2rem;
   font-family: 'Pretendard', sans-serif;
   color: #222;

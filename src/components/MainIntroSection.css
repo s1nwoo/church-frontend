@@ -6,8 +6,8 @@
 
 .hero {
   position: relative;
-  height: 750px;
-  background-image: url('./images/main.jpg');
+  height: 800px;
+  background-image: url('./images/main4.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -17,6 +17,7 @@
   color: white;
 }
 
+/*
 .overlay {
   content: "";
   position: absolute;
@@ -27,6 +28,7 @@
   background: rgba(0, 0, 0, 0.6);
   z-index: 0;
 }
+*/
 
 .hero-text {
   position: absolute;

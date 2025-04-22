@@ -3,11 +3,16 @@ import React from 'react';
 import './InfoCardSection.css';
 import { useNavigate } from 'react-router-dom';
 
+import iconFamily from './icons/icon_family.png';
+import iconLocation from './icons/icon_location.png';
+import iconDocument from './icons/icon_document.png';
+import iconClock from './icons/icon_clock.png';
+
 const cards = [
-  { icon: '🖋️', label: '새가족 등록' },
-  { icon: '🅿️', label: '약도 · 주차' },
-  { icon: '📄', label: '주보' },
-  { icon: '⏰', label: '예배시간' }
+  { icon: iconFamily, label: '새가족 등록' },
+  { icon: iconLocation, label: '약도 · 주차' },
+  { icon: iconDocument, label: '주보' },
+  { icon: iconClock, label: '예배시간' }
 ];
 
 const InfoCardSection = () => {
@@ -21,7 +26,6 @@ const InfoCardSection = () => {
 
   return (
     <section className="info-card-section">
-      {/* ✅ 내용은 .page-container 안에서 정렬 */}
       <div className="page-container">
         <div className="info-card-container">
           {cards.map((card, idx) => (
@@ -31,7 +35,9 @@ const InfoCardSection = () => {
               onClick={() => handleClick(card.label)}
               style={{ cursor: 'pointer' }}
             >
-              <div className="info-icon">{card.icon}</div>
+              <div className="info-icon">
+                <img src={card.icon} alt={card.label} />
+              </div>
               <p className="info-label">{card.label}</p>
             </div>
           ))}

@@ -26,17 +26,17 @@
 
 .info-card-container {
   display: flex;
-  gap: 32px;
-  justify-content: space-between; /* ✅ 중앙 정렬 대신 시작/끝 정렬 */
+  gap: 16px;                        /* ✅ 좌우 간격 줄임 (기존 32px → 16px) */
+  justify-content: space-between;  /* ✅ 좌우 정렬 맞춤 */
   flex-wrap: wrap;
-  width: 100%;                    /* ✅ max-width 제거 */
+  width: 100%;
   margin: 0 auto;
 }
 
 .info-card {
   background-color: white;
   border-radius: 12px;
-  padding: 40px 24px;
+  padding: 32px 70px;              /* ✅ 좌우 padding 확 줄임 (기존 100px → 20px) */
   text-align: center;
   width: 200px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
@@ -48,11 +48,9 @@
 }
 
 .info-icon {
-  background-color: #0033cc;
-  color: white;
-  font-size: 32px;
   width: 56px;
   height: 56px;
+  background-color: #bcdff0;
   border-radius: 16px;
   display: flex;
   align-items: center;
@@ -60,8 +58,13 @@
   margin: 0 auto 16px;
 }
 
+.info-icon img {
+  width: 28px;
+  height: 28px;
+}
+
 .info-label {
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: bold;
   color: #222;
 }

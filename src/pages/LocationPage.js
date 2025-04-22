@@ -2,6 +2,12 @@
 import React, { useEffect } from 'react';
 import './LocationPage.css';
 
+import iconCar from '../components/icons/icon_come_car.svg';
+import iconCall from '../components/icons/icon_come_call.svg';
+import iconSubway from '../components/icons/icon_come_subway.svg';
+import iconBus from '../components/icons/icon_come_bus.svg';
+
+
 function LocationPage() {
   useEffect(() => {
     const scriptId = 'kakao-map-script';
@@ -21,8 +27,8 @@ function LocationPage() {
         window.kakao.maps.load(() => {
           const container = document.getElementById('map');
           const options = {
-            center: new window.kakao.maps.LatLng(37.5685, 126.8123),
-            level: 3,
+            center: new window.kakao.maps.LatLng(37.5707, 126.8123),
+            level: 4,
           };
           const map = new window.kakao.maps.Map(container, options);
           const marker = new window.kakao.maps.Marker({
@@ -39,17 +45,16 @@ function LocationPage() {
   }, []);
 
   return (
-    <div className="location-container">
+    <div className="location-container page-container">
       <h2 className="location-title">방화침례교회 오시는 길</h2>
       <div id="map" className="location-map" />
 
       {/* 주소 */}
       <div className="info-row">
         <div className="icon-wrapper">
-          <img src="/icons/icon_come_car.svg" alt="주소" />
+          <img src={iconCar} alt="주소" />
         </div>
         <div className="inline-text">
-          <span className="label">주소</span>
           <span className="content">
             07607 서울특별시 강서구 방화동로 115, 2층 (방화동 580-25)
           </span>
@@ -59,10 +64,9 @@ function LocationPage() {
       {/* 교회안내 */}
       <div className="info-row">
         <div className="icon-wrapper">
-          <img src="/icons/icon_come_call.svg" alt="교회안내" />
+          <img src={iconCall} alt="교회안내" />
         </div>
         <div className="inline-text">
-          <span className="label">교회안내</span>
           <span className="content">02-XXXX-XXXX</span>
         </div>
       </div>
@@ -70,10 +74,9 @@ function LocationPage() {
       {/* 지하철 */}
       <div className="info-row">
         <div className="icon-wrapper">
-          <img src="/icons/icon_come_subway.svg" alt="지하철" />
+          <img src={iconSubway} alt="지하철" />
         </div>
         <div className="inline-text">
-          <span className="label">지하철</span>
           <span className="content">
             <div>
               <span className="subway-tag line5">5호선</span> 개화산역 1번출구 – 도보 11분
@@ -88,10 +91,9 @@ function LocationPage() {
       {/* 버스 */}
       <div className="info-row no-border">
         <div className="icon-wrapper">
-          <img src="/icons/icon_come_bus.svg" alt="버스" />
+          <img src={iconBus} alt="버스" />
         </div>
         <div className="inline-text">
-          <span className="label">버스</span>
           <span className="content">
             <div className="bus-stop">
               <strong>방신시장전통입구</strong>
