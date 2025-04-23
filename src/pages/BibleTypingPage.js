@@ -165,18 +165,29 @@ function BibleTypingPage() {
               <h4>{currentChapter}장 {currentVerse.verse}절</h4>
             </div>
 
-            <div className="info-row">
-              {renderComparison()}
-            </div>
-            <div>
-              <input
-                type="text"
-                value={input}
-                onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
-                placeholder="본문을 그대로 입력하세요"
-                className="typing-input"
-              />
+            <div className="typing-line-container">
+              {/* 출력 라인 */}
+              <div className="comparison-line">
+                {currentVerse.text.split('').map((ch, i) => {
+                  let color = 'gray';
+                  if (input[i] === ch) color = 'green';
+                  else if (input[i]) color = 'red';
+                  return <span key={i} style={{ color }}>{ch}</span>;
+                })}
+              </div>
+
+              {/* 입력 라인 */}
+                <input
+                  type="text"
+                  value={input}
+                  onChange={handleInputChange}
+                  onKeyDown={handleKeyDown}
+                  onPaste={(e) => e.preventDefault()}     // ✅ 붙여넣기 차단
+                  onContextMenu={(e) => e.preventDefault()} // ✅ 마우스 우클릭 차단
+                  onDrop={(e) => e.preventDefault()}      // ✅ 드래그앤드롭 붙여넣기 차단
+                  placeholder="본문을 그대로 입력하세요"
+                  className="typing-input"
+                />
             </div>
 
             <div className="progress-container">
