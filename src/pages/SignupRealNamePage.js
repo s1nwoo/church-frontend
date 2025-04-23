@@ -52,6 +52,10 @@ const SignupRealNamePage = () => {
     alert(`인증번호: ${code}`);
   };
 
+const handleBack = () => {
+  navigate('/signup');
+};
+
   const handleVerify = () => {
     if (!authCode) {
       alert('먼저 인증번호를 발송해주세요.');
@@ -76,7 +80,7 @@ const SignupRealNamePage = () => {
   };
 
   return (
-    <div className="signup-page">
+    <div className="signup-page page-container">
       <h1 className="signup-title">회원가입</h1>
 
       <div className="signup-steps">
@@ -176,7 +180,7 @@ const SignupRealNamePage = () => {
       </div>
 
       <div className="signup-buttons">
-        <button className="cancel-btn">취소</button>
+        <button className="cancel-btn" onClick={handleBack}>이전</button>
         <button
           className="next-btn"
           onClick={handleNext}

@@ -1,7 +1,7 @@
 .signup-page {
   max-width: 800px;
-  margin: 0 auto;
-  padding: 40px 20px;
+  margin: auto;
+  padding: 2rem;
   background-color: #fff;
 }
 
@@ -15,6 +15,7 @@
   justify-content: space-between;
   margin-bottom: 32px;
   position: relative;
+  min-height: 80px;  /* 또는 고정 height */
 }
 
 .signup-steps::after {
@@ -165,7 +166,7 @@
 
 .terms-box {
   width: 100%;
-  height: 160px;
+  height: 150px;
   padding: 12px;
   font-size: 13px;
   border: 1px solid #ccc;
@@ -190,6 +191,9 @@
 /* 비활성 단계 스타일 약간 보정 */
 .step .label {
   color: #888; /* 기본은 흐리게 */
+    display: flex;
+    align-items: center;  /* 텍스트 수직 정렬 */
+    height: 24px;
 }
 
 .login-input.selected {
@@ -234,4 +238,13 @@
   width: 100%;
   height: 44px;
   font-size: 15px;
+}
+
+.signup-page .input-wrapper {
+  width: 100%;
+}
+
+.signup-page .login-input {
+  width: 100%;
+  box-sizing: border-box;
 }

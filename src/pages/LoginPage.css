@@ -1,10 +1,10 @@
 .login-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #002B80 0%, #0033cc 100%);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px 20px;
+  background: linear-gradient(135deg, #002B80 0%, #0033cc 100%);
+  padding: 0;
 }
 
 .login-box {
@@ -15,6 +15,7 @@
   width: 100%;
   box-shadow: 0 8px 24px rgba(0,0,0,0.1);
   text-align: center;
+  transform: translateY(-46px);
 }
 
 .login-box h2 {

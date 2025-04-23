@@ -17,6 +17,10 @@ const SignupPage = () => {
     setAgreePrivacy(newValue);
   };
 
+    const handleCancel = () => {
+        navigate('/');
+    };
+
   const handleSubmit = () => {
     if (!agreeTerms || !agreePrivacy) {
       setShowError(true);
@@ -39,7 +43,7 @@ const SignupPage = () => {
 3. 보유기간: 회원 탈퇴 시까지`;
 
   return (
-    <div className="signup-page">
+    <div className="signup-page page-container">
       <h1 className="signup-title">회원가입</h1>
 
       <div className="signup-steps">
@@ -52,13 +56,13 @@ const SignupPage = () => {
       </div>
 
       <p className="signup-guide">
-        사랑의교회 홈페이지의 이용약관, 개인정보보호정책에 관한 사항을 잘 읽어보시고 동의해주세요!
+        방화침례교회 홈페이지의 이용약관, 개인정보보호정책에 관한 사항을 잘 읽어보시고 동의해주세요!
       </p>
 
       <label className="check-row">
         <input type="checkbox" checked={agreeAll} onChange={handleAllChange} />
         <span className="checkmark"></span>
-        <strong>사랑의교회의 이용약관, 개인정보보호방침에 모두 동의 합니다.</strong>
+        <strong>방화침례교회의 이용약관, 개인정보보호방침에 모두 동의 합니다.</strong>
       </label>
 
       {/* 약관 개별 동의 */}
@@ -83,7 +87,7 @@ const SignupPage = () => {
       <textarea className="terms-box" readOnly value={privacyText} />
 
       <div className="signup-buttons">
-        <button className="cancel-btn">취소</button>
+        <button className="cancel-btn" onClick={handleCancel}>취소</button>
         <button className="next-btn" onClick={handleSubmit}>다음</button>
       </div>
     </div>

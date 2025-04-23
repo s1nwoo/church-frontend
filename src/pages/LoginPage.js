@@ -41,7 +41,7 @@ const LoginPage = () => {
       <div className="login-box">
         <h2>로그인</h2>
         <p className="welcome">
-          사랑의교회 홈페이지에 오신 것을 환영합니다.<br />
+          방화침례교회 홈페이지에 오신 것을 환영합니다.<br />
           가입하신 아이디와 비밀번호를 입력해주세요
         </p>
 
