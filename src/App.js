@@ -15,6 +15,7 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import SignupRealNamePage from './pages/SignupRealNamePage'
 import SignupExtraInfoPage from './pages/SignupExtraInfoPage';
+import BibleTypingPage from './pages/BibleTypingPage';
 
 import LocationPage from './pages/LocationPage';
 
@@ -47,6 +48,7 @@ function App() {
             <Route path="/signup/realname" element={<div className="page-container"><SignupRealNamePage /></div>} />
             <Route path="/signup/extra" element={<div className="page-container"><SignupExtraInfoPage /></div>} />
             <Route path="/location" element={<div className="page-container"><LocationPage /></div>} />
+            <Route path="/bible-practice" element={<div className="page-container"><BibleTypingPage /></div>} />
           </Routes>
 
           <Footer />

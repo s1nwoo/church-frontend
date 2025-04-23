@@ -1,8 +1,24 @@
 // src/components/MainIntroSection.js
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './MainIntroSection.css';
 
 const MainIntroSection = () => {
+  const navigate = useNavigate();
+
+  const items = [
+    ['내용1'],
+    ['내용2'],
+    ['내용3'],
+    ['내용4'],
+    ['성경타자통독'],
+  ];
+
+  const handleClick = (label) => {
+    if (label === '성경타자통독') {
+      navigate('/bible-practice'); // ✅ 해당 경로로 이동
+    }
+  };
   return (
     <section className="main-intro">
       <div className="hero">
@@ -19,20 +35,19 @@ const MainIntroSection = () => {
           </div>
         */}
 
-        <div className="hero-info-section">
-          {[
-            ['내용1'],
-            ['내용2'],
-            ['내용3'],
-            ['내용4'],
-            ['성경타자통독']
-          ].map(([line1, line2], idx) => (
-            <div className="info-box" key={idx}>
-              <strong>{line1}</strong>
-              {line2 && <div>{line2}</div>}
-            </div>
-          ))}
-        </div>
+          <div className="hero-info-section">
+            {items.map(([line1, line2], idx) => (
+              <div
+                className="info-box"
+                key={idx}
+                onClick={() => handleClick(line1)} // ✅ 클릭 이벤트 등록
+                style={{ cursor: line1 === '성경타자통독' ? 'pointer' : 'default' }}
+              >
+                <strong>{line1}</strong>
+                {line2 && <div>{line2}</div>}
+              </div>
+            ))}
+          </div>
       </div>
     </section>
   );

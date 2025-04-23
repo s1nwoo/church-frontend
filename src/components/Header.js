@@ -8,6 +8,8 @@ import logoImg from './images/logo.jpg'; // ✅ 추가
 const Header = () => {
   const { user, logout } = useContext(AuthContext);
 
+
+
   return (
     <header className="header">
       <div className="header-inner page-container">
@@ -33,7 +35,7 @@ const Header = () => {
             </Link>
           ) : (
             <div className="user-info">
-              <span>{user.name}님</span>
+              <span>{user.username}님</span>
               <button onClick={logout} className="logout-btn">로그아웃</button>
             </div>
           )}

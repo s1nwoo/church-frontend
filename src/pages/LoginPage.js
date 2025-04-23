@@ -21,12 +21,12 @@ const LoginPage = () => {
         password,
       });
 
-console.log('response.data:', response.data);
-console.log('typeof response.data:', typeof response.data);
+      const { accessToken } = response.data;
 
-    const user = response.data;
-    localStorage.setItem('user', JSON.stringify(user));
-    login(user); // Header에서 user.name 접근 가능
+      // ✅ accessToken과 username 저장
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('user', JSON.stringify({ username }));
+      login({ username });
 
       alert('로그인 성공!');
       navigate('/');
