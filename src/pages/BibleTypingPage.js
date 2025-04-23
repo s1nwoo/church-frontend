@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './BibleTypingPage.css';
 
 function BibleTypingPage() {
   const [books, setBooks] = useState([]);
@@ -11,21 +12,18 @@ function BibleTypingPage() {
   const [input, setInput] = useState('');
   const [isCorrect, setIsCorrect] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [progress, setProgress] = useState(0);
   const navigate = useNavigate();
 
-  // 로그인 확인
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
-    if (!token) {
-      navigate('/login');
-    }
+    if (!token) navigate('/login');
   }, [navigate]);
 
   const lockRef = useRef(false);
   const lastInvokeRef = useRef(0);
   const THROTTLE_DELAY = 300;
 
-  // 책 목록 불러오기
   useEffect(() => {
     axios.get('/api/bible-practice/books', {
       headers: {
@@ -36,7 +34,6 @@ function BibleTypingPage() {
       .catch(err => console.error('책 목록 불러오기 실패:', err));
   }, []);
 
-  // 책 선택 시 진행 위치 불러오기
   useEffect(() => {
     if (!selectedBook) return;
 
@@ -52,14 +49,12 @@ function BibleTypingPage() {
         fetchAndReset(selectedBook, chapter, verse);
       })
       .catch(err => {
-        console.error('진행 위치 불러오기 실패:', err);
         setCurrentChapter(1);
         setCurrentVerseNumber(1);
         fetchAndReset(selectedBook, 1, 1);
       });
   }, [selectedBook]);
 
-  // 구절 불러오기
   const fetchAndReset = (book, chapter, verse) => {
     axios.get(`/api/bible-practice/verse?bookCode=${encodeURIComponent(book)}&chapter=${chapter}&verse=${verse}`, {
       headers: {
@@ -70,6 +65,7 @@ function BibleTypingPage() {
         setCurrentVerse(res.data);
         setInput('');
         setIsCorrect(false);
+        setProgress(((verse - 1) / 31) * 100); // 임시 진행률 (전체 절수 알면 수정 가능)
       })
       .catch(err => console.error('구절 불러오기 실패:', err));
   };
@@ -85,9 +81,7 @@ function BibleTypingPage() {
     if (!isCorrect) return;
 
     const now = Date.now();
-    if (lockRef.current || now - lastInvokeRef.current < THROTTLE_DELAY) {
-      return;
-    }
+    if (lockRef.current || now - lastInvokeRef.current < THROTTLE_DELAY) return;
 
     lockRef.current = true;
     lastInvokeRef.current = now;
@@ -97,7 +91,7 @@ function BibleTypingPage() {
 
     try {
       await axios.post('/api/bible-practice/progress', {
-        book: selectedBook,
+        bookCode: selectedBook,
         chapter: currentChapter,
         verse: next
       }, {
@@ -109,7 +103,6 @@ function BibleTypingPage() {
       setCurrentVerseNumber(next);
       fetchAndReset(selectedBook, currentChapter, next);
     } catch (err) {
-      console.error('진행 위치 저장 실패:', err);
       alert('진행 위치 저장 중 오류가 발생했습니다.');
     } finally {
       lockRef.current = false;
@@ -124,18 +117,22 @@ function BibleTypingPage() {
     }
   };
 
+  const handleBookChange = e => {
+    setSelectedBook(e.target.value);
+  };
+
   const renderComparison = () => {
     if (!currentVerse) return null;
+
     return (
-      <div style={{ marginTop: '1rem', fontSize: '1.2rem' }}>
+      <div style={{ marginBottom: '1rem', fontSize: '1.1rem' }}>
         {currentVerse.text.split('').map((ch, i) => {
           let color = 'gray';
           if (input[i] === ch) color = 'green';
-          else if (input[i] && input[i] !== ch) color = 'red';
+          else if (input[i]) color = 'red';
+
           return (
-            <span key={i} style={{ color }}>
-              {ch}
-            </span>
+            <span key={i} style={{ color }}>{ch}</span>
           );
         })}
       </div>
@@ -144,52 +141,55 @@ function BibleTypingPage() {
 
   return (
     <div className="location-container page-container">
-      <h2>성경 타자 연습</h2>
 
-      {/* 책 선택 */}
-      <div className="info-row">
-        <label className="label">성경 책 선택:</label>
-        <select
-          value={selectedBook}
-          onChange={e => setSelectedBook(e.target.value)}
-          disabled={isSubmitting}
-        >
-          <option value="">-- 선택 --</option>
-          {books.map((b, i) => (
-            <option key={i} value={b.abbr}>
-              {b.name}
-            </option>
-          ))}
-        </select>
-      </div>
+      <h2 className="location-title">성경 타자 통독</h2>
 
-      {/* 현재 구절 */}
-      {currentVerse && (
-        <div className="info-row">
-          <h4>{currentChapter}장 {currentVerse.verse}절:</h4>
-          <p>{currentVerse.text}</p>
+      <div className="typing-section">
+        <div className="book-select-group">
+          <label htmlFor="book-select">성경 책 선택</label>
+          <select
+            id="book-select"
+            value={selectedBook}
+            onChange={handleBookChange}
+          >
+            <option value="">-- 선택 --</option>
+            {books.map((book) => (
+              <option key={book.abbr} value={book.abbr}>{book.name}</option>
+            ))}
+          </select>
         </div>
-      )}
 
-      {/* 오타 비교 */}
-      {renderComparison()}
+        {currentVerse && (
+          <>
+            <div className="info-row">
+              <h4>{currentChapter}장 {currentVerse.verse}절</h4>
+            </div>
 
-      {/* 입력창 */}
-      <input
-        type="text"
-        value={input}
-        onChange={handleInputChange}
-        onKeyDown={handleKeyDown}
-        placeholder="본문을 그대로 입력하세요"
-        className="typing-input"
-        disabled={isSubmitting}
-      />
+            <div className="info-row">
+              {renderComparison()}
+            </div>
+            <div>
+              <input
+                type="text"
+                value={input}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+                placeholder="본문을 그대로 입력하세요"
+                className="typing-input"
+              />
+            </div>
 
-      {/* 다음 절 버튼 */}
-      <div style={{ marginTop: '1rem' }}>
-        <button onClick={handleNextVerse} disabled={!isCorrect || isSubmitting}>
-          다음 절 ▶
-        </button>
+            <div className="progress-container">
+              <div className="progress-bar" style={{ width: `${progress}%` }}></div>
+            </div>
+
+            <div className="info-row" style={{ marginTop: '1rem' }}>
+              <button onClick={handleNextVerse} disabled={!isCorrect || isSubmitting}>
+                다음 절 ▶
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
