@@ -10,7 +10,7 @@ import iconClock from './icons/icon_clock.png';
 
 const cards = [
   { icon: iconFamily, label: '새가족 등록' },
-  { icon: iconLocation, label: '약도 · 주차' },
+  { icon: iconLocation, label: '오시는 길' },
   { icon: iconDocument, label: '주보' },
   { icon: iconClock, label: '예배시간' }
 ];
@@ -19,7 +19,7 @@ const InfoCardSection = () => {
   const navigate = useNavigate();
 
   const handleClick = (label) => {
-    if (label === '약도 · 주차') {
+    if (label === '오시는 길') {
       navigate('/location');
     }
   };

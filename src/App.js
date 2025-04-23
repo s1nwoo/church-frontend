@@ -3,6 +3,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import './App.css';
+import ScrollToTop from './components/ScrollToTop';
 
 import Header from './components/Header';
 import MainIntroSection from './components/MainIntroSection';
@@ -21,6 +22,7 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <ScrollToTop />
         <div className="app-wrapper">
           <Header />
 

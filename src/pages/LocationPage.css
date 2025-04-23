@@ -2,7 +2,6 @@
 .location-container {
   /* 기존 max-width, margin 제거 */
   padding: 2rem;
-  font-family: 'Pretendard', sans-serif;
   color: #222;
 }
 
@@ -109,9 +108,7 @@
 .bus-type {
   display: inline-flex;
   align-items: center;
-  font-weight: bold;
   margin-right: 8px;
-  font-size: 15px;
 }
 
 .bus-dot {
