@@ -9,7 +9,7 @@ const AdminDashboardPage = () => {
 
   const cards = [
     {
-      title: '성도 관리',
+      title: '성도 관리(기능 없음)',
       description: '교인 정보 등록/수정/삭제 기능을 제공합니다.',
       icon: <FaUsers size={32} />,
       path: '/admin/members',
