@@ -1,0 +1,25 @@
+// src/pages/LogoGalleryPage.js
+import React from 'react';
+import './LogoGalleryPage.css';
+
+const LogoGalleryPage = () => {
+  const logos = [
+    'swlogo.png',
+    'yelogo.png'
+  ]; // 실제로는 이미지 파일 경로 배열
+
+  return (
+    <div className="logo-gallery page-container">
+      <h1>로고 모음집</h1>
+      <div className="logo-grid">
+        {logos.map((logo, idx) => (
+          <div className="logo-item" key={idx}>
+            <img src={require(`../components/images/${logo}`)} alt={`로고 ${idx + 1}`} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default LogoGalleryPage;

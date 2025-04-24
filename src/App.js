@@ -18,6 +18,9 @@ import SignupExtraInfoPage from './pages/SignupExtraInfoPage';
 import BibleTypingPage from './pages/BibleTypingPage';
 
 import LocationPage from './pages/LocationPage';
+import LogoGalleryPage from './pages/LogoGalleryPage';
+
+import SermonDetailPage from './pages/SermonDetailPage';
 
 function App() {
   return (
@@ -49,6 +52,8 @@ function App() {
             <Route path="/signup/extra" element={<div className="page-container"><SignupExtraInfoPage /></div>} />
             <Route path="/location" element={<div className="page-container"><LocationPage /></div>} />
             <Route path="/bible-practice" element={<div className="page-container"><BibleTypingPage /></div>} />
+            <Route path="/logo-gallery" element={<div className="page-container"><LogoGalleryPage /></div>} />
+            <Route path="/sermons/:id" element={<div className="page-container"><SermonDetailPage /></div>} />
           </Routes>
 
           <Footer />

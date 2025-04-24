@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import './Header.css';
-import logoImg from './images/logo.jpg';
+import logoImg from './images/swlogo.png';
 
 const Header = () => {
   const { user, logout } = useContext(AuthContext);

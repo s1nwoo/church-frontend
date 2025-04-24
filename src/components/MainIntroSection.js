@@ -10,13 +10,15 @@ const MainIntroSection = () => {
     ['내용1'],
     ['내용2'],
     ['내용3'],
-    ['내용4'],
+    ['로고 모음집'],
     ['성경타자통독'],
   ];
 
   const handleClick = (label) => {
     if (label === '성경타자통독') {
       navigate('/bible-practice'); // ✅ 해당 경로로 이동
+    } else if (label === '로고 모음집') {
+         navigate('/logo-gallery'); // ✅ 추후 연결할 라우트
     }
   };
   return (

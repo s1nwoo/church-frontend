@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './SermonSection.css';
+import { useNavigate } from 'react-router-dom';
+
 
 const SermonSection = () => {
   const [sermons, setSermons] = useState([]);
@@ -12,6 +14,8 @@ const SermonSection = () => {
       .catch(err => console.error(err));
   }, []);
 
+const navigate = useNavigate();
+
   return (
     <section className="sermon-section">
       <h2>설교 · 찬양</h2>
@@ -20,12 +24,11 @@ const SermonSection = () => {
           .sort((a, b) => b.id - a.id)
           .slice(0, 3)
           .map(sermon => (
-            <a
-              href={sermon.youtubeUrl}
+            <div
               key={sermon.id}
               className="sermon-card"
-              target="_blank"
-              rel="noopener noreferrer"
+              onClick={() => navigate(`/sermons/${sermon.id}`)}
+              style={{ cursor: 'pointer' }}
             >
               <div className="sermon-thumbnail">
                 <img src={`https://img.youtube.com/vi/${extractYoutubeId(sermon.youtubeUrl)}/0.jpg`} alt={sermon.title} />
@@ -36,7 +39,7 @@ const SermonSection = () => {
                 {sermon.bibleText && <p className="subtitle">{sermon.bibleText}</p>}
                 <p className="preacher">{sermon.preacher} · 주후 {sermon.sermonDate}</p>
               </div>
-            </a>
+            </div>
           ))}
       </div>
     </section>
