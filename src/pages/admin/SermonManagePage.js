@@ -15,12 +15,12 @@ const initialForm = {
 const SermonManagePage = () => {
   const [sermons, setSermons] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [editing, setEditing] = useState(null); // id or null
+  const [editing, setEditing] = useState(null);
   const [form, setForm] = useState(initialForm);
   const [search, setSearch] = useState('');
 
   const fetchSermons = async () => {
-    const res = await axios.get(`/api/sermons?keyword=${search}`);
+    const res = await axios.get(`/api/sermons?keyword=${search}&includeDeleted=true`);
     setSermons(res.data.content || []);
   };
 
@@ -72,7 +72,7 @@ const SermonManagePage = () => {
   };
 
   return (
-    <div className="sermon-manage-container page-container">
+    <div className="sermon-manage-container">
       <h2>설교 관리</h2>
 
       <div className="sermon-manage-top">
@@ -93,6 +93,7 @@ const SermonManagePage = () => {
             <th>설교자</th>
             <th>날짜</th>
             <th>본문</th>
+            <th>삭제 여부</th>
             <th>관리</th>
           </tr>
         </thead>
@@ -103,6 +104,7 @@ const SermonManagePage = () => {
               <td>{s.preacher}</td>
               <td>{s.sermonDate}</td>
               <td>{s.bibleText}</td>
+              <td>{s.deleted ? '삭제됨' : '-'}</td>
               <td>
                 <button onClick={() => openEditModal(s)}>수정</button>
                 <button onClick={() => handleDelete(s.id)} className="delete-btn">삭제</button>
