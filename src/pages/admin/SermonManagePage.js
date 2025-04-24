@@ -12,6 +12,15 @@ const initialForm = {
   content: '',
 };
 
+const fieldLabels = {
+  title: '제목',
+  preacher: '설교자',
+  sermonDate: '설교 날짜',
+  bibleText: '본문',
+  youtubeUrl: 'YouTube 링크',
+  content: '설명',
+};
+
 const SermonManagePage = () => {
   const [sermons, setSermons] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
@@ -20,8 +29,13 @@ const SermonManagePage = () => {
   const [search, setSearch] = useState('');
 
   const fetchSermons = async () => {
-    const res = await axios.get(`/api/sermons?keyword=${search}&includeDeleted=true`);
-    setSermons(res.data.content || []);
+    try {
+      const res = await axios.get(`/api/sermons?keyword=${search}&includeDeleted=true`);
+      setSermons(res.data.content || []);
+    } catch (err) {
+      console.error(err);
+      alert('목록 조회 중 오류 발생');
+    }
   };
 
   useEffect(() => {
@@ -36,7 +50,11 @@ const SermonManagePage = () => {
 
   const openEditModal = (sermon) => {
     setEditing(sermon.id);
-    setForm(sermon);
+    // Convert date to yyyy-MM-dd if needed
+    setForm({
+      ...sermon,
+      sermonDate: sermon.sermonDate,
+    });
     setModalOpen(true);
   };
 
@@ -46,6 +64,15 @@ const SermonManagePage = () => {
   };
 
   const handleSubmit = async () => {
+    // 필수 항목 검사
+    const required = ['title', 'preacher', 'sermonDate', 'youtubeUrl'];
+    for (const key of required) {
+      if (!form[key]) {
+        alert(`${fieldLabels[key]}을(를) 입력해주세요.`);
+        return;
+      }
+    }
+
     try {
       if (editing) {
         await axios.put(`/api/sermons/${editing}`, form);
@@ -56,7 +83,8 @@ const SermonManagePage = () => {
       fetchSermons();
     } catch (err) {
       console.error(err);
-      alert('저장 중 오류 발생');
+      const msg = err.response?.data?.message || '저장 중 오류 발생';
+      alert(msg);
     }
   };
 
@@ -99,7 +127,7 @@ const SermonManagePage = () => {
         </thead>
         <tbody>
           {sermons.map((s) => (
-            <tr key={s.id}>
+            <tr key={s.id} className={s.deleted ? 'deleted-row' : ''}>
               <td>{s.title}</td>
               <td>{s.preacher}</td>
               <td>{s.sermonDate}</td>
@@ -118,15 +146,26 @@ const SermonManagePage = () => {
         <div className="modal-overlay">
           <div className="modal">
             <h3>{editing ? '설교 수정' : '설교 등록'}</h3>
-            {Object.entries(form).map(([key, value]) => (
-              <input
-                key={key}
-                type="text"
-                placeholder={key}
-                value={value}
-                onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-              />
-            ))}
+            {Object.entries(form).map(([key, value]) => {
+              const commonProps = {
+                key,
+                value,
+                onChange: (e) => setForm({ ...form, [key]: e.target.value }),
+              };
+              return key === 'sermonDate' ? (
+                <input
+                  {...commonProps}
+                  type="date"
+                  placeholder={fieldLabels[key]}
+                />
+              ) : (
+                <input
+                  {...commonProps}
+                  type="text"
+                  placeholder={fieldLabels[key]}
+                />
+              );
+            })}
             <div className="modal-actions">
               <button onClick={handleSubmit} className="save-btn">저장</button>
               <button onClick={closeModal} className="cancel-btn">취소</button>
