@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './SignupPage.css';
+import './SignupRealNamePage.css'; // 이 CSS를 사용할 것
 
 const SignupRealNamePage = () => {
   const navigate = useNavigate();
@@ -13,33 +13,26 @@ const SignupRealNamePage = () => {
   const [isVerified, setIsVerified] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  // 유효성 검사 정규식
-  const isNameValid = /^[가-힣ㄱ-ㅎㅏ-ㅣ]+$/.test(name);
-  const isBirthValid = /^\d{8}$/.test(birth);
-  const isPhoneValid = /^\d{11}$/.test(phone);
-  const isCodeInputValid = /^\d{6}$/.test(inputCode);
+  const isNameValid = name !== '' && /^[가-힣ㄱ-ㅎㅏ-ㅣ]+$/.test(name);
+  const isBirthValid = birth !== '' && /^\d{8}$/.test(birth);
+  const isPhoneValid = phone !== '' && /^\d{11}$/.test(phone);
+  const isCodeInputValid = inputCode !== '' && /^\d{6}$/.test(inputCode);
 
-  // 이벤트 핸들러
   const handleNameChange = (e) => {
     const value = e.target.value;
-    if (/^[가-힣ㄱ-ㅎㅏ-ㅣ]*$/.test(value)) {
-      setName(value);
-    }
+    if (/^[가-힣ㄱ-ㅎㅏ-ㅣ]*$/.test(value)) setName(value);
   };
 
   const handleBirthChange = (e) => {
-    const value = e.target.value.replace(/\D/g, '').slice(0, 8);
-    setBirth(value);
+    setBirth(e.target.value.replace(/\D/g, '').slice(0, 8));
   };
 
   const handlePhoneChange = (e) => {
-    const value = e.target.value.replace(/\D/g, '').slice(0, 11);
-    setPhone(value);
+    setPhone(e.target.value.replace(/\D/g, '').slice(0, 11));
   };
 
   const handleCodeChange = (e) => {
-    const value = e.target.value.replace(/\D/g, '').slice(0, 6);
-    setInputCode(value);
+    setInputCode(e.target.value.replace(/\D/g, '').slice(0, 6));
   };
 
   const handleSendCode = () => {
@@ -51,10 +44,6 @@ const SignupRealNamePage = () => {
     setAuthCode(code);
     alert(`인증번호: ${code}`);
   };
-
-const handleBack = () => {
-  navigate('/signup');
-};
 
   const handleVerify = () => {
     if (!authCode) {
@@ -70,13 +59,19 @@ const handleBack = () => {
     }
   };
 
+  const handleBack = () => {
+    navigate('/signup');
+  };
+
   const handleNext = () => {
     setSubmitted(true);
-    if (isNameValid && isBirthValid && isPhoneValid && isVerified) {
-      navigate('/signup/extra', {
-        state: { name, birth, phone },
-      });
+    if (!(isNameValid && isBirthValid && isPhoneValid && isVerified)) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
     }
+    navigate('/signup/extra', {
+      state: { name, birth, phone },
+    });
   };
 
   return (
@@ -102,12 +97,10 @@ const handleBack = () => {
             placeholder="이름"
             value={name}
             onChange={handleNameChange}
-            className="login-input"
+            className="realname-input"
           />
-          {submitted && isNameValid && <span className="status-icon">✔</span>}
-          {submitted && !isNameValid && <span className="status-icon">❗</span>}
+          {submitted && !isNameValid && <p className="input-error">필수 입력 정보입니다.</p>}
         </div>
-        {submitted && !isNameValid && <p className="input-error">필수 정보입니다.</p>}
 
         {/* 생년월일 */}
         <div className={`input-wrapper ${submitted && !isBirthValid ? 'invalid' : isBirthValid ? 'valid' : ''}`}>
@@ -116,78 +109,64 @@ const handleBack = () => {
             placeholder="생년월일 (예: 19920928)"
             value={birth}
             onChange={handleBirthChange}
-            className="login-input"
+            className="realname-input"
           />
-          {submitted && isBirthValid && <span className="status-icon">✔</span>}
-          {submitted && !isBirthValid && <span className="status-icon">❗</span>}
+          {submitted && !isBirthValid && <p className="input-error">필수 입력 정보입니다.</p>}
         </div>
-        {submitted && !isBirthValid && <p className="input-error">필수 정보입니다.</p>}
 
-        {/* 휴대폰 번호 + 인증받기 */}
-        <div
-          className={`input-wrapper ${submitted && !isPhoneValid ? 'invalid' : isPhoneValid ? 'valid' : ''}`}
-          style={{ display: 'flex', gap: '8px', width: '100%' }}
-        >
-          <input
-            type="text"
-            placeholder="휴대폰 번호"
-            value={phone}
-            onChange={handlePhoneChange}
-            className="login-input"
-            style={{ flex: 1 }}
-          />
-          <button
-            type="button"
-            className="next-btn"
-            style={{ width: '130px', height: '44px' }}
-            onClick={handleSendCode}
-          >
-            인증받기
-          </button>
-          {submitted && isPhoneValid && <span className="status-icon">✔</span>}
-          {submitted && !isPhoneValid && <span className="status-icon">❗</span>}
+        {/* 휴대폰 */}
+        <div className={`input-wrapper ${submitted && !isPhoneValid ? 'invalid' : isPhoneValid ? 'valid' : ''}`}>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <input
+              type="text"
+              placeholder="휴대폰 번호"
+              value={phone}
+              onChange={handlePhoneChange}
+              className="realname-input"
+              style={{ flex: 1 }}
+            />
+            <button
+              type="button"
+              className="next-btn"
+              style={{ width: '130px', height: '44px' }}
+              onClick={handleSendCode}
+            >
+              인증받기
+            </button>
+          </div>
+          {submitted && !isPhoneValid && <p className="input-error">필수 입력 정보입니다.</p>}
         </div>
-        {submitted && !isPhoneValid && <p className="input-error">필수 정보입니다.</p>}
 
-        {/* 인증번호 입력 + 인증확인 */}
-        <div
-          className={`input-wrapper ${submitted && !isCodeInputValid ? 'invalid' : isVerified ? 'valid' : ''}`}
-          style={{ display: 'flex', gap: '8px', width: '100%' }}
-        >
-          <input
-            type="text"
-            placeholder="인증번호 입력"
-            value={inputCode}
-            onChange={handleCodeChange}
-            className="login-input"
-            style={{ flex: 1 }}
-            disabled={isVerified}
-          />
-          <button
-            type="button"
-            className="next-btn"
-            style={{ width: '130px', height: '44px' }}
-            onClick={handleVerify}
-            disabled={isVerified}
-          >
-            인증확인
-          </button>
-          {submitted && isVerified && <span className="status-icon">✔</span>}
-          {submitted && !isVerified && <span className="status-icon">❗</span>}
+        {/* 인증번호 */}
+        <div className={`input-wrapper ${submitted && !isCodeInputValid ? 'invalid' : isVerified ? 'valid' : ''}`}>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <input
+              type="text"
+              placeholder="인증번호 입력"
+              value={inputCode}
+              onChange={handleCodeChange}
+              className="realname-input"
+              style={{ flex: 1 }}
+              disabled={isVerified}
+            />
+            <button
+              type="button"
+              className="next-btn"
+              style={{ width: '130px', height: '44px' }}
+              onClick={handleVerify}
+              disabled={isVerified}
+            >
+              인증확인
+            </button>
+          </div>
+          {submitted && !isCodeInputValid && <p className="input-error">필수 입력 정보입니다.</p>}
+          {isVerified && <p className="verified-text">✅ 인증이 완료되었습니다.</p>}
         </div>
-        {submitted && !isCodeInputValid && <p className="input-error">필수 정보입니다.</p>}
-        {isVerified && <p style={{ color: '#2e7d32', fontSize: '13px' }}>✅ 인증이 완료되었습니다.</p>}
       </div>
 
       <div className="signup-buttons">
         <button className="cancel-btn" onClick={handleBack}>이전</button>
-        <button
-          className="next-btn"
-          onClick={handleNext}
-          disabled={!(isNameValid && isBirthValid && isPhoneValid && isVerified)}
-        >
-          다음
-        </button>
+        <button className="next-btn" onClick={handleNext}>다음</button>
       </div>
     </div>
   );
