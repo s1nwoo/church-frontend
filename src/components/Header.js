@@ -1,14 +1,18 @@
 // src/components/Header.js
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import './Header.css';
-import logoImg from './images/logo.jpg'; // ✅ 추가
+import logoImg from './images/logo.jpg';
 
 const Header = () => {
   const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-
+  const handleLogout = () => {
+    logout();
+    navigate('/'); // 로그아웃 후 홈으로 이동
+  };
 
   return (
     <header className="header">
@@ -21,10 +25,10 @@ const Header = () => {
 
         <nav className="nav">
           <ul>
-            <li>교회소개</li>
-            <li>설교 · 찬양</li>
-            <li>목양 · 사역</li>
-            <li>교육 · 훈련</li>
+            <li>카테고리1</li>
+            <li>카테고리2</li>
+            <li>카테고리3</li>
+            <li>카테고리4</li>
           </ul>
         </nav>
 
@@ -36,7 +40,7 @@ const Header = () => {
           ) : (
             <div className="user-info">
               <span>{user.username}님</span>
-              <button onClick={logout} className="logout-btn">로그아웃</button>
+              <button onClick={handleLogout} className="logout-btn">로그아웃</button>
             </div>
           )}
         </div>

@@ -9,10 +9,10 @@ import iconDocument from './icons/icon_document.png';
 import iconClock from './icons/icon_clock.png';
 
 const cards = [
-  { icon: iconFamily, label: '새가족 등록' },
+  { icon: iconFamily, label: '새가족 등록(기능없음)' },
   { icon: iconLocation, label: '오시는 길' },
-  { icon: iconDocument, label: '주보' },
-  { icon: iconClock, label: '예배시간' }
+  { icon: iconDocument, label: '주보(기능없음)' },
+  { icon: iconClock, label: '예배시간(기능없음)' }
 ];
 
 const InfoCardSection = () => {

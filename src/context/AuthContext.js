@@ -17,12 +17,15 @@ export const AuthProvider = ({ children }) => {
   // 로그인 처리 함수
   const login = (userData) => {
     localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem('accessToken', userData.token); // 토큰도 저장
     setUser(userData);
   };
 
   // 로그아웃 처리 함수
   const logout = () => {
     localStorage.removeItem('user');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken'); // refreshToken도 있다면 제거
     setUser(null);
   };
 
