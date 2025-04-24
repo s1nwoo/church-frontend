@@ -21,6 +21,7 @@ import LocationPage from './pages/LocationPage';
 import LogoGalleryPage from './pages/LogoGalleryPage';
 
 import SermonDetailPage from './pages/SermonDetailPage';
+import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
             <Route path="/bible-practice" element={<div className="page-container"><BibleTypingPage /></div>} />
             <Route path="/logo-gallery" element={<div className="page-container"><LogoGalleryPage /></div>} />
             <Route path="/sermons/:id" element={<div className="page-container"><SermonDetailPage /></div>} />
+            <Route path="/admin" element={<div className="page-container"><AdminDashboardPage /></div>} />
           </Routes>
 
           <Footer />

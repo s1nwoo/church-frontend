@@ -1,0 +1,45 @@
+// src/pages/admin/AdminDashboardPage.js
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import './AdminDashboardPage.css';
+import { FaUsers, FaChalkboardTeacher } from 'react-icons/fa';
+
+const AdminDashboardPage = () => {
+  const navigate = useNavigate();
+
+  const cards = [
+    {
+      title: '성도 관리',
+      description: '교인 정보 등록/수정/삭제 기능을 제공합니다.',
+      icon: <FaUsers size={32} />,
+      path: '/admin/members',
+    },
+    {
+      title: '설교 관리',
+      description: '설교 내용을 등록하고 관리할 수 있습니다.',
+      icon: <FaChalkboardTeacher size={32} />,
+      path: '/admin/sermons',
+    },
+  ];
+
+  return (
+    <div className="admin-dashboard-container page-container">
+      <h2>관리자 메뉴</h2>
+      <div className="admin-card-grid">
+        {cards.map((card, idx) => (
+          <div
+            key={idx}
+            className="admin-card"
+            onClick={() => navigate(card.path)}
+          >
+            <div className="card-title">{card.title}</div>
+            <div className="card-icon">{card.icon}</div>
+            <div className="card-description">{card.description}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default AdminDashboardPage;

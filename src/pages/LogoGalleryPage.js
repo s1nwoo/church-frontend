@@ -4,7 +4,7 @@ import './LogoGalleryPage.css';
 
 const LogoGalleryPage = () => {
   const logos = [
-    'swlogo.png',
+    'swlogo1.png',
     'yelogo.png'
   ]; // 실제로는 이미지 파일 경로 배열
 

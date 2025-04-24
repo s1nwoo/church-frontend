@@ -1,3 +1,4 @@
+// src/pages/LoginPage.js
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -21,12 +22,17 @@ const LoginPage = () => {
         password,
       });
 
-      const { accessToken } = response.data;
+      // 📌 서버에서 받은 전체 응답 데이터
+      const userData = response.data;
+      console.log('로그인 응답', userData);
 
-      // ✅ accessToken과 username 저장
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('user', JSON.stringify({ username }));
-      login({ username });
+      // 1) userData.accessToken 이 정확히 들어있는지 확인
+      // 2) localStorage에 두 가지를 모두 저장
+      localStorage.setItem('accessToken', userData.accessToken);
+      localStorage.setItem('user', JSON.stringify(userData));
+
+      // Context에도 전체 전달
+      login(userData);
 
       alert('로그인 성공!');
       navigate('/');
