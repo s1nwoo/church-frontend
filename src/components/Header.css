@@ -17,19 +17,20 @@
 }
 
 .logo img {
-  height: auto;
   max-height: 100px;
   transform: scale(3.2);
   transform-origin: left;
 }
 
-.nav {
+/* 네비게이션 래퍼: 메가메뉴 기준 */
+.nav-wrapper {
+  position: relative;
   flex: 1;
   display: flex;
   justify-content: center;
 }
 
-.nav ul {
+.nav {
   display: flex;
   list-style: none;
   gap: 40px;
@@ -39,19 +40,73 @@
   font-weight: 500;
 }
 
-.nav ul li:hover {
-  color: #0033cc;
-  cursor: pointer;
-  text-decoration: underline;
+.nav-item {
+  position: relative;
 }
 
-.header-login-btn {
-  color: black;
-  padding: 12px;
-  border-radius: 6px;
-  border: none;
-  font-weight: bold;
+.nav-label {
   cursor: pointer;
+  user-select: none;
+}
+
+.nav-label:hover {
+  color: #0033cc;
+}
+
+/* 메가메뉴 */
+.mega-menu {
+  position: absolute;
+  top: 100%;          /* nav 바로 아래 */
+  left: 6%;          /* nav-wrapper 기준 가로 중앙 */
+  /* transform은 Header.js motion.div의 style에 위임 */
+  width: 1200px;
+  max-width: 100%;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 24px 0;
+  z-index: 900;
+}
+
+.mega-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  padding: 0 20px;
+}
+
+.mega-section h4 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.mega-section ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mega-section ul li {
+  margin-bottom: 6px;
+}
+
+.mega-section ul li a {
+  color: #333;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.mega-section ul li a:hover {
+  color: #0033cc;
+}
+
+/* 로그인/유저 영역 */
+.header-login-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .header-login-btn button {
@@ -68,7 +123,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 12px;
 }
 
 .user-dropdown-toggle {
