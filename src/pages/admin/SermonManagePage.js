@@ -3,29 +3,30 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './SermonManagePage.css';
 
-const initialForm = {
-  title: '',
-  preacher: '',
-  sermonDate: '',
-  bibleText: '',
-  youtubeUrl: '',
-  content: '',
-};
-
-const fieldLabels = {
-  title: '제목',
-  preacher: '설교자',
-  sermonDate: '설교 날짜',
-  bibleText: '본문',
-  youtubeUrl: 'YouTube 링크',
-  content: '설명',
-};
+const fieldConfig = [
+  { key: 'title',        label: '제목',        type: 'text',   editable: true },
+  { key: 'preacher',     label: '설교자',      type: 'text',   editable: true },
+  { key: 'sermonDate',   label: '설교 날짜',   type: 'date',   editable: true },
+  { key: 'bibleText',    label: '본문',        type: 'text',   editable: true },
+  { key: 'youtubeUrl',   label: '유튜브 링크',type: 'text',   editable: true },
+  { key: 'content',      label: '설명',        type: 'text',   editable: true },
+  {
+    key: 'deleted',      label: '삭제 여부',   type: 'select', editable: true,
+    options: [
+      { value: false, label: '아니요' },
+      { value: true,  label: '예'     },
+    ]
+  },
+  { key: 'createdDate',  label: '생성날짜',    type: 'text',   editable: false },
+  { key: 'updatedDate',  label: '수정날짜',    type: 'text',   editable: false },
+  { key: 'deletedDate',  label: '삭제날짜',    type: 'text',   editable: false },
+];
 
 const SermonManagePage = () => {
   const [sermons, setSermons] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [editing, setEditing] = useState(null);
-  const [form, setForm] = useState(initialForm);
+  const [editingId, setEditingId] = useState(null);
+  const [form, setForm] = useState({});
   const [search, setSearch] = useState('');
 
   const fetchSermons = async () => {
@@ -38,44 +39,48 @@ const SermonManagePage = () => {
     }
   };
 
-  useEffect(() => {
-    fetchSermons();
-  }, []);
+   useEffect(() => {
+     fetchSermons();
+   }, []);
 
   const openCreateModal = () => {
-    setEditing(null);
-    setForm(initialForm);
+    setEditingId(null);
+    // 서버가 리턴하는 객체 구조에 맞춰 초기화
+    setForm({
+      title: '', preacher: '', sermonDate: '', bibleText: '',
+      youtubeUrl: '', content: '', deleted: false,
+      createdDate: '', updatedDate: '', deletedDate: ''
+    });
     setModalOpen(true);
   };
 
   const openEditModal = (sermon) => {
-    setEditing(sermon.id);
-    // Convert date to yyyy-MM-dd if needed
-    setForm({
-      ...sermon,
-      sermonDate: sermon.sermonDate,
-    });
+    setEditingId(sermon.id);
+    setForm({ ...sermon });
     setModalOpen(true);
   };
 
   const closeModal = () => {
     setModalOpen(false);
-    setForm(initialForm);
+    setForm({});
+  };
+
+  const handleChange = (key, value) => {
+    setForm(prev => ({ ...prev, [key]: value }));
   };
 
   const handleSubmit = async () => {
-    // 필수 항목 검사
-    const required = ['title', 'preacher', 'sermonDate', 'youtubeUrl'];
-    for (const key of required) {
+    // 필수 검사
+    for (const { key, label } of fieldConfig.filter(f => f.editable && ['title','preacher','sermonDate','youtubeUrl'].includes(f.key))) {
       if (!form[key]) {
-        alert(`${fieldLabels[key]}을(를) 입력해주세요.`);
+        alert(`${label}을(를) 입력해주세요.`);
         return;
       }
     }
 
     try {
-      if (editing) {
-        await axios.put(`/api/sermons/${editing}`, form);
+      if (editingId) {
+        await axios.put(`/api/sermons/${editingId}`, form);
       } else {
         await axios.post('/api/sermons', form);
       }
@@ -83,8 +88,7 @@ const SermonManagePage = () => {
       fetchSermons();
     } catch (err) {
       console.error(err);
-      const msg = err.response?.data?.message || '저장 중 오류 발생';
-      alert(msg);
+      alert(err.response?.data?.message || '저장 중 오류 발생');
     }
   };
 
@@ -93,8 +97,7 @@ const SermonManagePage = () => {
     try {
       await axios.delete(`/api/sermons/${id}`);
       fetchSermons();
-    } catch (err) {
-      console.error(err);
+    } catch {
       alert('삭제 중 오류 발생');
     }
   };
@@ -108,7 +111,7 @@ const SermonManagePage = () => {
           type="text"
           placeholder="제목 또는 설교자 검색"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={e => setSearch(e.target.value)}
         />
         <button onClick={fetchSermons}>검색</button>
         <button onClick={openCreateModal} className="create-btn">등록</button>
@@ -117,24 +120,20 @@ const SermonManagePage = () => {
       <table className="sermon-table">
         <thead>
           <tr>
-            <th>제목</th>
-            <th>설교자</th>
-            <th>날짜</th>
-            <th>본문</th>
-            <th>삭제 여부</th>
-            <th>관리</th>
+            <th>제목</th><th>설교자</th><th>날짜</th><th>본문</th>
+            <th>삭제 여부</th><th>관리</th>
           </tr>
         </thead>
         <tbody>
-          {sermons.map((s) => (
+          {sermons.map(s => (
             <tr key={s.id} className={s.deleted ? 'deleted-row' : ''}>
               <td>{s.title}</td>
               <td>{s.preacher}</td>
               <td>{s.sermonDate}</td>
               <td>{s.bibleText}</td>
-              <td>{s.deleted ? '삭제됨' : '-'}</td>
+              <td>{s.deleted ? '예' : '아니요'}</td>
               <td>
-                <button onClick={() => openEditModal(s)}>수정</button>
+                <button onClick={() => openEditModal(s)} className="update-btn">수정</button>
                 <button onClick={() => handleDelete(s.id)} className="delete-btn">삭제</button>
               </td>
             </tr>
@@ -145,27 +144,48 @@ const SermonManagePage = () => {
       {modalOpen && (
         <div className="modal-overlay">
           <div className="modal">
-            <h3>{editing ? '설교 수정' : '설교 등록'}</h3>
-            {Object.entries(form).map(([key, value]) => {
-              const commonProps = {
-                key,
-                value,
-                onChange: (e) => setForm({ ...form, [key]: e.target.value }),
+            <h3>{editingId ? '설교 수정' : '설교 등록'}</h3>
+
+            {fieldConfig.map(({ key, label, type, editable, options }) => {
+              // id 필드 제외
+              if (key === 'id') return null;
+
+              const common = {
+                id: key,
+                value: form[key] ?? '',
+                onChange: e => {
+                  const val = type === 'select'
+                    ? e.target.value === 'true'
+                    : e.target.value;
+                  handleChange(key, val);
+                },
+                disabled: !editable
               };
-              return key === 'sermonDate' ? (
-                <input
-                  {...commonProps}
-                  type="date"
-                  placeholder={fieldLabels[key]}
-                />
-              ) : (
-                <input
-                  {...commonProps}
-                  type="text"
-                  placeholder={fieldLabels[key]}
-                />
+
+              return (
+                <div className="form-group" key={key}>
+                  <label htmlFor={key}>{label}</label>
+                  {type === 'select' ? (
+                    <select {...common}>
+                      {options.map(opt => (
+                        <option
+                          key={String(opt.value)}
+                          value={String(opt.value)}
+                        >
+                          {opt.label}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <input
+                      {...common}
+                      type={type}
+                    />
+                  )}
+                </div>
               );
             })}
+
             <div className="modal-actions">
               <button onClick={handleSubmit} className="save-btn">저장</button>
               <button onClick={closeModal} className="cancel-btn">취소</button>
