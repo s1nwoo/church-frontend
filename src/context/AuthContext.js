@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
   // 로그인 처리 함수
   const login = (userData) => {
     localStorage.setItem('user', JSON.stringify(userData));
-    localStorage.setItem('accessToken', userData.token); // 토큰도 저장
+    localStorage.setItem('accessToken', userData.accessToken);
     setUser(userData);
   };
 
