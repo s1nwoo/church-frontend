@@ -103,8 +103,8 @@ const SermonManagePage = () => {
   };
 
   return (
-    <div className="sermon-manage-container">
-      <h2>설교 관리</h2>
+    <div className="sermon-manage-container page-container">
+      <h2 className="sermon-title">설교 관리</h2>
 
       <div className="sermon-manage-top">
         <input

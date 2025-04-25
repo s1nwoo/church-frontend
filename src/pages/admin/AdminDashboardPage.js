@@ -24,7 +24,7 @@ const AdminDashboardPage = () => {
 
   return (
     <div className="admin-dashboard-container page-container">
-      <h2>관리자 메뉴</h2>
+      <h2 className="admin-title">관리자 메뉴</h2>
       <div className="admin-card-grid">
         {cards.map((card, idx) => (
           <div

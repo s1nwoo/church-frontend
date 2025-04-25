@@ -1,14 +1,16 @@
 /* src/pages/admin/AdminDashboardPage.css */
 .admin-dashboard-container {
-  padding: 40px 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 800px;
+  margin: auto;
+  padding: 2rem;
 }
 
-.admin-dashboard-container h2 {
-  font-size: 28px;
+.admin-title {
+  font-size: 24px;
   font-weight: bold;
   margin-bottom: 24px;
+  border-left: 4px solid #ff4081;
+  padding-left: 10px;
 }
 
 .admin-card-grid {
