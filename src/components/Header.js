@@ -4,7 +4,7 @@ import React, { useContext, useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import './Header.css';
-import logoImg from './images/logo.jpg';
+import logoImg from './images/logo.png';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const navItems = [
@@ -49,14 +49,18 @@ const Header = () => {
   const [openNav, setOpenNav]   = useState(null);
   const [userMenu, setUserMenu] = useState(false);
 
-  const navRef  = useRef(null);
-  const megaRef = useRef(null);
-  const userRef = useRef(null);
+  const navWrapperRef = useRef(null);
+  const navListRef    = useRef(null);
+  const megaRef       = useRef(null);
+  const userRef       = useRef(null);
 
-  // 1) 클릭 바깥쪽 닫기
   useEffect(() => {
     const onClickOutside = e => {
-      if (navRef.current && !navRef.current.contains(e.target)) {
+      if (
+        navWrapperRef.current &&
+        !navWrapperRef.current.contains(e.target) &&
+        !(megaRef.current && megaRef.current.contains(e.target))
+      ) {
         setOpenNav(null);
       }
       if (userRef.current && !userRef.current.contains(e.target)) {
@@ -67,26 +71,33 @@ const Header = () => {
     return () => document.removeEventListener('mousedown', onClickOutside);
   }, []);
 
-  // 2) 마우스 움직임 감지: nav/mega 그리고 gap 영역 벗어나면 닫기
   useEffect(() => {
     const onMouseMove = e => {
       if (!openNav) return;
 
-      const inNav  = navRef.current  && navRef.current.contains(e.target);
-      const inMega = megaRef.current && megaRef.current.contains(e.target);
+      const navRect = navListRef.current.getBoundingClientRect();
+      const megaRect = megaRef.current?.getBoundingClientRect();
+      const x = e.clientX, y = e.clientY;
+      const padding = 200;
 
-      // gap 영역 판단: nav 바로 아래 ~ mega 메뉴 바로 위 사이 Y 영역
-      let inGap = false;
-      if (navRef.current && megaRef.current) {
-        const navRect  = navRef.current.getBoundingClientRect();
-        const megaRect = megaRef.current.getBoundingClientRect();
-        const y = e.clientY;
-        if (y >= navRect.bottom && y <= megaRect.top) {
-          inGap = true;
-        }
-      }
+      const inNavText = (
+        x >= navRect.left - padding &&
+        x <= navRect.right + padding &&
+        y >= navRect.top &&
+        y <= navRect.bottom
+      );
+      const inMega = megaRect
+        ? x >= megaRect.left &&
+          x <= megaRect.right &&
+          y >= megaRect.top &&
+          y <= megaRect.bottom
+        : false;
 
-      if (!inNav && !inMega && !inGap) {
+      const inGap = megaRect
+        ? y >= navRect.bottom && y <= megaRect.top
+        : false;
+
+      if (!(inNavText || inGap || inMega)) {
         setOpenNav(null);
       }
     };
@@ -102,14 +113,21 @@ const Header = () => {
   return (
     <header className="header">
       <div className="header-inner page-container">
-        {/* 로고 */}
+        {/* 로고 클릭 시 최상단으로 이동 */}
         <div className="logo">
-          <Link to="/"><img src={logoImg} alt="방화침례교회 로고" /></Link>
+          <Link
+            to="/"
+            onClick={() => {
+              window.scrollTo({ top: 0, behavior: 'auto' });
+            }}
+          >
+            <img src={logoImg} alt="방화침례교회 로고" />
+          </Link>
         </div>
 
-        {/* 네비게이션 + 메가메뉴 */}
-        <nav className="nav-wrapper" ref={navRef}>
-          <ul className="nav">
+        {/* 네비게이션 */}
+        <nav className="nav-wrapper" ref={navWrapperRef}>
+          <ul className="nav" ref={navListRef}>
             {navItems.map(item => (
               <li key={item.label} className="nav-item">
                 <span
@@ -152,12 +170,12 @@ const Header = () => {
           </AnimatePresence>
         </nav>
 
-        {/* 로그인 / 유저 정보 + 로그아웃 */}
-        <div className="header-login-btn">
+        {/* 로그인 / 유저 메뉴 */}
+        <div className="header-login-btn" ref={userRef}>
           {!user ? (
             <Link to="/login"><button>로그인</button></Link>
           ) : (
-            <div className="user-info" ref={userRef}>
+            <>
               <span
                 className="user-dropdown-toggle"
                 onClick={() => setUserMenu(prev => !prev)}
@@ -180,8 +198,10 @@ const Header = () => {
                   </motion.div>
                 )}
               </AnimatePresence>
-              <button onClick={handleLogout} className="logout-btn">로그아웃</button>
-            </div>
+              <button onClick={handleLogout} className="logout-btn">
+                로그아웃
+              </button>
+            </>
           )}
         </div>
       </div>

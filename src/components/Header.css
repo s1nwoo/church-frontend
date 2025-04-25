@@ -17,9 +17,9 @@
 }
 
 .logo img {
-  max-height: 100px;
-  transform: scale(3.2);
-  transform-origin: left;
+  width: 240px;       /* 원본 100px × 3.2 */
+  height: auto;
+  cursor: pointer;    /* 포인터 커서도 표시 */
 }
 
 /* 네비게이션 래퍼: 메가메뉴 기준 */
@@ -139,8 +139,8 @@
 
 .user-dropdown-menu {
   position: absolute;
-  top: 120%;
-  left: 0;
+  top: 70%;
+  left: 87%;
   background-color: white;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
   border-radius: 6px;
