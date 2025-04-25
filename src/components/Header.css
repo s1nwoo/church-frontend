@@ -56,7 +56,7 @@
 /* 메가메뉴 */
 .mega-menu {
   position: absolute;
-  top: 100%;          /* nav 바로 아래 */
+  top: 250%;          /* nav 바로 아래 */
   left: 6%;          /* nav-wrapper 기준 가로 중앙 */
   /* transform은 Header.js motion.div의 style에 위임 */
   width: 1200px;

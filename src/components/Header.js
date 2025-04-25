@@ -48,12 +48,14 @@ const Header = () => {
 
   const [openNav, setOpenNav]   = useState(null);
   const [userMenu, setUserMenu] = useState(false);
-  const navRef  = useRef();
-  const userRef = useRef();
 
-  // 외부 클릭 감지하여 nav / user 메뉴 닫기
+  const navRef  = useRef(null);
+  const megaRef = useRef(null);
+  const userRef = useRef(null);
+
+  // 1) 클릭 바깥쪽 닫기
   useEffect(() => {
-    const handleClickOutside = e => {
+    const onClickOutside = e => {
       if (navRef.current && !navRef.current.contains(e.target)) {
         setOpenNav(null);
       }
@@ -61,9 +63,37 @@ const Header = () => {
         setUserMenu(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('mousedown', onClickOutside);
+    return () => document.removeEventListener('mousedown', onClickOutside);
   }, []);
+
+  // 2) 마우스 움직임 감지: nav/mega 그리고 gap 영역 벗어나면 닫기
+  useEffect(() => {
+    const onMouseMove = e => {
+      if (!openNav) return;
+
+      const inNav  = navRef.current  && navRef.current.contains(e.target);
+      const inMega = megaRef.current && megaRef.current.contains(e.target);
+
+      // gap 영역 판단: nav 바로 아래 ~ mega 메뉴 바로 위 사이 Y 영역
+      let inGap = false;
+      if (navRef.current && megaRef.current) {
+        const navRect  = navRef.current.getBoundingClientRect();
+        const megaRect = megaRef.current.getBoundingClientRect();
+        const y = e.clientY;
+        if (y >= navRect.bottom && y <= megaRect.top) {
+          inGap = true;
+        }
+      }
+
+      if (!inNav && !inMega && !inGap) {
+        setOpenNav(null);
+      }
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    return () => document.removeEventListener('mousemove', onMouseMove);
+  }, [openNav]);
 
   const toggleNav    = label => setOpenNav(prev => (prev === label ? null : label));
   const handleLogout = () => { logout(); navigate('/'); };
@@ -77,12 +107,8 @@ const Header = () => {
           <Link to="/"><img src={logoImg} alt="방화침례교회 로고" /></Link>
         </div>
 
-        {/* 네비게이션 래퍼: 여기를 벗어나면 메가메뉴 자동 닫힘 */}
-        <nav
-          className="nav-wrapper"
-          ref={navRef}
-          onMouseLeave={() => setOpenNav(null)}
-        >
+        {/* 네비게이션 + 메가메뉴 */}
+        <nav className="nav-wrapper" ref={navRef}>
           <ul className="nav">
             {navItems.map(item => (
               <li key={item.label} className="nav-item">
@@ -96,11 +122,11 @@ const Header = () => {
             ))}
           </ul>
 
-          {/* 메가메뉴: 화면 중앙 고정 */}
           <AnimatePresence>
             {currentItem && (
               <motion.div
                 className="mega-menu"
+                ref={megaRef}
                 style={{ transform: 'translateX(-50%)' }}
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -154,9 +180,7 @@ const Header = () => {
                   </motion.div>
                 )}
               </AnimatePresence>
-              <button onClick={handleLogout} className="logout-btn">
-                로그아웃
-              </button>
+              <button onClick={handleLogout} className="logout-btn">로그아웃</button>
             </div>
           )}
         </div>
