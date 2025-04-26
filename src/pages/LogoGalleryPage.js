@@ -12,7 +12,7 @@ const LogoGalleryPage = () => {
 
   return (
     <div className="logo-gallery page-container">
-      <h1>로고 모음집</h1>
+      <h2 className="main-title">로고 모음집</h2>
       <div className="logo-grid">
         {logos.map((logo, idx) => (
           <div className="logo-item" key={idx}>

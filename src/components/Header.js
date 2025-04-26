@@ -191,7 +191,7 @@ const Header = () => {
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <button onClick={() => navigate('/profile')}>내 정보 수정</button>
+                    <button onClick={() => navigate('/profile')}>내 정보 수정(기능없음)</button>
                     {user.role === 'ROLE_ADMIN' && (
                       <button onClick={() => navigate('/admin')}>관리자 메뉴</button>
                     )}

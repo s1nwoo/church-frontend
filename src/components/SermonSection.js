@@ -37,7 +37,7 @@ const navigate = useNavigate();
                 <span className="category">말씀</span>
                 <h3>{sermon.title}</h3>
                 {sermon.bibleText && <p className="subtitle">{sermon.bibleText}</p>}
-                <p className="preacher">{sermon.preacher} · 주후 {sermon.sermonDate}</p>
+                <p className="preacher">{sermon.preacher} · 일시 {sermon.sermonDate}</p>
               </div>
             </div>
           ))}
