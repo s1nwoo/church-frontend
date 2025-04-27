@@ -4,17 +4,16 @@ import axios from 'axios';
 import './SermonSection.css';
 import { useNavigate } from 'react-router-dom';
 
-
 const SermonSection = () => {
   const [sermons, setSermons] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://localhost:8080/api/sermons')
+    // ⚡️ 절대 URL 제거, 상대경로만 남김
+    axios.get('/api/sermons')
       .then(res => setSermons(res.data.content))
       .catch(err => console.error(err));
   }, []);
-
-const navigate = useNavigate();
 
   return (
     <section className="sermon-section">
@@ -31,13 +30,20 @@ const navigate = useNavigate();
               style={{ cursor: 'pointer' }}
             >
               <div className="sermon-thumbnail">
-                <img src={`https://img.youtube.com/vi/${extractYoutubeId(sermon.youtubeUrl)}/0.jpg`} alt={sermon.title} />
+                <img
+                  src={`https://img.youtube.com/vi/${extractYoutubeId(sermon.youtubeUrl)}/0.jpg`}
+                  alt={sermon.title}
+                />
               </div>
               <div className="sermon-meta">
                 <span className="category">말씀</span>
                 <h3>{sermon.title}</h3>
-                {sermon.bibleText && <p className="subtitle">{sermon.bibleText}</p>}
-                <p className="preacher">{sermon.preacher} · 일시 {sermon.sermonDate}</p>
+                {sermon.bibleText && (
+                  <p className="subtitle">{sermon.bibleText}</p>
+                )}
+                <p className="preacher">
+                  {sermon.preacher} · 일시 {sermon.sermonDate}
+                </p>
               </div>
             </div>
           ))}
@@ -47,7 +53,7 @@ const navigate = useNavigate();
 };
 
 function extractYoutubeId(url) {
-  const regex = /(?:\?v=|\/embed\/|\/watch\?v=|youtu.be\/)([\w-]{11})/;
+  const regex = /(?:\?v=|\/embed\/|\/watch\?v=|youtu\.be\/)([\w-]{11})/;
   const match = url.match(regex);
   return match ? match[1] : '';
 }
