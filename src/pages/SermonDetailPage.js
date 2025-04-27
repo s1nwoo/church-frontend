@@ -8,7 +8,8 @@ const SermonDetailPage = () => {
   const [sermon, setSermon] = useState(null);
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/api/sermons/${id}`)
+    // ⚡️ 절대경로 제거: /api/sermons/${id} 상대경로만 사용
+    axios.get(`/api/sermons/${id}`)
       .then(res => setSermon(res.data))
       .catch(err => console.error(err));
   }, [id]);
@@ -16,7 +17,7 @@ const SermonDetailPage = () => {
   if (!sermon) return <div className="page-container">로딩 중...</div>;
 
   const extractYoutubeId = (url) => {
-    const regex = /(?:\?v=|\/embed\/|\/watch\?v=|youtu.be\/)([\w-]{11})/;
+    const regex = /(?:\?v=|\/embed\/|\/watch\?v=|youtu\.be\/)([\w-]{11})/;
     const match = url.match(regex);
     return match ? match[1] : '';
   };
