@@ -8,7 +8,10 @@ const LogoGalleryPage = () => {
     'yelogo.png',
     'kjlogo.png',
     'jblogo.png',
-    'swlogo2.png'
+    'swlogo2.png',
+    'swlogo3.png',
+    'swlogo4.png',
+    'swlogo5.png',
   ]; // 실제로는 이미지 파일 경로 배열
 
   return (
