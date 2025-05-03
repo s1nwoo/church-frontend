@@ -15,6 +15,7 @@ const LogoGalleryPage = () => {
     'swlogo6.png',
     'swlogo7.png',
     'swlogo8.png',
+    'helogo.png',
   ]; // 실제로는 이미지 파일 경로 배열
 
   return (
