@@ -1,43 +1,13 @@
+/* src/components/CardSlider.css */
+
 /* 전체 슬라이더 컨테이너 */
 .card-slider {
+  position: relative;
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: column;
-}
-
-/* 슬라이드+버튼 래퍼 */
-.slides-container {
-  position: relative;
-  display: flex;
-  flex: 1;
-  min-height: 0;
   align-items: center;
-}
-
-/* 카드 묶음: 3장 균등, gap 30px */
-.slides-wrapper {
-  display: flex;
-  gap: 30px;
-  overflow: hidden;
-  flex: 1;
-  min-height: 0;
-}
-
-/* 개별 카드: 고정된 컨테이너 크기 */
-.slide {
-  flex: 0 0 calc((100% - 60px) / 3);
-  height: 100%;
-  min-width: 0;
-}
-
-/* 이미지: 항상 컨테이너에 꽉 차게 */
-.slide img {
-  width: 615px;
-  height: 360px;
-  object-fit: cover;
-  border-radius: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  /* justify-content: center;  슬라이더 중앙 정렬은 slides-container가 담당 */
 }
 
 /* 좌/우 화살표 */
@@ -52,20 +22,55 @@
   border-radius: 50%;
   font-size: 1.5rem;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  z-index: 10;
 }
-.arrow-left { left: 10px; }
-.arrow-right { right: 10px; }
+.arrow-left  { left: 10px; }
+.arrow-right { right: 10px;  }
 
-/* 도트 내비게이션 */
+/* 슬라이드를 보여주는 뷰포트 */
+.slides-container {
+  overflow: hidden;
+  flex: 1;
+  margin: 0 60px; /* 화살표 공간(40px) + 여유(20px) */
+  width: calc((615px * 3) + (30px * 2)); /* 3장 보여줄 폭 */
+}
+
+/* 모든 카드를 한 줄에 배치 */
+.slides-wrapper {
+  display: flex;
+  gap: 30px;
+  transition: transform 0.5s ease;
+}
+
+/* 개별 카드 컨테이너: 크기 고정 */
+.slide {
+  flex: 0 0 auto;
+  width: 615px;
+  height: 360px;
+  min-width: 0;
+}
+.slide img {
+  width: 615px;
+  height: 360px;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+/* ── 수정된 도트 네비게이션 ── */
 .dots {
+  /* 절대 위치 제거 */
+  position: relative;
+  bottom: auto;
+  left: auto;
+  transform: none;
+
+  /* 슬라이드 바로 아래 중앙 정렬 */
   display: flex;
   justify-content: center;
   gap: 8px;
-  margin-top: 8px;
+  margin: 16px auto 0; /* 위쪽 여백 16px, 수평 중앙, 아래 여백 0 */
 }
+
 .dot {
   width: 10px;
   height: 10px;
@@ -73,6 +78,7 @@
   border-radius: 50%;
   cursor: pointer;
 }
+
 .dot.active {
   background-color: #0078d4;
 }
