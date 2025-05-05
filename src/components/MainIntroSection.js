@@ -1,58 +1,27 @@
-// src/components/MainIntroSection.js
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import './MainIntroSection.css';
+import CardSlider from './CardSlider';
 
-const MainIntroSection = () => {
-  const navigate = useNavigate();
+// 이미지 import: hero-illustration.png가 아래 경로에 있어야 합니다.
+import heroIllustration from './images/hero-illustration.png';
 
-  const items = [
-    ['내용1'],
-    ['내용2'],
-    ['내용3'],
-    ['로고 모음집'],
-    ['성경타자통독'],
-  ];
-
-  const handleClick = (label) => {
-    if (label === '성경타자통독') {
-      navigate('/bible-practice'); // ✅ 해당 경로로 이동
-    } else if (label === '로고 모음집') {
-         navigate('/logo-gallery'); // ✅ 추후 연결할 라우트
-    }
-  };
-  return (
-    <section className="main-intro">
+const MainIntroSection = () => (
+  <section className="intro-section">
+    <div className="intro-inner page-container">
+      {/* ─── 위 50%: 이미지 전체 노출 ─── */}
       <div className="hero">
-        {/*
-          <div className="overlay"></div>
-          <div className="hero-text">
-            <p className="subtitle">2025년 사역표어</p>
-            <h1>“성령충만을 받으라!"</h1>
-            <p className="verse">
-              또 새 영을 너희 속에 두고 새 마음을 너희에게 주되 <br />
-              너희 육신에서 굳은 마음을 제거하고 부드러운 마음을 줄 것 이며,<br />
-              에스겔 36:26
-            </p>
-          </div>
-        */}
-
-          <div className="hero-info-section">
-            {items.map(([line1, line2], idx) => (
-              <div
-                className="info-box"
-                key={idx}
-                onClick={() => handleClick(line1)} // ✅ 클릭 이벤트 등록
-                style={{ cursor: line1 === '성경타자통독' ? 'pointer' : 'default' }}
-              >
-                <strong>{line1}</strong>
-                {line2 && <div>{line2}</div>}
-              </div>
-            ))}
-          </div>
+        <div className="hero-full-image">
+          <img
+            src={heroIllustration}
+            alt="사역 일러스트"
+          />
+        </div>
       </div>
-    </section>
-  );
-};
+
+      {/* ─── 아래 50%: 카드 슬라이더 ─── */}
+      <CardSlider />
+    </div>
+  </section>
+);
 
 export default MainIntroSection;

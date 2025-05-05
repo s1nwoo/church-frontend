@@ -1,177 +1,71 @@
-/* src/components/Header.css */
+/* Header 전체 래퍼 */
 .header {
   width: 100%;
-  background-color: white;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  position: fixed;
-  top: 0;
-  z-index: 999;
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
 }
 
-.header-inner {
-  height: 72px;
+/* 내부 컨테이너: page-container로 가로 중앙 정렬 */
+
+/* 로고 영역 */
+.logo-container a {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 20px 0;
-}
-
-.logo img {
-  width: 240px;       /* 원본 100px × 3.2 */
-  height: auto;
-  cursor: pointer;    /* 포인터 커서도 표시 */
-}
-
-/* 네비게이션 래퍼: 메가메뉴 기준 */
-.nav-wrapper {
-  position: relative;
-  flex: 1;
-  display: flex;
-  justify-content: center;
-}
-
-.nav {
-  display: flex;
-  list-style: none;
-  gap: 40px;
-  padding: 0;
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 500;
-}
-
-.nav-item {
-  position: relative;
-}
-
-.nav-label {
-  cursor: pointer;
-  user-select: none;
-}
-
-.nav-label:hover {
-  color: #0033cc;
-}
-
-/* 메가메뉴 */
-.mega-menu {
-  position: absolute;
-  top: 250%;          /* nav 바로 아래 */
-  left: 6%;          /* nav-wrapper 기준 가로 중앙 */
-  /* transform은 Header.js motion.div의 style에 위임 */
-  width: 1200px;
-  max-width: 100%;
-  background: white;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  padding: 24px 0;
-  z-index: 900;
-}
-
-.mega-grid {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  padding: 0 20px;
-}
-
-.mega-section h4 {
-  margin: 0 0 8px;
-  font-size: 1rem;
-  font-weight: 600;
-}
-
-.mega-section ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.mega-section ul li {
-  margin-bottom: 6px;
-}
-
-.mega-section ul li a {
-  color: #333;
   text-decoration: none;
-  font-size: 0.9rem;
 }
 
-.mega-section ul li a:hover {
-  color: #0033cc;
+.logo-image {
+  height: 50px;
+  margin-right: 10px;
 }
 
-/* 로그인/유저 영역 */
-.header-login-btn {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.header-login-btn button {
-  background-color: #0033cc;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 20px;
-  cursor: pointer;
+.logo-text {
+  font-size: 1.5rem;
+  color: #333;
   font-weight: bold;
 }
 
-.user-info {
-  position: relative;
+/* 데스크톱 네비게이션 메뉴 */
+.nav-menu {
   display: flex;
+  gap: 30px;
   align-items: center;
-  gap: 12px;
 }
 
-.user-dropdown-toggle {
-  font-weight: bold;
-  cursor: pointer;
-  color: #000;
+.menu-item {
+  text-decoration: none;
+  font-size: 1rem;
+  color: #333;
   transition: color 0.2s;
 }
 
-.user-dropdown-toggle:hover {
-  color: #0033cc;
+.menu-item:hover {
+  color: #0078d4;
 }
 
-.user-dropdown-menu {
-  position: absolute;
-  top: 70%;
-  left: 87%;
-  background-color: white;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  border-radius: 6px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 8px 12px;
-  z-index: 1000;
-  min-width: 140px;
+/* 햄버거 메뉴 숨김 (데스크톱) */
+.hamburger-menu {
+  display: none;
 }
 
-.user-dropdown-menu button {
+/* 햄버거 버튼 스타일 */
+.hamburger-button {
   background: none;
   border: none;
-  padding: 6px 0;
-  text-align: left;
-  font-size: 14px;
   cursor: pointer;
-  color: #333;
+  padding: 4px;
 }
 
-.user-dropdown-menu button:hover {
-  color: #0033cc;
+.hamburger-icon rect {
+  fill: #333;
 }
 
-.logout-btn {
-  background-color: #0033cc;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 13px;
+/* 모바일 뷰포트에서 메뉴 토글 */
+@media (max-width: 768px) {
+  .nav-menu {
+    display: none;         /* 데스크톱 메뉴 숨기기 */
+  }
+  .hamburger-menu {
+    display: block;        /* 햄버거 메뉴 보이기 */
+  }
 }

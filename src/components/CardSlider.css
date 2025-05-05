@@ -1,0 +1,82 @@
+/* 카드 슬라이더 전체 */
+.card-slider {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+/* slides-container: 슬라이드와 버튼을 감싸서 높이 기준점을 잡음 */
+.slides-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  margin: 0 -20px;  /* intro-inner의 padding 보정 */
+}
+
+/* slides-wrapper: 카드 3장 노출, gap 조정 */
+.slides-wrapper {
+  display: flex;
+  gap: 30px;
+  overflow: hidden;
+  flex: 1;
+  height: 100%;
+  padding: 0;       /* 패딩 완전 제거 */
+}
+
+/* 각 카드 */
+.slide {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+}
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 30px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* 화살표: slides-container 기준 중앙에 위치 */
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.8);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.arrow-left {
+  left: 10px;
+}
+.arrow-right {
+  right: 10px;
+}
+
+/* 도트 네비게이션 */
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;  /* 살짝 위로 당김 */
+}
+.dot {
+  width: 10px;
+  height: 10px;
+  background-color: #ddd;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.dot.active {
+  background-color: #0078d4;
+}

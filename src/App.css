@@ -13,11 +13,6 @@ body {
    overflow-y: scroll;
 }
 
-
-.app-wrapper {
-  padding-top: 112px;
-}
-
 /* 개발용 가이드라인 */
 .page-container::before,
 .page-container::after {

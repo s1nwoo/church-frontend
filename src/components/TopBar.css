@@ -1,0 +1,44 @@
+/* src/components/TopBar.css */
+.top-bar {
+  width: 100%;
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+  font-size: 0.9rem;
+}
+
+.top-bar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.youtube-link {
+  display: flex;
+  align-items: center;
+}
+
+.youtube-icon {
+  width: 24px;
+  height: 24px;
+  fill: #FF0000;
+  cursor: pointer;
+}
+
+.auth-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.auth-links a {
+  text-decoration: none;
+  color: #333;
+}
+
+.auth-links span {
+  color: #999;
+}
