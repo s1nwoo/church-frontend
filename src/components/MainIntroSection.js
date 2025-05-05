@@ -2,23 +2,18 @@ import React from 'react';
 import './MainIntroSection.css';
 import CardSlider from './CardSlider';
 
-// 이미지 import: hero-illustration.png가 아래 경로에 있어야 합니다.
-import heroIllustration from './images/hero-illustration.png';
+// hero 일러스트 import
+import heroImage from './images/hero-illustration.png';
 
 const MainIntroSection = () => (
   <section className="intro-section">
-    <div className="intro-inner page-container">
-      {/* ─── 위 50%: 이미지 전체 노출 ─── */}
+    <div className="intro-inner">
+      {/* 히어로(위 50%) */}
       <div className="hero">
-        <div className="hero-full-image">
-          <img
-            src={heroIllustration}
-            alt="사역 일러스트"
-          />
-        </div>
+        <img src={heroImage} alt="사역 일러스트" className="hero-full-image" />
       </div>
 
-      {/* ─── 아래 50%: 카드 슬라이더 ─── */}
+      {/* 카드 슬라이더(아래 50%) */}
       <CardSlider />
     </div>
   </section>
