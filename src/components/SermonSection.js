@@ -9,12 +9,12 @@ import { useNavigate } from 'react-router-dom';
 // src/components/images/sum.png 파일을 준비해 주세요
 import sumImage from './images/sum.png';
 // ─────────────────────────────────────────────────────────
-import iconImage from './images/icon1.png';
-import iconImage2 from './images/icon2.png';
-import iconImage3 from './images/icon3.png';
-import iconImage4 from './images/icon4.png';
-import iconImage5 from './images/icon5.png';
-import iconImage6 from './images/icon6.png';
+import iconImage from './images/icon1.png';  // 교회안내
+import iconImage2 from './images/icon2.png'; // 오시는길
+import iconImage3 from './images/icon3.png'; // 교회소식
+import iconImage4 from './images/icon4.png'; // 예배안내
+import iconImage5 from './images/icon5.png'; // 교회연혁
+import iconImage6 from './images/icon6.png'; // 유튜브채널
 
 const SermonSection = () => {
   const [sermons, setSermons] = useState([]);
@@ -104,7 +104,7 @@ const SermonSection = () => {
             <div className="emoji-button" onClick={() => {/* 나중에 경로 붙이기 */}}>
               <img src={iconImage} alt="" className="icon-image" />
             </div>
-            <div className="emoji-button" onClick={() => {/* 나중에 경로 붙이기 */}}>
+            <div className="emoji-button" onClick={() => navigate('/location')}>
               <img src={iconImage2} alt="" className="icon-image" />
             </div>
             <div className="emoji-button" onClick={() => {/* 나중에 경로 붙이기 */}}>

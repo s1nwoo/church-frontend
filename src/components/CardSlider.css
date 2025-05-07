@@ -13,19 +13,35 @@
 /* 좌/우 화살표 */
 .arrow {
   position: absolute;
-  top: 50%;
+  top: 49%;
   transform: translateY(-50%);
-  background: rgba(255,255,255,0.8);
+  background: none;        /* 원 배경 제거 */
   border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  font-size: 1.5rem;
+  width: auto;             /* 버튼 크기 자동 */
+  height: auto;
+  padding: 0;
   cursor: pointer;
   z-index: 10;
 }
-.arrow-left  { left: 10px; }
-.arrow-right { right: 10px;  }
+.arrow-left  { left: 615px; }
+.arrow-right { right: 615px; }
+
+/* [기능] 화살표 이미지 크기 및 중앙 정렬 */
+/* [설명] 버튼 안의 <img> 태그를 적절한 크기로 조정하고 블록 레벨로 가운데 배치 */
+/* ── 아이콘 이미지 불투명도 & transition ── */
+.arrow img {
+  display: block;
+  width: 60px;
+  height: 60px;
+  margin: auto;
+  opacity: 0.6;             /* 기본 50% 불투명 */
+  transition: opacity 0.3s ease;
+}
+
+/* ── 호버 시 완전 불투명 ── */
+.arrow:hover img {
+  opacity: 1;
+}
 
 /* 슬라이드를 보여주는 뷰포트 */
 .slides-container {
@@ -58,13 +74,11 @@
 
 /* ── 수정된 도트 네비게이션 ── */
 .dots {
-  /* 절대 위치 제거 */
   position: relative;
   bottom: auto;
   left: auto;
   transform: none;
 
-  /* 슬라이드 바로 아래 중앙 정렬 */
   display: flex;
   justify-content: center;
   gap: 8px;

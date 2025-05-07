@@ -1,64 +1,67 @@
+// src/components/CardSlider.js
 import React, { useState, useRef, useEffect } from 'react';
 import './CardSlider.css';
 
-// 실제 사용하시는 카드 이미지들을 모두 import 하세요
+// [기능] 화살표 이미지 import
+import allowL from './images/allow_l.png';
+import allowR from './images/allow_r.png';
+
+// [기능] 카드 이미지 import (실제 경로/파일명에 맞춰 조정)
 import card1 from './images/card/card3.png';
 import card2 from './images/card/card2.png';
 import card3 from './images/card/card4.png';
-// 예: 6개라면 아래도 import
- import card4 from './images/card/card1.png';
-// import card5 from './images/card/card5.png';
+import card4 from './images/card/card1.png';
+import card5 from './images/card/card5.png';
 // import card6 from './images/card/card6.png';
 
-const ORIGINAL = [card1, card2, card3, card4 /*, card4, card5, card6 */];
-const VISIBLE = 3;               // 한 번에 보일 카드 수
-const WIDTH = 615;               // 카드너비 (px)
-const GAP   = 30;                // 카드간격 (px)
-const DURATION = 500;            // 애니메이션 시간 (ms)
-
-// 컨테이너 폭: 3장*WIDTH + 2*GAP
+const ORIGINAL = [card1, card2, card3, card4, card5 /*, card6 */];
+const VISIBLE = 3;
+const WIDTH = 615;
+const GAP = 30;
+const DURATION = 500;
 const CONTAINER_WIDTH = VISIBLE * WIDTH + (VISIBLE - 1) * GAP;
-// 가운데 오프셋: (컨테이너폭 - 카드너비)/2
-const CENTER_OFFSET   = (CONTAINER_WIDTH - WIDTH) / 2;
+const CENTER_OFFSET = (CONTAINER_WIDTH - WIDTH) / 2;
 
 const CardSlider = () => {
-  // 앞뒤로 원본을 감싸서 무한루프
-  const extended = [
-    ...ORIGINAL,
-    ...ORIGINAL,
-    ...ORIGINAL
-  ];
   const total = ORIGINAL.length;
+  const extended = [...ORIGINAL, ...ORIGINAL, ...ORIGINAL];
 
-  const [idx, setIdx] = useState(total);   // 시작은 중앙 원본 첫번째
+  const [idx, setIdx] = useState(total);
   const [transOn, setTransOn] = useState(true);
   const wrapRef = useRef(null);
 
-  // translate 계산 & transition
+  // [기능] 슬라이드 이동 시 transform, transition 설정
   useEffect(() => {
     const w = wrapRef.current;
     if (!w) return;
     w.style.transition = transOn
       ? `transform ${DURATION}ms ease`
       : 'none';
-    // 이동 거리 = 카드+gap * idx, 보정값(center offset) 빼기
     const x = (WIDTH + GAP) * idx - CENTER_OFFSET;
     w.style.transform = `translateX(-${x}px)`;
   }, [idx, transOn]);
 
-  // next / prev
+  // [기능] 자동 재생: 컴포넌트 마운트 후 2초마다 next() 호출
+  useEffect(() => {
+    const play = () => {
+      setIdx(i => i + 1);
+      setTransOn(true);
+    };
+    const intervalId = setInterval(play, 5000);
+    return () => clearInterval(intervalId);
+  }, []);
+
+  // [기능] 다음/이전 이동
   const next = () => { setIdx(i => i + 1); setTransOn(true); };
   const prev = () => { setIdx(i => i - 1); setTransOn(true); };
 
-  // transition 끝나면 루프 보정
+  // [기능] 무한루프 보정
   const onEnd = () => {
     if (idx >= total * 2) {
-      // 우측 복제 구간 → 실제 중앙 원본 첫위치
       setTransOn(false);
       setIdx(total);
     }
     if (idx < total) {
-      // 좌측 복제 구간 → 실제 중앙 원본 마지막위치
       setTransOn(false);
       setIdx(total + (idx % total));
     }
@@ -66,7 +69,10 @@ const CardSlider = () => {
 
   return (
     <div className="card-slider">
-      <button className="arrow arrow-left" onClick={prev} aria-label="이전">‹</button>
+      <button className="arrow arrow-left" onClick={prev} aria-label="이전">
+        <img src={allowL} alt="이전" />
+      </button>
+
       <div className="slides-container">
         <div
           ref={wrapRef}
@@ -80,7 +86,11 @@ const CardSlider = () => {
           ))}
         </div>
       </div>
-      <button className="arrow arrow-right" onClick={next} aria-label="다음">›</button>
+
+      <button className="arrow arrow-right" onClick={next} aria-label="다음">
+        <img src={allowR} alt="다음" />
+      </button>
+
       <div className="dots">
         {ORIGINAL.map((_, i) => (
           <span
