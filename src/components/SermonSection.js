@@ -11,9 +11,9 @@ import sum2Image from './images/sum2.png';
 // ── 원본 아이콘 (001~006) ──
 import iconImage  from './images/001.png';
 import iconImage2 from './images/002.png';
-import iconImage3 from './images/003.png';
-import iconImage4 from './images/004.png';
-import iconImage5 from './images/006.png';
+import iconImage3 from './images/004.png';
+import iconImage4 from './images/007.png';
+import iconImage5 from './images/013.png';
 import iconImage6 from './images/005.png';
 
 // ── 첫 번째 교차 아이콘 (new1~new6) ──
