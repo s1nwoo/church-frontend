@@ -5,7 +5,7 @@ import { AuthProvider } from './context/AuthContext';
 import './App.css';
 import ScrollToTop from './components/ScrollToTop';
 
-import TopBar from './components/TopBar';
+//import TopBar from './components/TopBar';
 import Header from './components/Header';
 import MainIntroSection from './components/MainIntroSection';
 import SermonSection from './components/SermonSection';
@@ -31,7 +31,6 @@ function App() {
       <BrowserRouter>
         <ScrollToTop />
         <div className="app-wrapper">
-          <TopBar />
           <Header />
 
           {/* ✅ 메인인트로는 따로 렌더링 */}

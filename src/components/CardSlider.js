@@ -4,9 +4,9 @@ import './CardSlider.css';
 // 실제 사용하시는 카드 이미지들을 모두 import 하세요
 import card1 from './images/card/card1.png';
 import card2 from './images/card/card2.png';
-import card3 from './images/card/card3.png';
+import card3 from './images/card/card4.png';
 // 예: 6개라면 아래도 import
- import card4 from './images/card/card9.png';
+ import card4 from './images/card/card3.png';
 // import card5 from './images/card/card5.png';
 // import card6 from './images/card/card6.png';
 

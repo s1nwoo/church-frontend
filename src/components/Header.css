@@ -1,71 +1,125 @@
-/* Header 전체 래퍼 */
-.header {
+/* src/components/Header.css */
+
+/* ——— 공통 페이지 컨테이너 ——— */
+.page-container {
   width: 100%;
-  background-color: #fff;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+}
+
+/* ——— 상단 바 ——— */
+.top-bar {
+  background: #fff;
+  height: 40px;
   border-bottom: 1px solid #eee;
-}
-
-/* 내부 컨테이너: page-container로 가로 중앙 정렬 */
-
-/* 로고 영역 */
-.logo-container a {
   display: flex;
   align-items: center;
+}
+.top-bar-inner {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.yt-link {
+  margin-right: auto;
+}
+.yt-icon {
+  width: 24px;
+  height: 24px;
+}
+.auth-links a {
+  color: #333;
+  font-size: 0.9rem;
   text-decoration: none;
+  margin: 0 4px;
+  font-weight: 500;
+}
+.auth-links .sep {
+  color: #999;
 }
 
+/* ——— 메인 헤더 ——— */
+.main-header {
+  background: #fff;
+  height: 80px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+}
+.header-inner {
+  position: relative;        /* nav-menu 절대배치 기준 */
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+/* 로고 */
 .logo-image {
-  height: 50px;
-  margin-right: 10px;
+  height: 60px;
+  object-fit: contain;
 }
 
-.logo-text {
-  font-size: 1.5rem;
-  color: #333;
-  font-weight: bold;
-}
-
-/* 데스크톱 네비게이션 메뉴 */
+/* ——— 네비게이션 메뉴 ——— */
 .nav-menu {
+  position: absolute;        /* 좌우 끝 사이 중앙 정렬 */
+  left: 50%;
+  transform: translateX(-50%);
+
   display: flex;
-  gap: 30px;
+  flex-wrap: nowrap;         /* 한 줄로 고정 */
   align-items: center;
+  gap: 40px;
+  height: 100%;
+  white-space: nowrap;       /* 메뉴 전체 줄바꿈 방지 */
+  pointer-events: none;      /* 배경 클릭 무시 */
 }
-
-.menu-item {
+.nav-menu .menu-item {
+  pointer-events: auto;      /* 아이템만 클릭 가능 */
+  font-size: 22px;
+  font-weight: 800;
+  color: #1D1829;
+  line-height: 1.2;
+  padding: 0;
+  margin: 0;
+  font-family: 'Pretendard' !important;
   text-decoration: none;
-  font-size: 1rem;
-  color: #333;
-  transition: color 0.2s;
+  white-space: nowrap;       /* 텍스트 줄바꿈 방지 */
 }
-
-.menu-item:hover {
+.nav-menu .menu-item:hover {
   color: #0078d4;
 }
 
-/* 햄버거 메뉴 숨김 (데스크톱) */
+/* ——— 햄버거 메뉴 (모바일) ——— */
 .hamburger-menu {
   display: none;
 }
-
-/* 햄버거 버튼 스타일 */
 .hamburger-button {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 4px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.hamburger-button .bar {
+  width: 24px;
+  height: 2px;
+  background: #333;
+  border-radius: 1px;
 }
 
-.hamburger-icon rect {
-  fill: #333;
-}
-
-/* 모바일 뷰포트에서 메뉴 토글 */
-@media (max-width: 768px) {
+/* ——— 반응형 ——— */
+@media (max-width: 1024px) {
   .nav-menu {
-    display: none;         /* 데스크톱 메뉴 숨기기 */
+    display: none;
   }
   .hamburger-menu {
-    display: block;        /* 햄버거 메뉴 보이기 */
+    display: block;
   }
 }
