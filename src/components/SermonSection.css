@@ -143,7 +143,19 @@
 
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+    row-gap: 12px;
+    column-gap: 20px;
+}
+
+/* ① 헤더 텍스트 */
+.emoji-header {
+  grid-column: 1 / -1;    /* 2열 전체를 가로지름 */
+  text-align: center;
+}
+.emoji-header p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #333;
 }
 
 /* 내부 파트(이모지+레이블) */
@@ -157,10 +169,10 @@
 }
 .emoji-button .emoji {
   font-size: 32px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;   /* 레이블과 간격도 살짝 줄임 */
 }
 .emoji-button .label {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   color: #333;
   text-align: center;

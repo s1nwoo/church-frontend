@@ -9,6 +9,12 @@ import { useNavigate } from 'react-router-dom';
 // src/components/images/sum.png 파일을 준비해 주세요
 import sumImage from './images/sum.png';
 // ─────────────────────────────────────────────────────────
+import iconImage from './images/icon1.png';
+import iconImage2 from './images/icon2.png';
+import iconImage3 from './images/icon3.png';
+import iconImage4 from './images/icon4.png';
+import iconImage5 from './images/icon5.png';
+import iconImage6 from './images/icon6.png';
 
 const SermonSection = () => {
   const [sermons, setSermons] = useState([]);
@@ -87,29 +93,31 @@ const SermonSection = () => {
 
           {/* 오른쪽 이모지 버튼 */}
           <div className="sermon-emoji-buttons">
-            <div className="emoji-button" onClick={() => navigate('/sermons')}>
-              <div className="emoji">📖</div>
-              <div className="label">말씀과 찬양</div>
+              <div className="emoji-header">
+                    <p style={{ fontSize: '22px', margin: '6px 0' }}>
+                      하나님이 찾으시는 교회
+                    </p>
+                <p style={{ fontSize: '22px', margin: '6px 0' }}>기독교한국침례회 방화침례교회입니다</p>
+                <p style={{ fontSize: '16px', margin: '6px 0',marginTop:'20px' }}>복음으로, 은혜로, 사랑으로, 믿음으로</p>
+                <p style={{ fontSize: '16px', margin: '6px 0' }}>하나님을 만나길 간절히 소망합니다</p>
+              </div>
+            <div className="emoji-button" onClick={() => {/* 나중에 경로 붙이기 */}}>
+              <img src={iconImage} alt="" className="icon-image" />
             </div>
-            <div className="emoji-button" onClick={() => navigate('/newcomer')}>
-              <div className="emoji">👋</div>
-              <div className="label">등록안내</div>
+            <div className="emoji-button" onClick={() => {/* 나중에 경로 붙이기 */}}>
+              <img src={iconImage2} alt="" className="icon-image" />
             </div>
-            <div className="emoji-button" onClick={() => navigate('/bulletin')}>
-              <div className="emoji">📰</div>
-              <div className="label">교회주보</div>
+            <div className="emoji-button" onClick={() => {/* 나중에 경로 붙이기 */}}>
+              <img src={iconImage3} alt="" className="icon-image" />
             </div>
-            <div className="emoji-button" onClick={() => navigate('/contact')}>
-              <div className="emoji">🙏</div>
-              <div className="label">목회자와의 소통</div>
+            <div className="emoji-button" onClick={() => {/* 나중에 경로 붙이기 */}}>
+              <img src={iconImage4} alt="" className="icon-image" />
             </div>
-            <div className="emoji-button" onClick={() => navigate('/contact')}>
-              <div className="emoji">🙏</div>
-              <div className="label">목회자와의 소통</div>
+            <div className="emoji-button" onClick={() => {/* 나중에 경로 붙이기 */}}>
+              <img src={iconImage5} alt="" className="icon-image" />
             </div>
-            <div className="emoji-button" onClick={() => navigate('/contact')}>
-              <div className="emoji">🙏</div>
-              <div className="label">목회자와의 소통</div>
+            <div className="emoji-button" onClick={() => {/* 나중에 경로 붙이기 */}}>
+              <img src={iconImage6} alt="" className="icon-image" />
             </div>
           </div>
         </div>
