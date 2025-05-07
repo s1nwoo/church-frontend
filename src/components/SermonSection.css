@@ -1,66 +1,123 @@
+/* src/components/SermonSection.css */
+
+/* 섹션 전체 스타일 */
 .sermon-section {
-  padding: 60px 0; /* 좌우 패딩 제거 */
+  padding: 60px 0;
   width: 100%;
+  background: #999999;
 }
 
+/* page-container 는 header.css 에 이미 정의되어 있으므로 여기선 건드릴 필요 없습니다. */
+
+/* 섹션 제목 */
 .sermon-section h2 {
   font-size: 28px;
   font-weight: bold;
   margin-bottom: 40px;
+  text-align: center;
 }
 
-.sermon-list {
-  display: flex;
-  gap: 24px;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  width: 100%; /* ✅ 카드 너비 전체로 확장 */
+/* ───────────────────────────────────────── */
+/* 레이아웃: 좌(4) : 우(1) 그리드, 상단 정렬 */
+/* ───────────────────────────────────────── */
+.sermon-layout {
+  display: grid;
+  grid-template-columns: 4fr 1fr;  /* 비율만 바꾸시면 너비가 자동 계산됩니다 */
+  gap: 40px;
+  align-items: start;              /* 카드 높이를 컨텐츠 크기에 맞춤 */
 }
 
-.sermon-card {
-  flex: 1 1 calc(33.333% - 16px);
+/* ───────────────────────────────────────── */
+/* 좌측 설교 카드 (높이 auto) */
+/* ───────────────────────────────────────── */
+.sermon-feature {
   background: #fff;
   border-radius: 12px;
   overflow: hidden;
+  cursor: pointer;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  text-decoration: none;
-  color: inherit;
-  transition: transform 0.2s;
+
+  /* 높이 지정 제거! content 에 맞춰 늘어납니다. */
+  /* height: 550px; 삭제 */
+  display: flex;
+  flex-direction: column;
 }
 
-.sermon-card:hover {
-  transform: translateY(-4px);
+/* 헤더 */
+.feature-header {
+  text-align: center;
+  padding: 20px;
+}
+.feature-header-small {
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #666;
+  margin-bottom: 8px;
+}
+.feature-header-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
 }
 
-.sermon-thumbnail img {
-  width: 100%;
-  height: auto;
+/* 썸네일: 800×400 고정 */
+.feature-thumbnail {
+  width: 800px;
+  height: 400px;
+  object-fit: cover;
   display: block;
+  margin: 0 auto;
 }
 
-.sermon-meta {
-  padding: 16px;
+/* 메타 정보 */
+.feature-meta {
+  padding: 20px;
 }
-
-.category {
-  color: #0033cc;
-  font-size: 13px;
-  font-weight: 600;
+.feature-meta h3 {
+  font-size: 20px;
+  margin: 0 0 8px;
 }
-
-.sermon-card h3 {
-  margin: 6px 0 4px;
-  font-size: 18px;
+.feature-meta .subtitle {
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 8px;
 }
-
-.subtitle {
+.feature-meta .preacher {
   font-size: 14px;
-  color: #888;
-  font-weight: 600;
-  margin-bottom: 6px;
+  color: #555;
 }
 
-.preacher {
-  font-size: 13px;
-  color: #555;
+/* ───────────────────────────────────────── */
+/* 우측 이모지 버튼 컨테이너 (높이 auto) */
+/* ───────────────────────────────────────── */
+.sermon-emoji-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-auto-rows: auto;   /* 카드 높이 컨텐츠에 맞춰 늘어납니다 */
+  gap: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+/* 개별 이모지 버튼 */
+.emoji-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: none;
+  padding: 0;
+}
+.emoji-button .emoji {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+.emoji-button .label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
 }

@@ -43,8 +43,9 @@ function App() {
 
                   {/* ✅ 이후 섹션만 여백 적용 */}
                   <div className="page-container">
-                    <SermonSection />
+
                   </div>
+                  <SermonSection />
                   <InfoCardSection />
                 </>
               }

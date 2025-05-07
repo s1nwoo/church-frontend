@@ -9,44 +9,69 @@ const SermonSection = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // ⚡️ 절대 URL 제거, 상대경로만 남김
     axios.get('/api/sermons')
       .then(res => setSermons(res.data.content))
       .catch(err => console.error(err));
   }, []);
 
+  const latestSermon = sermons.sort((a, b) => b.id - a.id)[0];
+
   return (
     <section className="sermon-section">
-      <h2>설교 · 찬양</h2>
-      <div className="sermon-list">
-        {sermons
-          .sort((a, b) => b.id - a.id)
-          .slice(0, 3)
-          .map(sermon => (
+      <div className="page-container">
+        <h2>설교 · 찬양</h2>
+        <div className="sermon-layout">
+          {latestSermon && (
             <div
-              key={sermon.id}
-              className="sermon-card"
-              onClick={() => navigate(`/sermons/${sermon.id}`)}
-              style={{ cursor: 'pointer' }}
+              className="sermon-feature"
+              onClick={() => navigate(`/sermons/${latestSermon.id}`)}
             >
-              <div className="sermon-thumbnail">
-                <img
-                  src={`https://img.youtube.com/vi/${extractYoutubeId(sermon.youtubeUrl)}/0.jpg`}
-                  alt={sermon.title}
-                />
+              {/* 헤더 */}
+              <div className="feature-header">
+                <div className="feature-header-small">WORSHIP</div>
+                <h2 className="feature-header-title">금주의 주일설교</h2>
               </div>
-              <div className="sermon-meta">
-                <span className="category">말씀</span>
-                <h3>{sermon.title}</h3>
-                {sermon.bibleText && (
-                  <p className="subtitle">{sermon.bibleText}</p>
+
+              {/* 썸네일 */}
+              <img
+                src={`https://img.youtube.com/vi/${extractYoutubeId(latestSermon.youtubeUrl)}/0.jpg`}
+                alt={latestSermon.title}
+                className="feature-thumbnail"
+              />
+
+              {/* 메타 */}
+              <div className="feature-meta">
+                <h3>{latestSermon.title}</h3>
+                {latestSermon.bibleText && (
+                  <p className="subtitle">{latestSermon.bibleText}</p>
                 )}
                 <p className="preacher">
-                  {sermon.preacher} · 일시 {sermon.sermonDate}
+                  {latestSermon.sermonDate} · {latestSermon.preacher}
                 </p>
               </div>
             </div>
-          ))}
+          )}
+
+          {/* 오른쪽 이모지 버튼 */}
+          <div className="sermon-emoji-buttons">
+            <div className="emoji-button" onClick={() => navigate('/sermons')}>
+              <div className="emoji">📖</div>
+              <div className="label">말씀과 찬양</div>
+            </div>
+            <div className="emoji-button" onClick={() => navigate('/newcomer')}>
+              <div className="emoji">👋</div>
+              <div className="label">등록안내</div>
+            </div>
+            <div className="emoji-button" onClick={() => navigate('/bulletin')}>
+              <div className="emoji">📰</div>
+              <div className="label">교회주보</div>
+            </div>
+            <div className="emoji-button" onClick={() => navigate('/contact')}>
+              <div className="emoji">🙏</div>
+              <div className="label">목회자와의 소통</div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
