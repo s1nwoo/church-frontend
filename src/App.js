@@ -46,7 +46,6 @@ function App() {
 
                   </div>
                   <SermonSection />
-                  <InfoCardSection />
                 </>
               }
             />
