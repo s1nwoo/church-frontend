@@ -4,30 +4,62 @@ import axios from 'axios';
 import './SermonSection.css';
 import { useNavigate } from 'react-router-dom';
 
-// ─────────────────────────────────────────────────────────
-// 1) 임시 썸네일 이미지 import
-// src/components/images/sum.png 파일을 준비해 주세요
-import sumImage from './images/sum.png';
-// ─────────────────────────────────────────────────────────
-import iconImage from './images/icon1.png';  // 교회안내
-import iconImage2 from './images/icon2.png'; // 오시는길
-import iconImage3 from './images/icon3.png'; // 교회소식
-import iconImage4 from './images/icon4.png'; // 예배안내
-import iconImage5 from './images/icon5.png'; // 교회연혁
-import iconImage6 from './images/icon6.png'; // 유튜브채널
+// ── 썸네일 이미지 ──
+import sumImage  from './images/sum.png';
+import sum2Image from './images/sum2.png';
+
+// ── 원본 아이콘 (001~006) ──
+import iconImage  from './images/001.png';
+import iconImage2 from './images/002.png';
+import iconImage3 from './images/003.png';
+import iconImage4 from './images/004.png';
+import iconImage5 from './images/006.png';
+import iconImage6 from './images/005.png';
+
+// ── 첫 번째 교차 아이콘 (new1~new6) ──
+import new1 from './images/new1.png';
+import new2 from './images/new2.png';
+import new3 from './images/new3.png';
+import new4 from './images/new4.png';
+import new5 from './images/new5.png';
+import new6 from './images/new6.png';
+
+// ── 두 번째 교차 아이콘 (newnew1~newnew6) ──
+import newnew1 from './images/newnew1.png';
+import newnew2 from './images/newnew2.png';
+import newnew3 from './images/newnew3.png';
+import newnew4 from './images/newnew4.png';
+import newnew5 from './images/newnew5.png';
+import newnew6 from './images/newnew6.png';
 
 const SermonSection = () => {
-  const [sermons, setSermons] = useState([]);
+  const [sermons, setSermons]     = useState([]);
+  const [thumbIndex, setThumbIndex] = useState(0);
+  const [iconIndex, setIconIndex] = useState(0);
   const navigate = useNavigate();
 
+  // 설교 데이터 로드
   useEffect(() => {
-    axios
-      .get('/api/sermons')
+    axios.get('/api/sermons')
       .then(res => setSermons(res.data.content))
       .catch(err => console.error(err));
   }, []);
 
+  // 2초마다 썸네일(2단계)과 아이콘(3단계) 순환
+  useEffect(() => {
+    const id = setInterval(() => {
+      setThumbIndex(i => (i + 1) % 2);
+      setIconIndex(i => (i + 1) % 3);
+    }, 1500);
+    return () => clearInterval(id);
+  }, []);
+
   const latest = sermons.sort((a, b) => b.id - a.id)[0];
+
+  // 아이콘 상태별 배열
+  const icons      = [iconImage,  iconImage2,  iconImage3,  iconImage4,  iconImage5,  iconImage6];
+  const iconsNew   = [new1,       new2,         new3,         new4,         new5,         new6];
+  const iconsNewNew= [newnew1,    newnew2,      newnew3,      newnew4,      newnew5,      newnew6];
 
   return (
     <section className="sermon-section">
@@ -41,34 +73,17 @@ const SermonSection = () => {
                 <h3 className="feature-header-title">금주의 주일설교</h3>
               </div>
 
-              {/* ─────────────────────────────────────────────── */}
-              {/* 2) 여기서 유튜브 URL 대신 임시 이미지 사용 */}
+              {/* 썸네일: sum.png ↔ sum2.png */}
               <div
                 className="feature-video-wrapper"
                 onClick={() => navigate(`/sermons/${latest.id}`)}
               >
                 <img
-                  src={sumImage}
-                  alt="임시 썸네일"
+                  src={thumbIndex === 0 ? sumImage : sum2Image}
+                  alt="주일설교 썸네일"
                   className="feature-thumbnail"
                 />
               </div>
-              {/* ─────────────────────────────────────────────── */}
-
-              {/* 원래는 아래와 같이 Dynamic YouTube 썸네일을 사용했습니다.
-                  나중에 복원할 때는 주석을 해제하고 위 부분을 주석 처리하세요. */}
-              {/*
-              <div
-                className="feature-video-wrapper"
-                onClick={() => navigate(`/sermons/${latest.id}`)}
-              >
-                <img
-                  src={`https://img.youtube.com/vi/${extractYoutubeId(latest.youtubeUrl)}/0.jpg`}
-                  alt={latest.title}
-                  className="feature-thumbnail"
-                />
-              </div>
-              */}
 
               {/* 메타 & 버튼 */}
               <div className="feature-meta">
@@ -93,43 +108,47 @@ const SermonSection = () => {
 
           {/* 오른쪽 이모지 버튼 */}
           <div className="sermon-emoji-buttons">
-              <div className="emoji-header">
-                    <p style={{ fontSize: '22px', margin: '6px 0' }}>
-                      하나님이 찾으시는 교회
-                    </p>
-                <p style={{ fontSize: '22px', margin: '6px 0' }}>기독교한국침례회 방화침례교회입니다</p>
-                <p style={{ fontSize: '16px', margin: '6px 0',marginTop:'20px' }}>복음으로, 은혜로, 사랑으로, 믿음으로</p>
-                <p style={{ fontSize: '16px', margin: '6px 0' }}>하나님을 만나길 간절히 소망합니다</p>
-              </div>
-            <div className="emoji-button" onClick={() => {/* 나중에 경로 붙이기 */}}>
-              <img src={iconImage} alt="" className="icon-image" />
+            <div className="emoji-header">
+              <p style={{ fontSize: '22px', margin: '6px 0' }}>
+                하나님이 찾으시는 교회
+              </p>
+              <p style={{ fontSize: '22px', margin: '6px 0' }}>
+                기독교한국침례회 방화침례교회입니다
+              </p>
+              <p style={{ fontSize: '16px', margin: '6px 0', marginTop:'20px' }}>
+                복음으로, 은혜로, 사랑으로, 믿음으로
+              </p>
+              <p style={{ fontSize: '16px', margin: '6px 0' }}>
+                하나님을 만나길 간절히 소망합니다
+              </p>
             </div>
-            <div className="emoji-button" onClick={() => navigate('/location')}>
-              <img src={iconImage2} alt="" className="icon-image" />
-            </div>
-            <div className="emoji-button" onClick={() => {/* 나중에 경로 붙이기 */}}>
-              <img src={iconImage3} alt="" className="icon-image" />
-            </div>
-            <div className="emoji-button" onClick={() => {/* 나중에 경로 붙이기 */}}>
-              <img src={iconImage4} alt="" className="icon-image" />
-            </div>
-            <div className="emoji-button" onClick={() => {/* 나중에 경로 붙이기 */}}>
-              <img src={iconImage5} alt="" className="icon-image" />
-            </div>
-            <div className="emoji-button" onClick={() => {/* 나중에 경로 붙이기 */}}>
-              <img src={iconImage6} alt="" className="icon-image" />
-            </div>
+
+            {/* 6개 아이콘: iconIndex에 따라 0,1,2 상태 교차 */}
+            {icons.map((orig, idx) => {
+              let src;
+              if (iconIndex === 0) src = orig;
+              else if (iconIndex === 1) src = iconsNew[idx];
+              else src = iconsNewNew[idx];
+
+              return (
+                <div
+                  key={idx}
+                  className="emoji-button"
+                  onClick={() => { /* 필요 시 navigate 설정 */ }}
+                >
+                  <img
+                    src={src}
+                    alt=""
+                    className="icon-image"
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
     </section>
   );
 };
-
-function extractYoutubeId(url) {
-  const regex = /(?:\?v=|\/embed\/|\/watch\?v=|youtu\.be\/)([\w-]{11})/;
-  const m = url.match(regex);
-  return m ? m[1] : '';
-}
 
 export default SermonSection;
