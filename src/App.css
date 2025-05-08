@@ -57,13 +57,13 @@ body {
 }
 
 @media screen and (max-width: 768px) {
-  html {
-    font-size: 18px; /* 1rem = 18px */
+  .page-container {
+    margin: 0 40px;
   }
 }
 
 @media screen and (max-width: 480px) {
-  html {
-    font-size: 16px; /* 1rem = 16px */
+  .page-container {
+    margin: 0 20px;
   }
 }

@@ -1,67 +1,40 @@
-/* src/components/MainIntroSection.css */
-
-/* 전체 섹션: 뷰포트 높이 - TopBar(40px) - Header(80px) */
+/* 전체 섹션: 뷰포트 높이에서 TopBar(40px)+Header(80px)=120px 제외 */
 .intro-section {
   width: 100%;
   height: calc(100vh - 120px);
-  min-height: 500px; /* 모바일에서도 최소 높이 확보 */
 }
 
-/* 내부 컨테이너: flex 비율로 히어로/슬라이더 구분 */
+/* 내부 컨테이너: 전체 너비 사용, 패딩 제거 */
 .intro-inner {
   width: 100%;
-  height: 100%;
+  height: 97%;
   display: flex;
   flex-direction: column;
   margin: 0;
   padding: 0;
 }
 
-/* 히어로 영역: 전체의 60% */
+/* 히어로 영역 (위쪽 절반) */
 .hero {
-  flex: 6;
+  flex: 1;
   min-height: 0;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* 히어로 이미지: 컨테이너에 꽉 채우기 */
+/* 히어로 이미지: 컨테이너에 꽉 차도록 */
 .hero-full-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-/* 카드 슬라이더 영역: 전체의 40% */
+/* 카드 슬라이더 영역 (아래쪽 절반) */
 .card-slider {
-  flex: 4;
+  flex: 1;
   min-height: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-
-/* ─── 반응형: 768px 이하 ─── */
-@media screen and (max-width: 768px) {
-  .intro-section {
-    height: auto;            /* 높이 자동 확장 */
-    min-height: 500px;       /* 최소 높이 유지 */
-    padding: 20px 0;         /* 위아래 여백 추가 */
-  }
-  .intro-inner {
-    height: auto;
-  }
-  /* 모바일에서도 60/40 비율 유지 가능 */
-  .hero {
-    flex: 6;
-    min-height: 300px;       /* 최소 히어로 높이 지정 */
-  }
-  .hero-full-image {
-    height: auto;
-  }
-  .card-slider {
-    flex: 4;
-    margin-top: 20px;        /* 히어로와 간격 추가 */
-  }
 }
