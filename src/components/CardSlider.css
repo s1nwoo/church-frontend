@@ -128,8 +128,8 @@
 
     .arrow img {
       display: block;
-      width: 30px;
-      height: 30px;
+      width: 45px;
+      height: 45px;
       margin: auto;
       opacity: 0.6;
       transition: opacity 0.3s ease;
@@ -137,10 +137,10 @@
 
   /* 화살표 위치 조정 (PC용 615px → 모바일용 8px) */
   .arrow-left {
-    left: 8px;
+    left: 2px;
   }
   .arrow-right {
-    right: 8px;
+    right: 2px;
   }
 
   /* 도트는 그대로 표시 (원하시면 숨겨도 무방) */
