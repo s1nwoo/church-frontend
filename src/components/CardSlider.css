@@ -114,6 +114,27 @@
     border-radius: 16px;
   }
 
+    .arrow {
+      position: absolute;
+      top: 46%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+
+    .arrow img {
+      display: block;
+      width: 30px;
+      height: 30px;
+      margin: auto;
+      opacity: 0.6;
+      transition: opacity 0.3s ease;
+    }
+
   /* 화살표 위치 조정 (PC용 615px → 모바일용 8px) */
   .arrow-left {
     left: 8px;

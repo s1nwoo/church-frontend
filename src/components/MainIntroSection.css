@@ -63,7 +63,7 @@
   }
 
   .hero-full-image {
-    width: 100%;
+    width: 135%;
     height: auto;
     object-fit: contain;  /* 잘리는 부분 없이 전체 이미지 보이도록 */
   }
