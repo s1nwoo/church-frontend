@@ -7,7 +7,6 @@
   height: 100%;
   display: flex;
   align-items: center;
-  /* justify-content: center;  슬라이더 중앙 정렬은 slides-container가 담당 */
 }
 
 /* 좌/우 화살표 */
@@ -15,10 +14,8 @@
   position: absolute;
   top: 49%;
   transform: translateY(-50%);
-  background: none;        /* 원 배경 제거 */
+  background: none;
   border: none;
-  width: auto;             /* 버튼 크기 자동 */
-  height: auto;
   padding: 0;
   cursor: pointer;
   z-index: 10;
@@ -26,19 +23,15 @@
 .arrow-left  { left: 615px; }
 .arrow-right { right: 615px; }
 
-/* [기능] 화살표 이미지 크기 및 중앙 정렬 */
-/* [설명] 버튼 안의 <img> 태그를 적절한 크기로 조정하고 블록 레벨로 가운데 배치 */
-/* ── 아이콘 이미지 불투명도 & transition ── */
+/* 화살표 이미지 */
 .arrow img {
   display: block;
   width: 60px;
   height: 60px;
   margin: auto;
-  opacity: 0.6;             /* 기본 50% 불투명 */
+  opacity: 0.6;
   transition: opacity 0.3s ease;
 }
-
-/* ── 호버 시 완전 불투명 ── */
 .arrow:hover img {
   opacity: 1;
 }
@@ -47,18 +40,18 @@
 .slides-container {
   overflow: hidden;
   flex: 1;
-  margin: 0 60px; /* 화살표 공간(40px) + 여유(20px) */
-  width: calc((615px * 3) + (30px * 2)); /* 3장 보여줄 폭 */
+  margin: 0 60px;
+  width: calc((615px * 3) + (30px * 2)); /* PC: 3장 */
 }
 
-/* 모든 카드를 한 줄에 배치 */
+/* 슬라이드 래퍼 */
 .slides-wrapper {
   display: flex;
   gap: 30px;
   transition: transform 0.5s ease;
 }
 
-/* 개별 카드 컨테이너: 크기 고정 */
+/* 개별 카드 */
 .slide {
   flex: 0 0 auto;
   width: 615px;
@@ -72,19 +65,13 @@
   border-radius: 20px;
 }
 
-/* ── 수정된 도트 네비게이션 ── */
+/* 도트 네비게이션 */
 .dots {
-  position: relative;
-  bottom: auto;
-  left: auto;
-  transform: none;
-
   display: flex;
   justify-content: center;
   gap: 8px;
-  margin: 16px auto 0; /* 위쪽 여백 16px, 수평 중앙, 아래 여백 0 */
+  margin: 16px auto 0;
 }
-
 .dot {
   width: 10px;
   height: 10px;
@@ -92,7 +79,38 @@
   border-radius: 50%;
   cursor: pointer;
 }
-
 .dot.active {
   background-color: #0078d4;
+}
+
+/* ─── 반응형: 768px 이하 ─── */
+@media screen and (max-width: 768px) {
+  /* 화살표 위치와 크기 축소 */
+  .arrow-left  { left: 10px; }
+  .arrow-right { right: 10px; }
+  .arrow img {
+    width: 40px;
+    height: 40px;
+  }
+
+  /* 슬라이드 뷰포트: 컨테이너 폭 전체 사용 */
+  .slides-container {
+    margin: 0 20px;
+    width: 100%;
+  }
+
+  /* 카드 너비 100%로 변경 */
+  .slide {
+    width: 100%;
+    height: auto;
+  }
+  .slide img {
+    width: 100%;
+    height: auto;
+  }
+
+  /* 도트 간격 축소 */
+  .dots {
+    gap: 4px;
+  }
 }

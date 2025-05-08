@@ -3,59 +3,74 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CardSlider.css';
 
-// [기능] 화살표 이미지 import
+// 화살표 이미지
 import allowL from './images/allow_l.png';
 import allowR from './images/allow_r.png';
 
-// [기능] 카드 이미지 import
+// 카드 이미지
 import card1 from './images/card/card3.png';
 import card2 from './images/card/card2.png';
 import card3 from './images/card/card4.png';
 import card4 from './images/card/card1.png';
 import card5 from './images/card/card5.png';
-// import card6 from './images/card/card6.png';
 
-const ORIGINAL = [card1, card2, card3, card4, card5 /*, card6 */];
-const VISIBLE = 3;
-const WIDTH = 615;
+const ORIGINAL = [card1, card2, card3, card4, card5];
 const GAP = 30;
 const DURATION = 500;
-const CONTAINER_WIDTH = VISIBLE * WIDTH + (VISIBLE - 1) * GAP;
-const CENTER_OFFSET = (CONTAINER_WIDTH - WIDTH) / 2;
 
 const CardSlider = () => {
   const navigate = useNavigate();
   const total = ORIGINAL.length;
   const extended = [...ORIGINAL, ...ORIGINAL, ...ORIGINAL];
-
-  const [idx, setIdx] = useState(total);
-  const [transOn, setTransOn] = useState(true);
   const wrapRef = useRef(null);
 
-  // 슬라이드 이동 시 transform, transition 설정
+  // 슬라이드 상태
+  const [idx, setIdx] = useState(total);
+  const [transOn, setTransOn] = useState(true);
+
+  // 동적 설정: 슬라이드 폭, 보이는 개수, 중앙 오프셋
+  const [config, setConfig] = useState({
+    slideWidth: 615,
+    visible: 3,
+    gap: GAP,
+    centerOffset: ((615 * 3 + GAP * 2) - 615) / 2
+  });
+
+  // 화면 크기 변경 시 config 업데이트
+  useEffect(() => {
+    const updateConfig = () => {
+      const isMobile = window.innerWidth < 768;
+      const visible = isMobile ? 1 : 3;
+      const parentWidth = wrapRef.current.parentElement.clientWidth;
+      const slideWidth = isMobile ? parentWidth : 615;
+      const containerWidth = visible * slideWidth + (visible - 1) * GAP;
+      const centerOffset = (containerWidth - slideWidth) / 2;
+      setConfig({ slideWidth, visible, gap: GAP, centerOffset });
+    };
+    updateConfig();
+    window.addEventListener('resize', updateConfig);
+    return () => window.removeEventListener('resize', updateConfig);
+  }, []);
+
+  // transform 적용
   useEffect(() => {
     const w = wrapRef.current;
     if (!w) return;
     w.style.transition = transOn
       ? `transform ${DURATION}ms ease`
       : 'none';
-    const x = (WIDTH + GAP) * idx - CENTER_OFFSET;
+    const x = (config.slideWidth + config.gap) * idx - config.centerOffset;
     w.style.transform = `translateX(-${x}px)`;
-  }, [idx, transOn]);
+  }, [idx, transOn, config]);
 
-  // 자동 재생: 컴포넌트 마운트 후 5초마다 next() 호출
+  // 자동 재생
   useEffect(() => {
-    const play = () => {
+    const intervalId = setInterval(() => {
       setIdx(i => i + 1);
       setTransOn(true);
-    };
-    const intervalId = setInterval(play, 5000);
+    }, 5000);
     return () => clearInterval(intervalId);
   }, []);
-
-  // 다음/이전 이동
-  const next = () => { setIdx(i => i + 1); setTransOn(true); };
-  const prev = () => { setIdx(i => i - 1); setTransOn(true); };
 
   // 무한루프 보정
   const onEnd = () => {
@@ -69,20 +84,18 @@ const CardSlider = () => {
     }
   };
 
-  // 클릭 핸들러: 인덱스 mod 원본 길이로 판단
-  const handleClick = (slideIndex) => {
-    const cardNum = slideIndex % total;
+  // 이전/다음
+  const next = () => { setIdx(i => i + 1); setTransOn(true); };
+  const prev = () => { setIdx(i => i - 1); setTransOn(true); };
+
+  // 카드 클릭 핸들러 (예시)
+  const handleClick = (i) => {
+    const cardNum = i % total;
     if (cardNum === 0) {
-      // 카드1 클릭: 외부 유튜브 채널로 이동
-      window.open(
-        'https://www.youtube.com/@%EB%B0%A9%ED%99%94%EC%B9%A8%EB%A1%80%EA%B5%90%ED%9A%8C',
-        '_blank'
-      );
+      window.open('https://www.youtube.com/@%EB%B0%A9%ED%99%94%EC%B9%A8%EB%A1%80%EA%B5%90%ED%9A%8C','_blank');
     } else if (cardNum === 2) {
-      // 카드3 클릭: 로케이션 페이지로 이동
       navigate('/location');
     }
-    // 그 외 카드는 기본 동작 없음
   };
 
   return (
@@ -104,7 +117,7 @@ const CardSlider = () => {
               style={{ cursor: 'pointer' }}
               onClick={() => handleClick(i)}
             >
-              <img src={src} alt={`card-${i % total + 1}`} />
+              <img src={src} alt={`card-${(i % total) + 1}`} />
             </div>
           ))}
         </div>

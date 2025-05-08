@@ -18,7 +18,7 @@
 /* ───────────────────────────────────────────────────────── */
 .sermon-section {
   padding: 60px 0;
-  background: #f0f0f0; /* 필요시 변경 */
+  background: #f0f0f0;
 }
 
 .page-container {
@@ -42,7 +42,7 @@
   display: grid;
   grid-template-columns: var(--sermon-left-col) var(--sermon-right-col);
   gap: 40px;
-  align-items: stretch; /* 컨텐츠 높이에 맞춤 */
+  align-items: stretch;
 }
 
 /* ───────────────────────────────────────────────────────── */
@@ -58,8 +58,6 @@
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-
-/* 헤더 */
 .feature-header {
   padding: 20px;
   text-align: center;
@@ -76,16 +74,14 @@
   margin: 0;
 }
 
-/* 썸네일: 카드 칼럼 전체를 16:9 비율로 채우기 */
 .feature-video-wrapper {
   position: relative;
   width: 100%;
-  padding-top: var(--feature-thumb-aspect); /* 16:9 비율 */
+  padding-top: var(--feature-thumb-aspect);
   overflow: hidden;
   cursor: pointer;
 }
 
-/* img: wrapper를 꽉 채우고 object-fit으로 비율 유지 */
 .feature-video-wrapper .feature-thumbnail {
   position: absolute;
   top: 0;
@@ -95,16 +91,13 @@
   object-fit: cover;
 }
 
-/* 메타 & 버튼 */
 .feature-meta {
   padding: 20px;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
 }
-.meta-info {
-  /* 제목/부제/날짜 그룹 */
-}
+.meta-info {}
 .meta-title {
   font-size: 20px;
   margin: 0 0 8px;
@@ -133,7 +126,7 @@
 }
 
 /* ───────────────────────────────────────────────────────── */
-/* 우측 이모지 버튼 컨테이너 (한 개의 카드) */
+/* 우측 이모지 버튼 컨테이너 */
 /* ───────────────────────────────────────────────────────── */
 .sermon-emoji-buttons {
   background: #fff;
@@ -143,13 +136,12 @@
 
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-    row-gap: 12px;
-    column-gap: 20px;
+  row-gap: 12px;
+  column-gap: 20px;
 }
 
-/* ① 헤더 텍스트 */
 .emoji-header {
-  grid-column: 1 / -1;    /* 2열 전체를 가로지름 */
+  grid-column: 1 / -1;
   text-align: center;
 }
 .emoji-header p {
@@ -158,7 +150,6 @@
   color: #333;
 }
 
-/* 내부 파트(이모지+레이블) */
 .emoji-button {
   display: flex;
   flex-direction: column;
@@ -169,7 +160,7 @@
 }
 .emoji-button .emoji {
   font-size: 32px;
-  margin-bottom: 4px;   /* 레이블과 간격도 살짝 줄임 */
+  margin-bottom: 4px;
 }
 .emoji-button .label {
   font-size: 14px;
@@ -178,3 +169,51 @@
   text-align: center;
 }
 
+/* ─── 반응형: 768px 이하에서 1열 레이아웃 ─── */
+@media screen and (max-width: 768px) {
+  /* 레이아웃을 한 열로 변경 */
+  .sermon-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  /* 각 카드 사이 적당한 여백 */
+  .sermon-feature,
+  .sermon-emoji-buttons {
+    margin-bottom: 20px;
+  }
+
+  /* 이모지 버튼: 필요 시 1열로 변경 (주석 해제) */
+  /*
+  .sermon-emoji-buttons {
+    grid-template-columns: 1fr;
+  }
+  */
+
+    .feature-header-title {
+      font-size: 20px;
+    }
+    .meta-title {
+      font-size: 18px;
+    }
+    .meta-subtitle {
+      font-size: 13px;
+    }
+    .meta-detail {
+      font-size: 12px;
+    }
+    .feature-button {
+      padding: 8px 12px;
+      font-size: 12px;
+    }
+    .emoji-header p {
+      font-size: 12px;
+    }
+    .emoji-button .emoji {
+      font-size: 28px;
+    }
+    .emoji-button .label {
+      font-size: 12px;
+    }
+
+}
