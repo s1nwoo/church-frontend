@@ -1,27 +1,19 @@
-/* src/App.css */
-
-/* 1) 전역 박스 사이징 및 오버플로우 방지 */
-* {
-  box-sizing: border-box;
+html {
+  font-family: 'Pretendard Variable', sans-serif;
+  font-weight: 400; /* Medium */
+  font-variation-settings: 'wght' 400; /* 💡 브라우저 호환성 보완 */
+  font-size: 22px; /* 필요에 따라 조절 가능 */
+  scrollbar-gutter: stable;
 }
+
 body {
   margin: 0;
   padding: 0;
   font-size: 1rem;
-  overflow-x: hidden;
-  overflow-y: scroll;
+   overflow-y: scroll;
 }
 
-/* 2) 기본 HTML 설정 */
-html {
-  font-family: 'Pretendard Variable', sans-serif;
-  font-weight: 400; /* Medium */
-  font-variation-settings: 'wght' 400;
-  font-size: 22px;   /* 1rem 기준 크기 */
-  scrollbar-gutter: stable;
-}
-
-/* 3) 개발용 레이아웃 가이드라인 */
+/* 개발용 가이드라인 */
 .page-container::before,
 .page-container::after {
   content: '';
@@ -32,19 +24,30 @@ html {
   background-color: red;
   z-index: 9999;
 }
-.page-container::before { left: 0; }
-.page-container::after  { right: 0; }
+
+.main-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 24px;
+  border-left: 4px solid #ff4081;
+  padding-left: 10px;
+}
+
+.page-container::before {
+  left: 0;
+}
+
+.page-container::after {
+  right: 0;
+}
 
 .page-container {
   position: relative; /* 가이드라인 절대 위치 기준용 */
 }
 
-/* 4) 공통 레이아웃 클래스: 중앙 정렬 & 반응형 마진 */
+/* 공통 레이아웃 클래스 */
 .page-container {
-  width: 100%;
-  max-width: 1200px;
   margin: 0 200px;
-  padding: 0 20px;
 }
 
 @media screen and (max-width: 1024px) {
@@ -54,22 +57,13 @@ html {
 }
 
 @media screen and (max-width: 768px) {
-  .page-container {
-    margin: 0 20px;
+  html {
+    font-size: 18px; /* 1rem = 18px */
   }
 }
 
 @media screen and (max-width: 480px) {
-  .page-container {
-    margin: 0 10px;
+  html {
+    font-size: 16px; /* 1rem = 16px */
   }
-}
-
-/* 5) 메인 타이틀 스타일 */
-.main-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 24px;
-  border-left: 4px solid #ff4081;
-  padding-left: 10px;
 }
