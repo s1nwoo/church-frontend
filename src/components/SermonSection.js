@@ -33,10 +33,12 @@ import newnew5 from './images/newnew5.png';
 import newnew6 from './images/newnew6.png';
 
 const SermonSection = () => {
+
+  const navigate = useNavigate();
+
   const [sermons, setSermons]     = useState([]);
   const [thumbIndex, setThumbIndex] = useState(0);
   const [iconIndex, setIconIndex] = useState(0);
-  const navigate = useNavigate();
 
   // 설교 데이터 로드
   useEffect(() => {
@@ -55,7 +57,14 @@ const SermonSection = () => {
   }, []);
 
   const latest = sermons.sort((a, b) => b.id - a.id)[0];
-
+  const paths = [
+    '/guide',
+    '/location',
+    '/news',
+    '/worship',
+    '/history',
+    '/youtube'
+  ];
   // 아이콘 상태별 배열
   const icons      = [iconImage,  iconImage2,  iconImage3,  iconImage4,  iconImage5,  iconImage6];
   const iconsNew   = [new1,       new2,         new3,         new4,         new5,         new6];
@@ -134,7 +143,7 @@ const SermonSection = () => {
                 <div
                   key={idx}
                   className="emoji-button"
-                  onClick={() => { /* 필요 시 navigate 설정 */ }}
+                  onClick={() => navigate(paths[idx])}
                 >
                   <img
                     src={src}
