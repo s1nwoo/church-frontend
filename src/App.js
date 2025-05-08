@@ -9,7 +9,7 @@ import ScrollToTop from './components/ScrollToTop';
 import Header from './components/Header';
 import MainIntroSection from './components/MainIntroSection';
 import SermonSection from './components/SermonSection';
-import InfoCardSection from './components/InfoCardSection';
+//import InfoCardSection from './components/InfoCardSection';
 import Footer from './components/Footer';
 
 import LoginPage from './pages/LoginPage';

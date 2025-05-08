@@ -168,6 +168,7 @@
 /* ───────────────────────────────────────────────────────── */
 /* 반응형: 모바일(≤768px) 에서만 아래 변경 적용 */
 /* ───────────────────────────────────────────────────────── */
+
 @media screen and (max-width: 768px) {
   /* ─────────────────────────────────────
      1) 페이지 컨테이너 여백 확보
@@ -175,7 +176,6 @@
   .page-container {
     box-sizing: border-box;       /* padding이 내부로 포함되도록 */
     width: 100%;                  /* 뷰포트 너비에 맞추되 */
-    max-width: 360px;             /* 최대 360px로 고정 (원하시는 값으로 조정) */
     margin: 0 auto;               /* 화면 가운데 정렬 */
     padding: 0 16px;              /* 좌우 16px 여백 확보 */
     overflow-x: hidden;           /* 혹시 남는 가로 스크롤 숨김 */
@@ -206,4 +206,10 @@
   }
 }
 
-
+@media screen and (max-width: 480px) {
+  /* sermon-section 내부 page-container만 너비 조정 */
+  .sermon-section .page-container {
+    box-sizing: border-box;             /* padding이 포함되도록 */
+    margin: 0 auto;                     /* 화면 중앙에 고정 */
+  }
+}
