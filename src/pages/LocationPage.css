@@ -30,7 +30,10 @@
   align-items: center;
   padding: 20px 0;
   border-bottom: 1px solid #ddd;
+  margin: 0;
 }
+
+
 
 .info-row.no-border {
   border-bottom: none;
@@ -131,3 +134,38 @@
 .bus-stop {
   margin-bottom: 14px;
 }
+
+/* ─── 소메뉴 스타일 ─── */
+.location-submenu {
+  margin-bottom: 1rem;
+}
+.location-submenu ul {
+  display: flex;
+  gap: 1.5rem;              /* 메뉴 간 간격 */
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0.5rem;      /* 아래 패딩: 밑줄 대신 여유 공간 */
+  border-bottom: 1px solid #e0e0e0;
+}
+.location-submenu li {
+  margin: 0;
+}
+.location-submenu a {
+  text-decoration: none;
+  color: #c9c9c9;              /* 비활성 탭 색 */
+  font-size: 0.95rem;
+  padding: 0;               /* 밑줄용 패딩 제거 */
+  transition: color 0.2s;
+}
+.location-submenu a:hover {
+  color: #000;
+}
+
+/* ─── 활성(active) 탭 강조 ─── */
+.location-submenu a.active {
+  color: #000;
+  font-weight: 900;
+  /* 밑줄 제거 (분홍선 대신 폰트 굵기만) */
+  border-bottom: none;
+}
+

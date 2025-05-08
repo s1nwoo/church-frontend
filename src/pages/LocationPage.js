@@ -1,12 +1,11 @@
-// src/pages/LocationPage.js
 import React, { useEffect } from 'react';
+import { NavLink } from 'react-router-dom';    // ← 추가
 import './LocationPage.css';
 
 import iconCar from '../components/icons/icon_come_car.svg';
 import iconCall from '../components/icons/icon_come_call.svg';
 import iconSubway from '../components/icons/icon_come_subway.svg';
 import iconBus from '../components/icons/icon_come_bus.svg';
-
 
 function LocationPage() {
   useEffect(() => {
@@ -46,7 +45,41 @@ function LocationPage() {
 
   return (
     <div className="location-container page-container">
-      <h2 className="location-title">방화침례교회 오시는 길</h2>
+      {/* ─ 상단 제목 ─ */}
+      <h1 className="page-title">교회안내</h1>
+
+      {/* ─ 소메뉴 (3개) ─ */}
+      <nav className="location-submenu">
+        <ul>
+          <li>
+            <NavLink
+              to="/church-intro"
+              className={({ isActive }) => (isActive ? 'active' : undefined)}
+            >
+              교회소개
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/worship-info"
+              className={({ isActive }) => (isActive ? 'active' : undefined)}
+            >
+              예배안내
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/location"
+              className={({ isActive }) => (isActive ? 'active' : undefined)}
+            >
+              오시는 길
+            </NavLink>
+          </li>
+        </ul>
+      </nav>
+
+      {/* ─ 현재 페이지 제목 ─ */}
+
       <div id="map" className="location-map" />
 
       {/* 주소 */}
