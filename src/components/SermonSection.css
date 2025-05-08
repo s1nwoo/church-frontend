@@ -170,41 +170,75 @@
 /* ───────────────────────────────────────────────────────── */
 
 @media screen and (max-width: 768px) {
-  /* ─────────────────────────────────────
-     1) 페이지 컨테이너 여백 확보
-     ───────────────────────────────────── */
+  /* 1. 페이지 컨테이너 */
   .page-container {
-    box-sizing: border-box;       /* padding이 내부로 포함되도록 */
-    width: 100%;                  /* 뷰포트 너비에 맞추되 */
-    margin: 0 auto;               /* 화면 가운데 정렬 */
-    padding: 0 16px;              /* 좌우 16px 여백 확보 */
-    overflow-x: hidden;           /* 혹시 남는 가로 스크롤 숨김 */
-  }
-
-  /* ─────────────────────────────────────
-     2) 설교 섹션도 동일하게 overflow 숨김
-     ───────────────────────────────────── */
-  .sermon-section {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 16px;
     overflow-x: hidden;
   }
 
-  /* ─────────────────────────────────────
-     3) 나머지 모바일 최적화 스타일
-     (이미 적용해 놓으신 부분)
-     ───────────────────────────────────── */
+  .sermon-section {
+    overflow-x: hidden;
+    padding: 20px 0;
+  }
+
+  /* 2. 레이아웃 한 줄 */
   .sermon-layout {
+    display: grid;
     grid-template-columns: 1fr;
     gap: 8px;
   }
+
+  /* 3. 설교 카드 최소 너비 고정 */
   .sermon-feature {
-    border-radius: 8px;
-    box-shadow: none;
-    overflow: hidden;
+    min-width: 0;
   }
+
+  /* 4. 아이콘 그리드 (3열) */
   .sermon-emoji-buttons {
-    /* … */
+    /* grid 아이템이 부모 너비 넘어가지 않도록 */
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 8px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 6px;
+    row-gap: 6px;
+    margin-top: 8px;
+  }
+
+  /* 5. 헤더 텍스트 (위의 교회 소개 문구) */
+  .emoji-header {
+    grid-column: 1 / -1;
+    text-align: center;
+    margin: 4px 0;
+  }
+  .emoji-header p {
+    font-size: 14px;
+    margin: 4px 0;
+    line-height: 1.3;
+  }
+
+  /* 6. 버튼(아이콘) 스타일 */
+  .emoji-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 0;
+  }
+
+  /* JS에서 선언된 className="icon-image" */
+  .emoji-button .icon-image {
+    width: 82px;    /* 원하시는 크기로 조절 */
+    height: auto;
   }
 }
+
+
 
 @media screen and (max-width: 480px) {
   /* sermon-section 내부 page-container만 너비 조정 */
