@@ -1,3 +1,5 @@
+/* — 기존 코드 유지 — */
+
 /* 전체 섹션: 뷰포트 높이에서 TopBar(40px)+Header(80px)=120px 제외 */
 .intro-section {
   width: 100%;
@@ -14,7 +16,7 @@
   padding: 0;
 }
 
-/* 히어로 영역 (위쪽 절반) */
+/* 히어로(위 50%) */
 .hero {
   flex: 1;
   min-height: 0;
@@ -30,11 +32,39 @@
   object-fit: cover;
 }
 
-/* 카드 슬라이더 영역 (아래쪽 절반) */
+/* 카드 슬라이더(아래 50%) */
 .card-slider {
   flex: 1;
   min-height: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+
+/* — 반응형 처리 (모바일) — */
+@media screen and (max-width: 768px) {
+  /* 섹션 높이를 콘텐츠 높이에 맞추고, 위아래에 여백 조금 추가 */
+  .intro-section {
+    height: auto;
+    padding: 20px 0;
+  }
+
+  .intro-inner {
+    /* 세로로 쌓이던 구조 유지 (이미 flex-direction: column) */
+    padding: 0 16px;  /* 좌우 여백 */
+  }
+
+  .hero {
+    /* 고정 높이 제거, 이미지 비율 유지 */
+    height: auto;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .hero-full-image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;  /* 잘리는 부분 없이 전체 이미지 보이도록 */
+  }
 }

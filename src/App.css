@@ -1,3 +1,14 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html, body {
+  overflow-x: hidden;           /* 수평 스크롤 잠금 */
+  overscroll-behavior-x: none;  /* 수평 바운스 방지 */
+  touch-action: pan-y;          /* 수직 스크롤만 허용 */
+}
+
 html {
   font-family: 'Pretendard Variable', sans-serif;
   font-weight: 400; /* Medium */
