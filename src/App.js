@@ -25,6 +25,8 @@ import SermonDetailPage from './pages/SermonDetailPage';
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 import SermonManagePage from './pages/admin/SermonManagePage';
 
+import WorshipInfoPage from './pages/WorshipInfoPage';
+
 function App() {
   return (
     <AuthProvider>
@@ -59,6 +61,7 @@ function App() {
             <Route path="/sermons/:id" element={<div className="page-container"><SermonDetailPage /></div>} />
             <Route path="/admin" element={<div className="page-container"><AdminDashboardPage /></div>} />
             <Route path="/admin/sermons" element={<div className="page-container"><SermonManagePage /></div>} />
+            <Route path="/worship-info" element={<div className="page-container"><WorshipInfoPage  /></div>} />
           </Routes>
 
           <Footer />

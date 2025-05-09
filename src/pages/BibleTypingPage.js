@@ -146,7 +146,7 @@ function BibleTypingPage() {
 
       <div className="typing-section">
         <div className="book-select-group">
-          <label htmlFor="book-select">성경 책 선택</label>
+          <label className="bible-label" htmlFor="book-select">성경 책 선택</label>
           <select
             id="book-select"
             value={selectedBook}

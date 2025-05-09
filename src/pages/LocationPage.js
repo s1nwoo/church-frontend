@@ -132,16 +132,13 @@ function LocationPage() {
               <strong>방신시장전통입구</strong>
               <p>
                 <span className="bus-type">
-                  <span className="bus-dot blue" /> 간선
+                  <span className="bus-dot blue" /> 간선 605
                 </span>
-                <span className="bus-number">605</span>
               </p>
               <p>
                 <span className="bus-type">
-                  <span className="bus-dot green" /> 지선
+                  <span className="bus-dot green" /> 지선 6647 6629
                 </span>
-                <span className="bus-number">6647</span>
-                <span className="bus-number">6629</span>
               </p>
             </div>
 
@@ -149,18 +146,13 @@ function LocationPage() {
               <strong>방신전통시장정문 · 방화사거리</strong>
               <p>
                 <span className="bus-type">
-                  <span className="bus-dot blue" /> 간선
+                  <span className="bus-dot blue" /> 간선 605 654
                 </span>
-                <span className="bus-number">605</span>
-                <span className="bus-number">654</span>
               </p>
               <p>
                 <span className="bus-type">
-                  <span className="bus-dot green" /> 지선
+                  <span className="bus-dot green" /> 지선 6629 6631 6647
                 </span>
-                <span className="bus-number">6629</span>
-                <span className="bus-number">6631</span>
-                <span className="bus-number">6647</span>
               </p>
             </div>
 
@@ -168,15 +160,13 @@ function LocationPage() {
               <strong>마곡우촌아파트</strong>
               <p>
                 <span className="bus-type">
-                  <span className="bus-dot blue" /> 간선
+                  <span className="bus-dot blue" /> 간선 605
                 </span>
-                <span className="bus-number">605</span>
               </p>
               <p>
                 <span className="bus-type">
-                  <span className="bus-dot green" /> 지선
+                  <span className="bus-dot green" /> 지선 6631
                 </span>
-                <span className="bus-number">6631</span>
               </p>
             </div>
           </span>

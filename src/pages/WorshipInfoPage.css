@@ -1,0 +1,95 @@
+/* src/pages/WorshipInfoPage.css */
+
+/* ── 컨테이너 ── */
+.worship-container {
+  max-width: 800px;
+  padding: 2rem;
+  color: #222;
+}
+
+/* ── 상단 페이지 제목 ── */
+.page-title {
+  font-size: 1.5rem;
+  font-variation-settings: 'wght' 700 !important;
+  margin-bottom: 1rem;
+}
+
+/* ── 소메뉴 ── */
+.location-submenu {
+  margin-bottom: 1rem;
+}
+.location-submenu ul {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+.location-submenu a {
+  text-decoration: none;
+  color: #c9c9c9;
+  font-size: 0.95rem;
+  transition: color 0.2s;
+}
+.location-submenu a:hover {
+  color: #000;
+}
+.location-submenu a.active {
+  color: #000;
+  font-weight: 900;
+}
+
+/* ── 섹션 제목 (주일예배 / 주중예배) ── */
+.section-title {
+  font-size: 30px;               /* 30px */
+  font-variation-settings: 'wght' 600 !important;
+  text-align: left;              /* 왼쪽 정렬 */
+  margin: 0;      /* 위아래 여백 */
+  border-bottom: 1px solid #292929; /* 밑줄 */
+  padding-bottom: 0.5rem;
+  margin-top: 40px;
+}
+
+/* ── 서비스 테이블 ── */
+.service-table {
+  font-size: 18px;               /* 나머지 텍스트 18px */
+  margin-bottom: 2rem;
+}
+
+/* ── 각 행 ── */
+.service-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding: 0.75rem 0;
+}
+.service-row:last-child {
+  border-bottom: 1px solid #292929 !important;
+}
+
+/* ── 컬럼 ── */
+.service-col {
+  flex: 1;
+  min-width: 0;
+  font-size: inherit;            /* 부모인 .service-table의 18px 상속 */
+}
+
+.service-col.label {
+  flex: 0 0 100px;                /* 첫 칼럼 고정 폭 */
+  font-weight: 600;              /* 필요시 조정 */
+  display: flex;        /* flex 컨테이너로 전환 */
+  align-items: center;
+}
+.service-col.time {
+  border-left: 4px solid #34CA27;
+  padding: 0 1rem;
+}
+.service-col.location {
+  /* 기본 스타일 */
+}
+
+/* ── 텍스트 줄바꿈 방지 ── */
+.service-col span {
+  word-break: keep-all;
+}

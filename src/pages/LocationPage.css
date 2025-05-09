@@ -1,6 +1,7 @@
 /* ===== 전체 컨테이너 ===== */
 .location-container {
   /* 기존 max-width, margin 제거 */
+  max-width: 800px;
   padding: 2rem;
   color: #222;
 }
@@ -169,3 +170,37 @@
   border-bottom: none;
 }
 
+.location-container .bus-stop p {
+  /* 기본 <p> 여백 제거 후, 위아래 간격만 4px로 재설정 */
+  margin: 4px 0;
+  line-height: 1.4;  /* 텍스트 줄간격도 원하시는 대로 조절 */
+}
+
+.location-container .bus-stop {
+  /* 그룹 간 여백을 조금만 남기고 줄이기 */
+  margin-bottom: 8px;  /* 기존 14px → 8px */
+}
+
+/* ───────────────────────────────────────────────────────── */
+/* LocationPage: 주소·전화·지하철·버스 텍스트 18px 통일 */
+/* ───────────────────────────────────────────────────────── */
+.location-container .inline-text,
+.location-container .inline-text .content,
+.location-container .bus-stop p,
+.location-container .bus-type,
+.location-container .bus-number,
+.location-container .subway-tag {
+  font-size: 18px;
+  line-height: 1.4;  /* 필요에 따라 조정 */
+  font-variant-numeric: lining-nums;
+}
+
+.location-container .bus-stop strong {
+    font-variation-settings: 'wght' 700 !important;
+    font-size: 18px;
+    line-height: 1.4;  /* 필요에 따라 조정 */
+}
+
+.location-container .inline-text .bus-stop + .bus-stop {
+  padding-top: 12px;  /* 값은 필요에 따라 조정 */
+}
