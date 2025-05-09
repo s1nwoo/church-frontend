@@ -50,7 +50,7 @@ const Header = () => {
           {/* 네비게이션 메뉴 */}
           <nav className="nav-menu">
             <Link to="/church-intro" className="menu-item">교회소개</Link>
-            <Link to="/about"    className="menu-item">예배 미디어</Link>
+            <Link to="/worship-media"    className="menu-item">예배 미디어</Link>
             <Link to="/mission"  className="menu-item">소식 나눔</Link>
           </nav>
 

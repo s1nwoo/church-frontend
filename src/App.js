@@ -27,6 +27,7 @@ import SermonManagePage from './pages/admin/SermonManagePage';
 
 import WorshipInfoPage from './pages/WorshipInfoPage';
 import ChurchIntroPage from './pages/ChurchIntroPage';
+import WorshipMediaPage from './pages/WorshipMediaPage';
 
 function App() {
   return (
@@ -64,6 +65,7 @@ function App() {
             <Route path="/admin/sermons" element={<div className="page-container"><SermonManagePage /></div>} />
             <Route path="/worship-info" element={<div className="page-container"><WorshipInfoPage  /></div>} />
             <Route path="/church-intro" element={<div className="page-container"><ChurchIntroPage   /></div>} />
+            <Route path="/worship-media" element={<div className="page-container"><WorshipMediaPage   /></div>} />
           </Routes>
 
           <Footer />

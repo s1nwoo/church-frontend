@@ -85,7 +85,7 @@ const SermonSection = () => {
               {/* 썸네일: sum.png ↔ sum2.png */}
               <div
                 className="feature-video-wrapper"
-                onClick={() => navigate(`/sermons/${latest.id}`)}
+                onClick={() => navigate(`/worship-media`)}
               >
                 <img
                   src={thumbIndex === 0 ? sumImage : sum2Image}

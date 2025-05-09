@@ -1,0 +1,202 @@
+/* src/pages/WorshipMediaPage.css */
+
+/* ─── 컨테이너 & 타이틀 ─── */
+.media-container {
+  padding: 2rem 0;
+}
+.page-title {
+  font-size: 1.5rem;
+  font-variation-settings: 'wght' 700 !important;
+  margin: 0 0 1rem;
+}
+
+/* ─── 서브메뉴 ─── */
+.location-submenu {
+  margin-bottom: 1rem;
+}
+.location-submenu ul {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+.location-submenu button {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.95rem;
+  color: #c9c9c9;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.location-submenu button:hover {
+  color: #000;
+}
+.location-submenu button.active {
+  color: #000;
+  font-variation-settings: 'wght' 900 !important;
+}
+
+/* ─── 설교 헤더 ─── */
+.sermon-header {
+  margin-bottom: 1rem;
+}
+.sermon-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+.ref {
+  font-size: 0.9rem;
+  color: #666;
+}
+.sermon-meta {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0.25rem 0 1.5rem;
+}
+
+/* ─── 비디오 + 사이드바 그리드 ─── */
+.media-content {
+  display: grid;
+  grid-template-columns: 2.5fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+  margin-bottom: 2rem;
+}
+.video-wrapper {
+  position: relative;
+  padding-top: 56.25%;
+}
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.media-resources {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.media-resources a {
+  font-size: 0.85rem;
+  color: #0066cc;
+  text-decoration: none;
+}
+
+/* ─── 사이드바 ─── */
+.media-sidebar {
+  padding-left: 1rem;
+}
+
+/* ─── 리스트 컨테이너에 상/하단 라인 ─── */
+.media-sidebar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+
+/* ─── 리스트 아이템 ─── */
+.media-sidebar li {
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+  padding: 0.99rem 0;
+  font-size: 18px;
+}
+/* 아이템 간 구분선 (위쪽만) */
+.media-sidebar li + li {
+  border-top: 1px solid #ddd;
+}
+
+/* ─── 날짜 ─── */
+.media-sidebar .date {
+  flex: 0 0 3.5rem;
+  color: #666;
+  font-variation-settings: 'wght' 400;
+}
+
+/* ─── 제목/설교자 그룹 ─── */
+.media-sidebar .item {
+  flex: 1;
+  margin-left: 0.5rem;
+  border-left: 4px solid #ccc;  /* 기본 회색 막대기 */
+  padding-left: 8px;
+}
+.media-sidebar .item strong {
+  display: block;
+  color: #000;
+  font-variation-settings: 'wght' 400;
+  margin-bottom: 4px;
+}
+.media-sidebar .item small {
+  color: #777;
+  font-variation-settings: 'wght' 400;
+}
+
+/* ─── 선택된 항목 ─── */
+.media-sidebar li.active .item {
+  border-left-color: #FF5722;
+}
+.media-sidebar li.active .date,
+.media-sidebar li.active .item strong,
+.media-sidebar li.active .item small {
+  font-variation-settings: 'wght' 700 !important;
+}
+
+/* ─── 전체목록 버튼 ─── */
+.view-all {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  margin: 1rem 0 0;
+  background: #fff;
+  border: 1px solid #333;
+  font-size: 1rem;
+  cursor: pointer;
+  text-align: center;
+}
+
+/* ─── 스크립트 ─── */
+.media-transcript {
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 1rem;
+}
+.media-transcript h3 {
+  font-size: 1rem;
+  margin: 0 0 0.5rem;
+  color: #333;
+}
+.media-transcript p {
+  font-size: 0.9rem;
+  margin: 0.25rem 0;
+  line-height: 1.4;
+}
+
+/* ─── 준비 중 안내 ─── */
+.placeholder {
+  text-align: center;
+  padding: 2rem 0;
+  color: #777;
+}
+
+/* ─── 반응형 (≤768px) ─── */
+@media screen and (max-width: 768px) {
+  .media-content {
+    grid-template-columns: 1fr;
+  }
+  .media-sidebar {
+    padding-left: 0;
+    margin-top: 1.5rem;
+  }
+  .view-all {
+    margin-top: 0.5rem;
+  }
+}
