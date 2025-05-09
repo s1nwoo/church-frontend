@@ -2,7 +2,8 @@
 
 /* ─── 컨테이너 & 타이틀 ─── */
 .media-container {
-  padding: 2rem 0;
+  max-width: 1200px;
+  padding: 2rem;
 }
 .page-title {
   font-size: 1.5rem;
@@ -61,14 +62,15 @@
 /* ─── 비디오 + 사이드바 그리드 ─── */
 .media-content {
   display: grid;
-  grid-template-columns: 2.5fr 1fr;
-  gap: 1.5rem;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 1rem;
   align-items: start;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 .video-wrapper {
   position: relative;
   padding-top: 56.25%;
+  width: 690px;
 }
 .video-wrapper iframe {
   position: absolute;
@@ -107,7 +109,7 @@
   display: flex;
   align-items: flex-start;
   cursor: pointer;
-  padding: 0.99rem 0;
+  padding: 0.43rem 0;
   font-size: 18px;
 }
 /* 아이템 간 구분선 (위쪽만) */
