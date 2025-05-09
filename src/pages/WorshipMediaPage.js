@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import './WorshipMediaPage.css';
 import axios from 'axios';
+import './WorshipMediaPage.css';
 
 const TABS = [
   { key: 'sunday',    label: '주일예배'    },
@@ -8,7 +8,7 @@ const TABS = [
   { key: 'friday',    label: '금요기도회'  },
 ];
 
-// YouTube URL에서 11자리 ID만 뽑아내는 유틸
+// YouTube URL에서 11자리 ID만 추출
 function extractYoutubeId(url) {
   const regex = /(?:\?v=|\/embed\/|youtu\.be\/)([\w-]{11})/;
   const match = url.match(regex);
@@ -17,20 +17,29 @@ function extractYoutubeId(url) {
 
 export default function WorshipMediaPage() {
   const [activeTab, setActiveTab] = useState('sunday');
-  const [list, setList]         = useState([]);
-  const [selected, setSelected] = useState(null);
+  const [list, setList]           = useState([]);
+  const [selected, setSelected]   = useState(null);
 
+  // ─── 마운트 시: 전체 받아와서 ID 내림차순 정렬 → 최신 4개만 사용 ───
   useEffect(() => {
     axios
-      .get('/api/sermons?size=4&page=0&includeDeleted=false')
+      .get('/api/sermons', {
+        params: {
+          page: 0,
+          includeDeleted: false,
+        }
+      })
       .then(res => {
-        const sermons = res.data.content;
-        setList(sermons);
-        if (sermons.length) loadDetail(sermons[0].id);
+        const all = res.data.content.slice();
+        all.sort((a, b) => b.id - a.id);      // ID 큰 순서로 정렬
+        const top4 = all.slice(0, 4);         // 상위 4개만
+        setList(top4);
+        if (top4.length) loadDetail(top4[0].id);
       })
       .catch(console.error);
   }, []);
 
+  // ─── 상세 불러오기 ───
   function loadDetail(id) {
     axios
       .get(`/api/sermons/${id}`)
@@ -45,8 +54,8 @@ export default function WorshipMediaPage() {
 
   return (
     <div className="media-container page-container">
+      {/* 상단 타이틀 & 서브메뉴 */}
       <h1 className="page-title">예배와 훈련</h1>
-
       <nav className="location-submenu">
         <ul>
           {TABS.map(tab => (
@@ -62,6 +71,7 @@ export default function WorshipMediaPage() {
         </ul>
       </nav>
 
+      {/* 주일예배 헤더 */}
       {activeTab === 'sunday' && (
         <div className="sermon-header">
           <h2 className="sermon-title">
@@ -75,6 +85,7 @@ export default function WorshipMediaPage() {
         </div>
       )}
 
+      {/* 비디오 + 사이드바 그리드 */}
       <div className="media-content">
         <div className="media-main">
           <div className="video-wrapper">
@@ -85,6 +96,12 @@ export default function WorshipMediaPage() {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />
+          </div>
+          <div className="media-resources">
+            {selected.hwpUrl && <a href={selected.hwpUrl}>녹취록 (hwp)</a>}
+            {selected.docUrl && <a href={selected.docUrl}>녹취록 (doc)</a>}
+            {selected.pdfUrl && <a href={selected.pdfUrl}>요약본 (pdf)</a>}
+            {selected.mp3Url && <a href={selected.mp3Url}>MP3</a>}
           </div>
         </div>
 
@@ -112,6 +129,7 @@ export default function WorshipMediaPage() {
         </aside>
       </div>
 
+      {/* 스크립트 (주일예배 탭) */}
       {activeTab === 'sunday' && (
         <div className="media-transcript">
           <h3>설교본문 | {selected.bibleText} 말씀</h3>
@@ -123,6 +141,7 @@ export default function WorshipMediaPage() {
         </div>
       )}
 
+      {/* 준비 중 안내 (그 외 탭) */}
       {activeTab !== 'sunday' && (
         <div className="placeholder">
           <p>
