@@ -85,8 +85,12 @@ const CardSlider = () => {
     const cardNum = i % total;
     if (cardNum === 0) {
       window.open('https://www.youtube.com/@%EB%B0%A9%ED%99%94%EC%B9%A8%EB%A1%80%EA%B5%90%ED%9A%8C', '_blank');
+    } else if (cardNum === 1) {
+      navigate('/church-intro');
     } else if (cardNum === 2) {
       navigate('/location');
+    } else if (cardNum === 4) {
+      navigate('/worship-info');
     }
   };
 

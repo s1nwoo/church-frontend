@@ -1,0 +1,158 @@
+/* src/pages/ChurchIntroPage.css */
+
+/* ─── 컨테이너 ─── */
+.intro-container {
+  max-width: 800px;
+  padding: 2rem;
+  color: #222;
+  background: #fff;
+}
+
+/* ─── 상단 페이지 제목 ─── */
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
+}
+
+/* ─── 소메뉴 ─── */
+.intro-submenu {
+  margin-bottom: 1rem;
+}
+.intro-submenu ul {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+.intro-submenu li {
+  margin: 0;
+}
+.intro-submenu a {
+  text-decoration: none;
+  color: #c9c9c9;
+  font-size: 0.95rem;
+  transition: color 0.2s;
+}
+.intro-submenu a:hover {
+  color: #000;
+}
+.intro-submenu a.active {
+  color: #000;
+  font-weight: 900;
+}
+
+/* ─── 이미지 + 텍스트 피처 블록 ─── */
+.intro-feature {
+  display: flex;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 2rem 0;
+  background: transparent; /* 부모 배경 투명 처리 */
+}
+.feature-image {
+  flex: 0 0 240px;
+  height: auto;
+}
+.feature-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.feature-text {
+  flex: 1;
+  padding: 2rem;
+  color: #292929;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: transparent; /* 자식 배경 투명 처리 */
+}
+.feature-text h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
+}
+.feature-text p {
+  margin: 0 0 1rem;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* ─── 본문 임시 컨텐츠 ─── */
+.intro-content {
+  margin-top: 2rem;
+}
+.intro-content h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0 0 1rem;
+}
+.intro-content p {
+  margin: 0 0 1rem;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+.intro-image-placeholder {
+  width: 100%;
+  height: 240px;
+  background: #f5f5f5;
+  border: 1px dashed #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  margin: 1.5rem 0;
+}
+.intro-content h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.5rem;
+}
+
+/* ─── 반응형 (모바일 ≤768px) ─── */
+@media screen and (max-width: 768px) {
+  .intro-container {
+    padding: 1rem;
+  }
+  .page-title {
+    font-size: 1.25rem;
+  }
+  .intro-submenu ul {
+    gap: 1rem;
+    padding-bottom: 0.25rem;
+  }
+  .intro-feature {
+    display: block;
+  }
+  .feature-image {
+    width: 100%;
+    flex: none;
+    height: auto;
+  }
+  .feature-text {
+    padding: 1rem;
+  }
+  .feature-text h2 {
+    font-size: 1.5rem;
+  }
+  .feature-text p {
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+  }
+  .intro-content h2 {
+    font-size: 1.5rem;
+  }
+  .intro-content p {
+    font-size: 0.9rem;
+  }
+  .intro-image-placeholder {
+    height: 180px;
+  }
+  .intro-content h3 {
+    font-size: 1.1rem;
+  }
+}
