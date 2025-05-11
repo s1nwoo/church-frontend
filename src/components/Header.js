@@ -1,24 +1,42 @@
+// src/components/Header.js
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import './Header.css';
 
-// images 폴더에 newlogo.png, newlogo2.png를 위치시킵니다.
-import newlogo from './images/newlogo2.png';
-import newlogo2 from './images/newlogo1.png';
+// images 폴더에 newlogo1.png, newlogo2.png를 위치시킵니다.
+import newlogo1 from './images/newlogo1.png';
+import newlogo2 from './images/newlogo2.png';
 
 const Header = () => {
-  // 교체할 로고를 배열로 관리
-  const logos = [newlogo, newlogo2];
-  const [currentLogoIndex, setCurrentLogoIndex] = useState(0);
+  const logos = [newlogo1, newlogo2];
+  const [logoIndex, setLogoIndex] = useState(0);
+  const [latestId, setLatestId]   = useState(null);
 
+  // 1초마다 로고 교체
   useEffect(() => {
-    // 1초마다 index를 0,1,0,1... 순환하도록 설정
-    const intervalId = setInterval(() => {
-      setCurrentLogoIndex(prev => (prev + 1) % logos.length);
-    }, 1500);
+    const iv = setInterval(() => {
+      setLogoIndex(i => (i + 1) % logos.length);
+    }, 1000);
+    return () => clearInterval(iv);
+  }, []);
 
-    // 언마운트 시 인터벌 클리어
-    return () => clearInterval(intervalId);
+  // 최신 설교 ID 조회 (size:1000 추가) :contentReference[oaicite:0]{index=0}
+  useEffect(() => {
+    axios.get('/api/sermons', {
+      params: {
+        page: 0,
+        size: 1000,
+        includeDeleted: false
+      }
+    })
+    .then(res => {
+      const all = res.data.content
+        .slice()
+        .sort((a, b) => b.id - a.id);
+      if (all.length) setLatestId(all[0].id);
+    })
+    .catch(console.error);
   }, []);
 
   return (
@@ -40,21 +58,37 @@ const Header = () => {
           <div className="logo-container">
             <Link to="/">
               <img
-                src={logos[currentLogoIndex]}
+                src={logos[logoIndex]}
                 alt="교회 로고"
                 className="logo-image"
               />
             </Link>
           </div>
 
-          {/* 네비게이션 메뉴 */}
+          {/* 네비게이션 메뉴 (CSS 그대로 유지) */}
           <nav className="nav-menu">
-            <Link to="/church-intro" className="menu-item">교회소개</Link>
-            <Link to="/worship-media"    className="menu-item">예배 미디어</Link>
-            <Link to="/mission"  className="menu-item">소식 나눔</Link>
+            <Link to="/church-intro" className="menu-item">
+              교회소개
+            </Link>
+            {/* 최신 설교 상세로 이동 */}
+            {latestId ? (
+              <Link
+                to={`/worship-media/${latestId}`}
+                className="menu-item"
+              >
+                예배 미디어
+              </Link>
+            ) : (
+              <Link to="#" className="menu-item">
+                예배 미디어
+              </Link>
+            )}
+            <Link to="/mission" className="menu-item">
+              소식 나눔
+            </Link>
           </nav>
 
-          {/* 햄버거 (모바일 보일 때) */}
+          {/* 햄버거 (모바일) */}
           <div className="hamburger-menu">
             <button className="hamburger-button" aria-label="메뉴 열기">
               <span className="bar" />

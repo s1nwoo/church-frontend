@@ -1,32 +1,31 @@
 // src/App.js
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import './App.css';
 import ScrollToTop from './components/ScrollToTop';
 
-//import TopBar from './components/TopBar';
 import Header from './components/Header';
 import MainIntroSection from './components/MainIntroSection';
 import SermonSection from './components/SermonSection';
-//import InfoCardSection from './components/InfoCardSection';
 import Footer from './components/Footer';
 
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
-import SignupRealNamePage from './pages/SignupRealNamePage'
+import SignupRealNamePage from './pages/SignupRealNamePage';
 import SignupExtraInfoPage from './pages/SignupExtraInfoPage';
 import BibleTypingPage from './pages/BibleTypingPage';
-
 import LocationPage from './pages/LocationPage';
 import LogoGalleryPage from './pages/LogoGalleryPage';
-
 import SermonDetailPage from './pages/SermonDetailPage';
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 import SermonManagePage from './pages/admin/SermonManagePage';
-
 import WorshipInfoPage from './pages/WorshipInfoPage';
 import ChurchIntroPage from './pages/ChurchIntroPage';
+
+// 전체목록 페이지 컴포넌트
+import AllSermonsPage from './pages/AllSermonsPage';
+// 상세페이지 컴포넌트 (파라미터 기반)
 import WorshipMediaPage from './pages/WorshipMediaPage';
 
 function App() {
@@ -37,22 +36,18 @@ function App() {
         <div className="app-wrapper">
           <Header />
 
-          {/* ✅ 메인인트로는 따로 렌더링 */}
           <Routes>
             <Route
               path="/"
               element={
                 <>
                   <MainIntroSection />
-
-                  {/* ✅ 이후 섹션만 여백 적용 */}
-                  <div className="page-container">
-
-                  </div>
+                  <div className="page-container"></div>
                   <SermonSection />
                 </>
               }
             />
+
             <Route path="/login" element={<div className="page-container"><LoginPage /></div>} />
             <Route path="/signup" element={<div className="page-container"><SignupPage /></div>} />
             <Route path="/signup/realname" element={<div className="page-container"><SignupRealNamePage /></div>} />
@@ -63,9 +58,16 @@ function App() {
             <Route path="/sermons/:id" element={<div className="page-container"><SermonDetailPage /></div>} />
             <Route path="/admin" element={<div className="page-container"><AdminDashboardPage /></div>} />
             <Route path="/admin/sermons" element={<div className="page-container"><SermonManagePage /></div>} />
-            <Route path="/worship-info" element={<div className="page-container"><WorshipInfoPage  /></div>} />
-            <Route path="/church-intro" element={<div className="page-container"><ChurchIntroPage   /></div>} />
-            <Route path="/worship-media" element={<div className="page-container"><WorshipMediaPage   /></div>} />
+            <Route path="/worship-info" element={<div className="page-container"><WorshipInfoPage /></div>} />
+            <Route path="/church-intro" element={<div className="page-container"><ChurchIntroPage /></div>} />
+
+            {/* ──────────────────────────────────────────────── */}
+            {/* 예배와 훈련 (설교 영상) 전체목록 / 상세 */}
+            <Route path="/worship-media" element={<Navigate to="all" replace />} />
+            <Route path="/worship-media/all" element={<div className="page-container"><AllSermonsPage /></div>} />
+            <Route path="/worship-media/:id" element={<div className="page-container"><WorshipMediaPage /></div>} />
+            {/* ──────────────────────────────────────────────── */}
+
           </Routes>
 
           <Footer />
@@ -74,6 +76,5 @@ function App() {
     </AuthProvider>
   );
 }
-
 
 export default App;

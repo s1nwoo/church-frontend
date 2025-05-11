@@ -59,6 +59,14 @@ function LocationPage() {
               교회소개
             </NavLink>
           </li>
+                  <li>
+                    <NavLink
+                      to="/church-history"
+                      className={({ isActive }) => (isActive ? 'active' : undefined)}
+                    >
+                      교회연혁
+                    </NavLink>
+                  </li>
           <li>
             <NavLink
               to="/worship-info"
