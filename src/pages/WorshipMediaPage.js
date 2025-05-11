@@ -6,6 +6,7 @@ import './WorshipMediaPage.css';
 
 const TABS = [
   { key: 'sunday', label: '주일예배' },
+
 ];
 
 function extractYoutubeId(url) {
@@ -143,16 +144,23 @@ export default function WorshipMediaPage() {
       </div>
 
       {/* 스크립트 (주일예배 탭) */}
-      {activeTab === 'sunday' && (
-        <div className="media-transcript">
-          <h3>설교본문 | {selected.bibleText} 말씀</h3>
-          {selected.transcriptLines?.map((line, i) => (
-            <p key={i}>
-              <strong>{line.ref}</strong> {line.text}
-            </p>
-          ))}
-        </div>
-      )}
+        {activeTab === 'sunday' && (
+          <>
+            <div className="media-transcript">
+              <h3>설교본문 | {selected.bibleText} 말씀</h3>
+              {selected.transcriptLines?.map((line,i)=>(
+                <p key={i}><strong>{line.ref}</strong> {line.text}</p>
+              ))}
+            {/* ─── 자동 가져온 성경구절 ─── */}
+
+              {selected.bibleVerses && selected.bibleVerses.length > 0 ? (
+                selected.bibleVerses.map((txt, idx) => <p key={idx}>{txt}</p>)
+              ) : (
+                <p>성경구절 정보가 없습니다.</p>
+              )}
+            </div>
+          </>
+        )}
 
       {/* 다른 탭 준비중 안내 */}
       {activeTab !== 'sunday' && (
