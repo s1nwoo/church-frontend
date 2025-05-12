@@ -1,0 +1,104 @@
+/* src/pages/ChurchHistoryPage.css */
+
+.history-container {
+  max-width: 1200px;
+  padding: 2rem;
+}
+
+/* (상단 제목/소메뉴는 ChurchIntroPage.css에서 가져옵니다) */
+
+.history-description p {
+  margin: 0.5rem 0;
+  line-height: 1.6;
+}
+
+/* ─── 타임라인 컨테이너 ─── */
+.history-timeline {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin: 3rem 0;
+  padding-top: 2rem; /* 연도들이 올라갈 공간 */
+}
+
+/* ─── 중앙 가로 선 ─── */
+.history-timeline::before {
+  content: '';
+  position: absolute;
+  top: 2rem;     /* dot와 동일한 높이 */
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #ccc;
+  z-index: 1;
+}
+
+/* ─── 각 연혁 아이템 ─── */
+.timeline-item {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  text-align: center;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ─── 각 아이템의 점 (dot) ─── */
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  top: 2rem;    /* 선과 같은 높이 */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: #999;
+  border-radius: 50%;
+}
+
+/* ─── 연도 텍스트 ─── */
+.timeline-year {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+/* ─── 연혁 내용 ─── */
+.timeline-content {
+  max-width: 200px;
+}
+.timeline-content p {
+  margin: 0.25rem 0;
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.4;
+}
+
+/* ─── 반응형 (≤768px) ─── */
+@media screen and (max-width: 768px) {
+  .history-timeline {
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 0;
+  }
+  .history-timeline::before {
+    top: 0;
+    left: 1rem;
+    width: 2px;
+    height: 100%;
+  }
+  .timeline-item {
+    width: auto;
+    margin-bottom: 2rem;
+    text-align: left;
+    padding-left: 2rem;
+  }
+  .timeline-item::before {
+    top: 0;
+    left: 1rem;
+    transform: translate(-50%, 0);
+  }
+}

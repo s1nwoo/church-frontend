@@ -22,6 +22,7 @@ import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 import SermonManagePage from './pages/admin/SermonManagePage';
 import WorshipInfoPage from './pages/WorshipInfoPage';
 import ChurchIntroPage from './pages/ChurchIntroPage';
+import ChurchHistoryPage from './pages/ChurchHistoryPage';
 
 // 전체목록 페이지 컴포넌트
 import AllSermonsPage from './pages/AllSermonsPage';
@@ -60,6 +61,7 @@ function App() {
             <Route path="/admin/sermons" element={<div className="page-container"><SermonManagePage /></div>} />
             <Route path="/worship-info" element={<div className="page-container"><WorshipInfoPage /></div>} />
             <Route path="/church-intro" element={<div className="page-container"><ChurchIntroPage /></div>} />
+            <Route path="/church-history" element={<div className="page-container"><ChurchHistoryPage /></div>} />
 
             {/* ──────────────────────────────────────────────── */}
             {/* 예배와 훈련 (설교 영상) 전체목록 / 상세 */}

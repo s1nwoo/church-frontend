@@ -6,7 +6,8 @@ import axios from 'axios';
 import './AllSermonsPage.css';
 
 const TABS = [
-  { key: 'sunday',    label: '주일예배'    },
+  { key: 'sunday',  label: '주일예배' },
+  { key: 'outdoor', label: '야외예배' },
 ];
 
 export default function AllSermonsPage() {
@@ -16,6 +17,11 @@ export default function AllSermonsPage() {
 
   // 탭 변경 또는 마운트 시 전체 목록 불러오기
   useEffect(() => {
+    if (activeTab !== 'sunday') {
+      // 야외예배일 땐 API 호출 안 함
+      setList([]);
+      return;
+    }
     axios.get('/api/sermons', {
       params: {
         page: 0,
@@ -25,7 +31,6 @@ export default function AllSermonsPage() {
       }
     })
     .then(res => {
-      // TODO: activeTab별 필터링 로직 넣을 수도 있음
       const items = res.data.content
         .slice()
         .sort((a, b) => b.id - a.id);
@@ -47,41 +52,52 @@ export default function AllSermonsPage() {
                 onClick={() => setActiveTab(tab.key)}
               >
                 {tab.label}
-                {tab.icon && <span className="video-icon">▶️</span>}
               </button>
             </li>
           ))}
         </ul>
       </nav>
 
-      {/* 전체 설교 리스트 */}
-      <ul className="sermon-list">
-        {list.map(item => (
-          <li
-            key={item.id}
-            onClick={() => navigate(`/worship-media/${item.id}`)}
-          >
-            <div className="left">
-              <p className="title">
-                {item.title}
-                {item.bibleText && (
-                  <span className="ref">({item.bibleText})</span>
-                )}
-              </p>
-            </div>
-            <div className="right">
-              <p className="meta">
-                {new Date(item.sermonDate).toLocaleDateString('ko-KR', {
-                  year:   'numeric',
-                  month:  '2-digit',
-                  day:    '2-digit'
-                })}
-                &nbsp;|&nbsp;{item.preacher}
-              </p>
-            </div>
-          </li>
-        ))}
-      </ul>
+      {/* ─── 주일예배 목록 ─── */}
+      {activeTab === 'sunday' && (
+        <ul className="sermon-list">
+          {list.map(item => (
+            <li
+              key={item.id}
+              onClick={() => navigate(`/worship-media/${item.id}`)}
+            >
+              <div className="left">
+                <p className="title">
+                  {item.title}
+                  {item.bibleText && (
+                    <span className="ref">({item.bibleText})</span>
+                  )}
+                </p>
+              </div>
+              <div className="right">
+                <p className="meta">
+                  {new Date(item.sermonDate).toLocaleDateString('ko-KR', {
+                    year:   'numeric',
+                    month:  '2-digit',
+                    day:    '2-digit'
+                  })}
+                  &nbsp;|&nbsp;{item.preacher}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {/* ─── 야외예배 준비중 ─── */}
+      {activeTab === 'outdoor' && (
+        <div className="placeholder">
+          <p>
+            “{TABS.find(t => t.key === activeTab).label}” 콘텐츠는<br/>
+            준비 중입니다.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

@@ -66,10 +66,13 @@
   gap: 0.2rem;
   align-items: start;
 }
+
+/* ─── 비디오 래퍼 ─── */
 .video-wrapper {
   position: relative;
   padding-top: 56.25%;
-  width: 690px;
+  width: 100%;
+  max-width: 690px;  /* PC에서는 최대 690px */
 }
 .video-wrapper iframe {
   position: absolute;
@@ -78,6 +81,7 @@
   width: 100%;
   height: 100%;
 }
+
 .media-resources {
   display: flex;
   gap: 1rem;
@@ -111,7 +115,6 @@
   padding: 0.63rem 0;
   font-size: 18px;
 }
-/* 아이템 간 구분선 (위쪽만) */
 .media-sidebar li + li {
   border-top: 1px solid #ddd;
 }
@@ -127,7 +130,7 @@
 .media-sidebar .item {
   flex: 1;
   margin-left: 0.5rem;
-  border-left: 2px solid #ccc;  /* 기본 회색 막대기 */
+  border-left: 2px solid #ccc;
   padding-left: 8px;
 }
 .media-sidebar .item strong {
@@ -155,8 +158,10 @@
 .view-all {
   display: block;
   width: 100%;
+  max-width: 690px;    /* PC 에서 video-wrapper와 동일한 max-width */
+  box-sizing: border-box;
   padding: 0.75rem;
-  margin: 1rem 0 0;
+  margin: 1rem auto 0; /* 가운데 정렬 */
   background: #fff;
   border: 1px solid #333;
   font-size: 1rem;
@@ -174,8 +179,6 @@
   font-size: 20px;
   margin: 0 0 0.5rem;
   color: #333;
-
-  /* ─── 추가된 초록색 막대 ─── */
   border-left: 4px solid #4CAF50;
   padding-left: 8px;
 }
@@ -197,11 +200,16 @@
   .media-content {
     grid-template-columns: 1fr;
   }
+  .video-wrapper {
+    max-width: 100%;  /* 모바일에서는 완전 풀브라우저 */
+  }
   .media-sidebar {
     padding-left: 0;
     margin-top: 1.5rem;
   }
   .view-all {
+    /* margin-top만 남기고 자동 폭 유지 */
     margin-top: 0.5rem;
+    max-width: 100%;
   }
 }
