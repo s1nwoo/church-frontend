@@ -29,6 +29,10 @@ export default function PostDetailPage() {
     return <div className="page-container">로딩 중…</div>;
   }
 
+  const goToTab = (tabKey) => {
+    navigate(`/posts?category=${tabKey}`);
+  };
+
   return (
     <div className="post-detail-container page-container">
       <h1 className="page-title">소식 나눔</h1>
@@ -40,10 +44,7 @@ export default function PostDetailPage() {
             <li key={tab.key}>
               <button
                 className={activeTab === tab.key ? 'active' : undefined}
-                onClick={() => {
-                  setActiveTab(tab.key);
-                  navigate('/posts', { replace: true });
-                }}
+                onClick={() => goToTab(tab.key)}
               >
                 {tab.label}
               </button>
@@ -55,9 +56,10 @@ export default function PostDetailPage() {
       {/* 상세 콘텐츠 */}
       <h2 className="post-title">{post.title}</h2>
       <p className="post-meta">
-        {new Date(post.createdDate).toLocaleDateString('ko-KR', {
-          year: 'numeric', month: '2-digit', day: '2-digit'
-        })}
+        {new Date(post.createdDate)
+           .toLocaleDateString('ko-KR', {
+             year: 'numeric', month: '2-digit', day: '2-digit'
+           })}
         &nbsp;|&nbsp;{post.writer}
       </p>
       <div className="post-content">
@@ -66,7 +68,10 @@ export default function PostDetailPage() {
         ))}
       </div>
 
-      <button className="btn-list" onClick={() => navigate('/posts')}>
+      <button
+        className="btn-list"
+        onClick={() => navigate(`/posts?category=${activeTab}`)}
+      >
         목록으로 돌아가기
       </button>
     </div>

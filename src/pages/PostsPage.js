@@ -1,7 +1,7 @@
 // src/pages/PostsPage.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './PostsPage.css';
 
 const TABS = [
@@ -10,52 +10,61 @@ const TABS = [
 ];
 
 export default function PostsPage() {
-  const navigate = useNavigate();
+  const navigate  = useNavigate();
+  const location  = useLocation();
 
-  // 카테고리 탭, 입력 키워드, 실제 검색 키워드, 페이지 인덱스
-  const [activeTab, setActiveTab]         = useState('공지사항');
+  // URL 쿼리(category)에서 초기 탭 결정
+  const queryCat = new URLSearchParams(location.search).get('category');
+  const [activeTab, setActiveTab]         = useState(queryCat || '공지사항');
   const [keyword, setKeyword]             = useState('');
   const [searchKeyword, setSearchKeyword] = useState('');
   const [page, setPage]                   = useState(0);
-
-  // API 응답 구조를 담을 state: 항상 content 배열과 totalPages 숫자가 있어야 함
-  const [data, setData] = useState({ content: [], totalPages: 0 });
-
+  const [data, setData]                   = useState({ content: [], totalPages: 0 });
   const size = 10;
 
-  // 실제 API 호출 함수
+  // API 호출
   const fetchPosts = () => {
-    axios
-      .get('/api/posts', {
-        params: {
-          category: activeTab,
-          keyword:  searchKeyword,
-          page,
-          size
-        }
-      })
-      .then(res => {
-        const d = res.data;
-        // res.data가 배열일 수도, Page 객체일 수도 있으므로 분기 처리
-        if (Array.isArray(d)) {
-          setData({ content: d, totalPages: 1 });
-        } else {
-          setData({
-            content:    d.content    || [],
-            totalPages: d.totalPages || 0
-          });
-        }
-      })
-      .catch(console.error);
+    axios.get('/api/posts', {
+      params: { category: activeTab, keyword: searchKeyword, page, size }
+    })
+    .then(res => {
+      const d = res.data;
+      if (Array.isArray(d)) {
+        setData({ content: d, totalPages: 1 });
+      } else {
+        setData({
+          content:    d.content    || [],
+          totalPages: d.totalPages || 0
+        });
+      }
+    })
+    .catch(console.error);
   };
 
-  // 탭, 페이지, 실제 검색 키워드가 바뀔 때마다 재조회
+  // location.search 변경 시 (외부에서 category 바뀔 때) 반영
+  useEffect(() => {
+    const cat = new URLSearchParams(location.search).get('category');
+    if (cat && cat !== activeTab) {
+      setActiveTab(cat);
+      setPage(0);
+    }
+  }, [location.search]);
+
+  // 탭/페이지/검색어 변경 시 재조회
   useEffect(fetchPosts, [activeTab, page, searchKeyword]);
 
-  // 검색 버튼 클릭 시
   const onSearch = () => {
     setPage(0);
     setSearchKeyword(keyword);
+    // URL에도 반영
+    navigate(`/posts?category=${activeTab}`, { replace: true });
+  };
+
+  const changeTab = (tabKey) => {
+    setActiveTab(tabKey);
+    setPage(0);
+    // URL에도 반영
+    navigate(`/posts?category=${tabKey}`, { replace: true });
   };
 
   return (
@@ -69,10 +78,7 @@ export default function PostsPage() {
             <li key={tab.key}>
               <button
                 className={activeTab === tab.key ? 'active' : undefined}
-                onClick={() => {
-                  setActiveTab(tab.key);
-                  setPage(0);
-                }}
+                onClick={() => changeTab(tab.key)}
               >
                 {tab.label}
               </button>
@@ -93,7 +99,7 @@ export default function PostsPage() {
         <button onClick={onSearch}>검색</button>
       </div>
 
-      {/* 리스트 또는 빈 상태 안내 */}
+      {/* 리스트 or 빈 안내 */}
       {data.content.length === 0 ? (
         <p className="no-data">등록된 글이 없습니다.</p>
       ) : (
@@ -105,7 +111,8 @@ export default function PostsPage() {
               </div>
               <div className="right">
                 <p className="meta">
-                  {new Date(post.createdDate).toLocaleDateString('ko-KR')}
+                  {new Date(post.createdDate)
+                     .toLocaleDateString('ko-KR')}
                   &nbsp;|&nbsp;{post.writer}
                 </p>
               </div>
