@@ -83,7 +83,7 @@ const Header = () => {
                 예배 미디어
               </Link>
             )}
-            <Link to="/mission" className="menu-item">
+            <Link to="/posts" className="menu-item">
               소식 나눔
             </Link>
           </nav>

@@ -1,0 +1,125 @@
+/* src/pages/PostsPage.css */
+
+.posts-container {
+  max-width: 1200px;
+  padding: 2rem;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-variation-settings: 'wght' 700 !important;
+  margin-bottom: 1rem;
+}
+
+/* ─── 카테고리 탭 (기존 서브메뉴 스타일 재사용) ─── */
+.location-submenu {
+  margin-bottom: 1rem;
+}
+.location-submenu ul {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0.5rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+.location-submenu button {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.95rem;
+  color: #c9c9c9;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.location-submenu button:hover,
+.location-submenu button.active {
+  color: #000;
+  font-variation-settings: 'wght' 900 !important;
+}
+
+/* ─── 검색 바 ─── */
+.posts-search {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.posts-search input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.posts-search button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #333;
+  background: #fff;
+  cursor: pointer;
+}
+
+/* ─── 리스트 ─── */
+.posts-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid #ddd;
+}
+.posts-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+.posts-list li:hover {
+  background: #fafafa;
+}
+.posts-list .left .title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #000;
+}
+.posts-list .right .meta {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
+  white-space: nowrap;
+}
+
+/* ─── 페이지네이션 ─── */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.pagination button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #333;
+  background: #fff;
+  cursor: pointer;
+}
+.pagination button:disabled {
+  color: #aaa;
+  border-color: #eee;
+  cursor: default;
+}
+.pagination span {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+/* ─── 반응형 (≤768px) ─── */
+@media screen and (max-width: 768px) {
+  .posts-search {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .pagination {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
