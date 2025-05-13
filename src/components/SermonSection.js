@@ -30,7 +30,7 @@ import newnew6 from './images/newnew6.png';
 
 export default function SermonSection() {
   const navigate = useNavigate();
-  const [sermons, setSermons] = useState([]);
+  const [sermons, setSermons]       = useState([]);
   const [thumbIndex, setThumbIndex] = useState(0);
   const [iconIndex, setIconIndex]   = useState(0);
 
@@ -53,24 +53,36 @@ export default function SermonSection() {
   }, []);
 
   // 최신 설교 한 건
-  const latest = sermons
-    .slice()
-    .sort((a, b) => b.id - a.id)[0];
+  const latest = sermons.slice().sort((a, b) => b.id - a.id)[0];
 
   // 클릭 시 최신 상세로 이동
   const goToLatest = () => {
     if (latest) navigate(`/worship-media/${latest.id}`);
   };
 
-  const paths = ['/guide','/location','/news','/worship','/history','/youtube'];
-  const icons      = [iconImage,  iconImage2,  iconImage3,  iconImage4,  iconImage5,  iconImage6];
-  const iconsNew   = [new1,       new2,         new3,         new4,         new5,         new6];
-  const iconsNewNew= [newnew1,    newnew2,      newnew3,      newnew4,      newnew5,      newnew6];
+  // 유튜브 채널 URL (새 탭으로 열기)
+  const youtubeChannelUrl = 'https://www.youtube.com/@%EB%B0%A9%ED%99%94%EC%B9%A8%EB%A1%80%EA%B5%90%ED%9A%8C';
+
+  // 내부 라우트 + 특별 처리용 '/youtube'
+  const paths = [
+    '/church-intro',
+    '/location',
+    '/worship-info',
+    '/posts',
+    '/church-history',
+    '/youtube'
+  ];
+
+  const icons      = [iconImage, iconImage2, iconImage3, iconImage4, iconImage5, iconImage6];
+  const iconsNew   = [new1,      new2,      new3,      new4,      new5,      new6];
+  const iconsNewNew= [newnew1,   newnew2,   newnew3,   newnew4,   newnew5,   newnew6];
 
   return (
     <section className="sermon-section">
       <div className="page-container">
         <div className="sermon-layout">
+
+          {/* 금주의 주일설교 */}
           {latest && (
             <div className="sermon-feature">
               <div className="feature-header">
@@ -107,6 +119,8 @@ export default function SermonSection() {
               </div>
             </div>
           )}
+
+          {/* 아이콘 버튼들 */}
           <div className="sermon-emoji-buttons">
             <div className="emoji-header">
               <p style={{ fontSize: '22px', margin: '6px 0' }}>
@@ -115,7 +129,7 @@ export default function SermonSection() {
               <p style={{ fontSize: '22px', margin: '6px 0' }}>
                 기독교한국침례회 방화침례교회입니다
               </p>
-              <p style={{ fontSize: '16px', margin: '6px 0', marginTop:'20px' }}>
+              <p style={{ fontSize: '16px', margin: '6px 0', marginTop: '20px' }}>
                 복음으로, 은혜로, 사랑으로, 믿음으로
               </p>
               <p style={{ fontSize: '16px', margin: '6px 0' }}>
@@ -123,7 +137,7 @@ export default function SermonSection() {
               </p>
             </div>
             {icons.map((orig, idx) => {
-              let src = iconIndex === 0
+              const src = iconIndex === 0
                 ? orig
                 : iconIndex === 1
                   ? iconsNew[idx]
@@ -132,13 +146,20 @@ export default function SermonSection() {
                 <div
                   key={idx}
                   className="emoji-button"
-                  onClick={() => navigate(paths[idx])}
+                  onClick={() => {
+                    if (paths[idx] === '/youtube') {
+                      window.open(youtubeChannelUrl, '_blank');
+                    } else {
+                      navigate(paths[idx]);
+                    }
+                  }}
                 >
                   <img src={src} className="icon-image" alt="" />
                 </div>
               );
             })}
           </div>
+
         </div>
       </div>
     </section>
