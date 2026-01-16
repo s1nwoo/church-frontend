@@ -21,7 +21,13 @@ body {
   margin: 0;
   padding: 0;
   font-size: 1rem;
-   overflow-y: scroll;
+  overflow-y: scroll;
+  background: #f6f7f9; /* ✅ 배경색 추가 */
+}
+
+/* 로그인 페이지에서 배경 흰색 */
+body.auth-page {
+  background: #ffffff;
 }
 
 /* 개발용 가이드라인 */
@@ -32,7 +38,6 @@ body {
   top: 0;
   height: 100%;
   width: 1px;
-  background-color: red;
   z-index: 9999;
 }
 

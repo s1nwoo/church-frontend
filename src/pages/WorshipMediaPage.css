@@ -1,5 +1,41 @@
 /* src/pages/WorshipMediaPage.css */
 
+/* ===== intro-container 스타일 추가 ===== */
+.intro-container {
+  max-width: 1200px;
+  padding: 40px 20px;
+  color: #222;
+  background: #fff;
+  margin: 0 auto 30px auto;
+  border-radius: 16px;
+}
+
+/* ===== 탭 메뉴 버튼 스타일 (주일예배/야외예배) ===== */
+.intro-tabs .tab-item {
+  background: none;
+  border: none;
+  padding: 20px 32px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #666;
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-family: 'Pretendard', sans-serif;
+}
+
+.intro-tabs .tab-item:hover {
+  color: #333;
+  background: #f9f9f9;
+}
+
+.intro-tabs .tab-item.active {
+  color: #333;
+  font-weight: 700;
+  border-bottom-color: #7D4CFC;
+}
+
 /* ─── 컨테이너 & 타이틀 ─── */
 .media-container {
   max-width: 1200px;
@@ -197,6 +233,10 @@
 
 /* ─── 반응형 (≤768px) ─── */
 @media screen and (max-width: 768px) {
+  .intro-container {
+    padding: 30px 20px;
+  }
+
   .media-content {
     grid-template-columns: 1fr;
   }

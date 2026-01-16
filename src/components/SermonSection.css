@@ -18,7 +18,7 @@
 /* ───────────────────────────────────────────────────────── */
 .sermon-section {
   padding: 60px 0;
-  background: #f0f0f0;
+  background: #f6f7f9;
 }
 
 .page-container {
@@ -111,7 +111,7 @@
   color: #555;
 }
 .feature-button {
-  background: #0033cc;
+  background: #7D4CFC;
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -120,8 +120,9 @@
   cursor: pointer;
   transition: background .2s;
 }
+
 .feature-button:hover {
-  background: #002299;
+  background: #FF6B9D;
 }
 
 /* ───────────────────────────────────────────────────────── */

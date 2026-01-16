@@ -68,7 +68,7 @@ export default function AllSermonsPage() {
             >
               <div className="left">
                 <p className="title">
-                  {item.title}
+                  {item.content}
                   {item.bibleText && (
                     <span className="ref">({item.bibleText})</span>
                   )}

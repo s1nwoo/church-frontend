@@ -1,7 +1,16 @@
+/* ===== intro-container 스타일 추가 ===== */
+.intro-container {
+  max-width: 1200px;
+  padding: 40px 20px;
+  color: #222;
+  background: #fff;
+  margin: 0 auto 30px auto;
+  border-radius: 16px;
+}
+
 /* ===== 전체 컨테이너 ===== */
 .location-container {
-  /* 기존 max-width, margin 제거 */
-  max-width: 800px;
+  max-width: 1200px;
   padding: 2rem;
   color: #222;
 }
@@ -34,8 +43,6 @@
   margin: 0;
 }
 
-
-
 .info-row.no-border {
   border-bottom: none;
 }
@@ -51,156 +58,172 @@
 }
 
 .icon-wrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  width: 32px;
+  height: 32px;
 }
 
-/* 텍스트 wrapper */
+/* 인라인 텍스트 (아이콘 옆 설명) */
 .inline-text {
   flex: 1;
-  font-size: 1.1em;
-  line-height: 1.6;
 }
 
-/* 라벨 */
-.inline-text .label {
-  display: inline-block;
-  font-weight: bold;
-  min-width: 120px;
-  font-size: 1.15em;
-  vertical-align: top;
-}
-
-/* 본문 텍스트 */
 .inline-text .content {
-  display: inline-block;
+  font-size: 15px;
+  line-height: 1.6;
   color: #333;
 }
 
-/* 지하철 태그 */
+/* 지하철 태그 (노선 표시) */
 .subway-tag {
   display: inline-block;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 14px;
+  padding: 2px 8px;
+  border-radius: 4px;
   font-weight: bold;
-  color: white;
+  font-size: 13px;
   margin-right: 8px;
-  vertical-align: middle;
 }
 
-.line5 {
-  background-color: #8B50A4;
+.subway-tag.line5 {
+  background: #996cad;
+  color: #fff;
 }
 
-.line9 {
-  background-color: #C09A00;
+.subway-tag.line9 {
+  background: #d4a24a;
+  color: #fff;
 }
 
-/* 버스 숫자 */
-.bus-number {
-  display: inline-block;
-  font-size: 1.1em;
-  margin-right: 6px;
-  font-weight: 400;
+/* 버스 정류장 스타일 */
+.bus-stop {
+  margin-bottom: 16px;
+}
+
+.bus-stop:last-child {
+  margin-bottom: 0;
+}
+
+.bus-stop strong {
+  display: block;
+  font-size: 15px;
+  margin-bottom: 6px;
   color: #222;
-  line-height: 1.6;
 }
 
-/* 간선/지선 앞 원형 */
+.bus-stop p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+/* 버스 타입 표시 */
 .bus-type {
   display: inline-flex;
   align-items: center;
-  margin-right: 8px;
+  gap: 6px;
 }
 
+/* 버스 dot (노선 컬러) */
 .bus-dot {
-  display: inline-block;
-  width: 15px;
-  height: 15px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  margin-right: 6px;
-  vertical-align: middle;
+  display: inline-block;
 }
 
 .bus-dot.blue {
-  background-color: #34AAFF;
+  background: #0052a4;
 }
 
 .bus-dot.green {
-  background-color: #34CA27;
+  background: #53b332;
 }
 
-.bus-stop {
-  margin-bottom: 14px;
-}
-
-/* ─── 소메뉴 스타일 ─── */
+/* 소메뉴 스타일 */
 .location-submenu {
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 }
+
 .location-submenu ul {
   display: flex;
-  gap: 1.5rem;              /* 메뉴 간 간격 */
+  gap: 1.5rem;
   list-style: none;
   margin: 0;
-  padding: 0 0 0.5rem;      /* 아래 패딩: 밑줄 대신 여유 공간 */
+  padding: 0 0 0.5rem;
   border-bottom: 1px solid #e0e0e0;
 }
+
 .location-submenu li {
   margin: 0;
 }
+
 .location-submenu a {
   text-decoration: none;
-  color: #c9c9c9;              /* 비활성 탭 색 */
+  color: #c9c9c9;
   font-size: 0.95rem;
-  padding: 0;               /* 밑줄용 패딩 제거 */
   transition: color 0.2s;
 }
+
 .location-submenu a:hover {
   color: #000;
 }
 
-/* ─── 활성(active) 탭 강조 ─── */
 .location-submenu a.active {
   color: #000;
   font-weight: 900;
-  /* 밑줄 제거 (분홍선 대신 폰트 굵기만) */
-  border-bottom: none;
 }
 
-.location-container .bus-stop p {
-  /* 기본 <p> 여백 제거 후, 위아래 간격만 4px로 재설정 */
-  margin: 4px 0;
-  line-height: 1.4;  /* 텍스트 줄간격도 원하시는 대로 조절 */
+/* 페이지 제목 스타일 */
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
 }
 
-.location-container .bus-stop {
-  /* 그룹 간 여백을 조금만 남기고 줄이기 */
-  margin-bottom: 8px;  /* 기존 14px → 8px */
-}
+/* 반응형 (모바일) */
+@media screen and (max-width: 768px) {
+  .intro-container {
+    padding: 30px 20px;
+  }
 
-/* ───────────────────────────────────────────────────────── */
-/* LocationPage: 주소·전화·지하철·버스 텍스트 18px 통일 */
-/* ───────────────────────────────────────────────────────── */
-.location-container .inline-text,
-.location-container .inline-text .content,
-.location-container .bus-stop p,
-.location-container .bus-type,
-.location-container .bus-number,
-.location-container .subway-tag {
-  font-size: 18px;
-  line-height: 1.4;  /* 필요에 따라 조정 */
-  font-variant-numeric: lining-nums;
-}
+  .location-container {
+    padding: 1.5rem;
+  }
 
-.location-container .bus-stop strong {
-    font-variation-settings: 'wght' 700 !important;
-    font-size: 18px;
-    line-height: 1.4;  /* 필요에 따라 조정 */
-}
+  .location-map {
+    height: 300px;
+  }
 
-.location-container .inline-text .bus-stop + .bus-stop {
-  padding-top: 12px;  /* 값은 필요에 따라 조정 */
+  .info-row {
+    padding: 16px 0;
+  }
+
+  .icon-wrapper {
+    width: 40px;
+    margin-right: 12px;
+  }
+
+  .icon-wrapper img {
+    width: 28px;
+    height: 28px;
+  }
+
+  .inline-text .content {
+    font-size: 14px;
+  }
+
+  .subway-tag {
+    font-size: 12px;
+    padding: 2px 6px;
+  }
+
+  .bus-stop strong {
+    font-size: 14px;
+  }
+
+  .bus-stop p {
+    font-size: 13px;
+  }
+
+  .location-submenu ul {
+    gap: 1rem;
+  }
 }

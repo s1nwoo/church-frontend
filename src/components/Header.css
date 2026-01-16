@@ -11,12 +11,18 @@
 
 /* ——— 상단 바 ——— */
 .top-bar {
-  background: #fff;
-  height: 40px;
+  background: #f6f7f9;
+  height: 50px;
   border-bottom: 1px solid #eee;
   display: flex;
   align-items: center;
 }
+
+/* 로그인 페이지에서 상단바 배경 흰색 */
+.auth-page .top-bar {
+  background: #ffffff;
+}
+
 .top-bar-inner {
   width: 100%;
   display: flex;
@@ -30,27 +36,236 @@
   width: 24px;
   height: 24px;
 }
-.auth-links a {
-  color: #333;
-  font-size: 0.9rem;
-  text-decoration: none;
-  margin: 0 4px;
-  font-weight: 500;
+
+/* ✅ 로그인/회원가입 링크 컨테이너 */
+.auth-links {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
-.auth-links .sep {
-  color: #999;
+
+/* ✅ 헤더 로그인/회원가입 버튼 스타일 */
+.header-auth-btn {
+  padding: 7px 18px;
+  border-radius: 24px;
+  font-size: 12px;
+  font-weight: 500;
+  font-style: normal;
+  font-family: 'Pretendard';
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* 헤더 로그인 버튼 (흰색 배경, 회색 테두리) */
+.header-auth-btn.header-login-btn {
+  background: #ffffff;
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+.header-auth-btn.header-login-btn:hover {
+  border-color: #7D4CFC;
+  color: #7D4CFC;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(125, 76, 252, 0.15);
+}
+
+/* 헤더 회원가입 버튼 (메인색상) */
+.header-auth-btn.header-signup-btn {
+  background: #7D4CFC;
+  color: white;
+  border: 1px solid #7D4CFC;
+}
+
+.header-auth-btn.header-signup-btn:hover {
+  background: #FF6B9D;
+  border-color: #FF6B9D;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(125, 76, 252, 0.3);
+}
+
+/* ✅ "방화침례교회 홈" 링크 스타일 (로그인 버튼 위치) */
+.church-home-link {
+  padding: 7px 18px;
+  border-radius: 24px;
+  font-size: 13px;
+  font-weight: 600;
+  font-style: normal;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  line-height: 1;
+  background: #ffffff;
+  color: #666;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  margin-right: 40px;
+}
+
+.church-home-link:hover {
+  border-color: #7D4CFC;
+  color: #7D4CFC;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(125, 76, 252, 0.15);
+}
+
+/* ✅ 트렌디한 사용자 메뉴 */
+.user-menu-container {
+  position: relative;
+}
+
+.user-menu-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Pretendard', sans-serif;
+}
+
+.user-menu-trigger:hover {
+  background: #e9ecef;
+  border-color: #d0d0d0;
+}
+
+.user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.dropdown-arrow {
+  transition: transform 0.2s ease;
+  color: #666;
+}
+
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* ✅ 드롭다운 메뉴 */
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 180px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  z-index: 1000;
+  animation: dropdownFadeIn 0.2s ease;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  width: 100%;
+  text-align: left;
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  font-family: 'Pretendard', sans-serif;
+}
+
+.dropdown-item:hover {
+  background: #f8f9fa;
+}
+
+.dropdown-item svg {
+  color: #666;
+  flex-shrink: 0;
+}
+
+.dropdown-item.logout {
+  border-top: 1px solid #f0f0f0;
+  color: #dc3545;
+}
+
+.dropdown-item.logout svg {
+  color: #dc3545;
+}
+
+.dropdown-item.logout:hover {
+  background: #fff5f5;
+}
+
+/* ✅ 관리자 메뉴 스타일 */
+.dropdown-item.admin {
+  color: #7D4CFC;
+  border-top: 1px solid #f0f0f0;
+}
+
+.dropdown-item.admin svg {
+  color: #7D4CFC;
+}
+
+.dropdown-item.admin:hover {
+  background: #f0f8ff;
 }
 
 /* ——— 메인 헤더 ——— */
 .main-header {
-  background: #fff;
+  background: #f6f7f9;
   height: 80px;
   border-bottom: 1px solid #eee;
   display: flex;
   align-items: center;
 }
+
+/* 로그인 페이지 헤더 (배경 흰색) */
+.main-header.auth-page-header {
+  background: #ffffff;
+}
+
 .header-inner {
-  position: relative;        /* nav-menu 절대배치 기준 */
+  position: relative;
   width: 100%;
   display: flex;
   align-items: center;
@@ -66,32 +281,32 @@
 
 /* ——— 네비게이션 메뉴 ——— */
 .nav-menu {
-  position: absolute;        /* 좌우 끝 사이 중앙 정렬 */
+  position: absolute;
   left: 50%;
   transform: translateX(-50%);
-
   display: flex;
-  flex-wrap: nowrap;         /* 한 줄로 고정 */
+  flex-wrap: nowrap;
   align-items: center;
   gap: 40px;
   height: 100%;
-  white-space: nowrap;       /* 메뉴 전체 줄바꿈 방지 */
-  pointer-events: none;      /* 배경 클릭 무시 */
+  white-space: nowrap;
+  pointer-events: none;
 }
 .nav-menu .menu-item {
-  pointer-events: auto;      /* 아이템만 클릭 가능 */
-  font-size: 22px;
-  font-weight: 800;
+  pointer-events: auto;
+  font-size: 18px;
+  font-weight: 700;
   color: #1D1829;
   line-height: 1.2;
   padding: 0;
   margin: 0;
   font-family: 'Pretendard' !important;
   text-decoration: none;
-  white-space: nowrap;       /* 텍스트 줄바꿈 방지 */
+  white-space: nowrap;
+  transition: color 0.2s ease;
 }
 .nav-menu .menu-item:hover {
-  color: #0078d4;
+  color: #7D4CFC;
 }
 
 /* ——— 햄버거 메뉴 (모바일) ——— */
@@ -121,5 +336,38 @@
   }
   .hamburger-menu {
     display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  /* 헤더 버튼 크기 조정 */
+  .header-auth-btn {
+    padding: 6px 14px;
+    font-size: 13px;
+  }
+
+  .user-menu-trigger {
+    padding: 6px 10px;
+  }
+
+  .user-name {
+    display: none;
+  }
+
+  .user-avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  .dropdown-arrow {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  /* 작은 화면에서 헤더 버튼 */
+  .header-auth-btn {
+    padding: 5px 12px;
+    font-size: 12px;
   }
 }

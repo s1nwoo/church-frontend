@@ -39,7 +39,7 @@
 
 .circle {
   background-color: #e5ecfb;
-  color: #0033cc;
+  color: #7D4CFC;
   border-radius: 50%;
   width: 48px;
   height: 48px;
@@ -52,7 +52,7 @@
 }
 
 .step.active .circle {
-  background-color: #0033cc;
+  background-color: #7D4CFC;
   color: white;
 }
 
@@ -174,6 +174,6 @@
 }
 
 .next-btn {
-  background-color: #0033cc;
+  background-color: #7D4CFC;
   color: white;
 }

@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AdminDashboardPage.css';
-import { FaUsers, FaChalkboardTeacher } from 'react-icons/fa';
+import { FaUsers, FaChalkboardTeacher, FaNewspaper } from 'react-icons/fa';
 
 const AdminDashboardPage = () => {
   const navigate = useNavigate();
@@ -19,6 +19,12 @@ const AdminDashboardPage = () => {
       description: '설교 내용을 등록하고 관리할 수 있습니다.',
       icon: <FaChalkboardTeacher size={32} />,
       path: '/admin/sermons',
+    },
+    {
+      title: '소식 관리',
+      description: '공지사항과 성도소식을 등록하고 관리할 수 있습니다.',
+      icon: <FaNewspaper size={32} />,
+      path: '/admin/posts',
     },
   ];
 

@@ -1,8 +1,9 @@
 // src/pages/WorshipMediaPage.js
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, NavLink } from 'react-router-dom';
 import axios from 'axios';
 import './WorshipMediaPage.css';
+import './ChurchIntroPage.css';
 
 const TABS = [
   { key: 'sunday',  label: '주일예배' },
@@ -22,10 +23,10 @@ export default function WorshipMediaPage() {
 
   const [activeTab, setActiveTab] = useState('sunday');
   const [allItems,   setAllItems] = useState([]);   // 전체 데이터
-  const [list,       setList]     = useState([]);   // 사이드바용 4개
+  const [list,       setList]     = useState([]);   // 사이드바용 최신 4개 (고정)
   const [selected,   setSelected] = useState(null); // 상세 데이터
 
-  // 1) 전체 데이터 로드 (최신 ID 판단 & 사이드바 재구성용)
+  // 1) 전체 데이터 로드
   useEffect(() => {
     axios.get('/api/sermons', {
       params: { page: 0, size: 1000, includeDeleted: false }
@@ -42,15 +43,36 @@ export default function WorshipMediaPage() {
       .catch(console.error);
   }, [id]);
 
-  // 3) selected 혹은 allItems 변경 시 사이드바용 4개 재계산
+  // 3) selected와 allItems가 로드되면 현재 글 기준 전후 설교 표시
   useEffect(() => {
-    if (!selected || allItems.length === 0) return;
-    const related = allItems
-      .filter(item => item.id <= selected.id)
-      .sort((a, b) => b.id - a.id)
-      .slice(0, 4);
-    setList(related);
-  }, [selected, allItems]);
+    if (allItems.length === 0 || !selected) return;
+
+    // ID 기준 오름차순 정렬 (1, 2, 3, ... 순서)
+    const sorted = allItems
+      .slice()
+      .sort((a, b) => a.id - b.id);
+
+    // 현재 글의 인덱스 찾기
+    const currentIndex = sorted.findIndex(s => s.id === selected.id);
+
+    if (currentIndex === -1) {
+      // 현재 글을 찾지 못한 경우 최신 4개
+      setList(sorted.slice().reverse().slice(0, 4).reverse());
+      return;
+    }
+
+    // 현재 글 기준 전후로 총 4개 추출
+    // 현재 글 포함하여 -1, 0, +1, +2 위치
+    const start = Math.max(0, currentIndex - 1);
+    const end = Math.min(sorted.length, start + 4);
+
+    // 4개가 안 되면 앞쪽으로 조정
+    const finalStart = Math.max(0, end - 4);
+    const relatedSermons = sorted.slice(finalStart, end);
+
+    // 최신순으로 표시 (역순)
+    setList(relatedSermons.reverse());
+  }, [allItems, selected]);
 
   // 로딩 상태 (Sunday 탭용)
   if (activeTab === 'sunday' && !selected) {
@@ -61,112 +83,123 @@ export default function WorshipMediaPage() {
   const embedUrl = selected && `https://www.youtube.com/embed/${videoId}`;
 
   return (
-    <div className="media-container page-container">
-      {/* 상단 타이틀 & 서브메뉴 */}
-      <h1 className="page-title">예배와 훈련</h1>
-      <nav className="location-submenu">
-        <ul>
-          {TABS.map(tab => (
-            <li key={tab.key}>
-              <button
-                className={activeTab === tab.key ? 'active' : undefined}
-                onClick={() => setActiveTab(tab.key)}
-              >
-                {tab.label}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </nav>
-
-      {/* ─── Sunday 탭: 상세 + 리스트 ─── */}
-      {activeTab === 'sunday' && selected && (
-        <>
-          {/* 설교 헤더 */}
-          <div className="sermon-header">
-            <h2 className="sermon-title">
-              {selected.title} <span className="ref">({selected.bibleText})</span>
-            </h2>
-            <p className="sermon-meta">
-              {new Date(selected.sermonDate).toLocaleDateString('ko-KR', {
-                year: 'numeric', month: '2-digit', day: '2-digit'
-              })} | {selected.preacher}
-            </p>
-          </div>
-
-          {/* 비디오 + 사이드바 */}
-          <div className="media-content">
-            <div className="media-main">
-              <div className="video-wrapper">
-                <iframe
-                  title={selected.title}
-                  src={embedUrl}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              </div>
-              <div className="media-resources">
-                {selected.hwpUrl && <a href={selected.hwpUrl}>녹취록 (hwp)</a>}
-                {selected.docUrl && <a href={selected.docUrl}>녹취록 (doc)</a>}
-                {selected.pdfUrl && <a href={selected.pdfUrl}>요약본 (pdf)</a>}
-                {selected.mp3Url && <a href={selected.mp3Url}>MP3</a>}
-              </div>
-            </div>
-            <aside className="media-sidebar">
-              <ul>
-                {list.map(item => (
-                  <li
-                    key={item.id}
-                    className={selected.id === item.id ? 'active' : undefined}
-                    onClick={() => navigate(`/worship-media/${item.id}`)}
-                  >
-                    <span className="date">
-                      {new Date(item.sermonDate).toLocaleDateString('en-US', {
-                        month: '2-digit', day: '2-digit'
-                      })}
-                    </span>
-                    <div className="item">
-                      <strong>{item.title}</strong>
-                      <small>{item.preacher}</small>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-              <button
-                className="view-all"
-                onClick={() => navigate('/worship-media/all')}
-              >
-                전체목록
-              </button>
-            </aside>
-          </div>
-
-          {/* 스크립트 + 성경구절 */}
-          <div className="media-transcript">
-            <h3>설교본문 | {selected.bibleText} 말씀</h3>
-            {selected.transcriptLines?.map((line, i) => (
-              <p key={i}><strong>{line.ref}</strong> {line.text}</p>
-            ))}
-          </div>
-          <div className="media-transcript">
-            {selected.bibleVerses && selected.bibleVerses.length > 0
-              ? selected.bibleVerses.map((txt, idx) => <p key={idx}>{txt}</p>)
-              : <p>성경구절 정보가 없습니다.</p>
-            }
-          </div>
-        </>
-      )}
-
-      {/* ─── 기타 탭: 준비중 안내 ─── */}
-      {activeTab !== 'sunday' && (
-        <div className="placeholder">
-          <p>
-            “{TABS.find(t => t.key === activeTab).label}” 콘텐츠는<br/>
-            준비 중입니다.
+    <>
+      {/* ─── 상단 배너 박스 (임시) ─── */}
+      <div className="intro-banner">
+        <div className="intro-banner-inner text-banner">
+          <h1 className="banner-title">예배 미디어</h1>
+          <p className="banner-subtitle">
+            방화침례교회 설교 영상을 시청하세요<br />
+            하나님의 말씀으로 은혜받는 시간
           </p>
         </div>
-      )}
-    </div>
+      </div>
+
+      {/* ─── 탭 메뉴 (주일예배/야외예배) ─── */}
+      <nav className="intro-tabs">
+        <div className="intro-tabs-inner">
+          {TABS.map(tab => (
+            <button
+              key={tab.key}
+              className={activeTab === tab.key ? 'tab-item active' : 'tab-item'}
+              onClick={() => setActiveTab(tab.key)}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      </nav>
+
+      <div className="intro-container page-container">
+        {/* ─── Sunday 탭: 상세 + 리스트 ─── */}
+        {activeTab === 'sunday' && selected && (
+          <>
+            {/* 설교 헤더 */}
+            <div className="sermon-header">
+              <h2 className="sermon-title">
+                {selected.content} <span className="ref">({selected.bibleText})</span>
+              </h2>
+              <p className="sermon-meta">
+                {new Date(selected.sermonDate).toLocaleDateString('ko-KR', {
+                  year: 'numeric', month: '2-digit', day: '2-digit'
+                })} | {selected.preacher}
+              </p>
+            </div>
+
+            {/* 비디오 + 사이드바 */}
+            <div className="media-content">
+              <div className="media-main">
+                <div className="video-wrapper">
+                  <iframe
+                    title={selected.content}
+                    src={embedUrl}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+                <div className="media-resources">
+                  {selected.hwpUrl && <a href={selected.hwpUrl}>녹취록 (hwp)</a>}
+                  {selected.docUrl && <a href={selected.docUrl}>녹취록 (doc)</a>}
+                  {selected.pdfUrl && <a href={selected.pdfUrl}>요약본 (pdf)</a>}
+                  {selected.mp3Url && <a href={selected.mp3Url}>MP3</a>}
+                </div>
+              </div>
+              <aside className="media-sidebar">
+                <ul>
+                  {list.map(item => (
+                    <li
+                      key={item.id}
+                      className={selected.id === item.id ? 'active' : undefined}
+                      onClick={() => navigate(`/worship-media/${item.id}`)}
+                    >
+                      <span className="date">
+                        {new Date(item.sermonDate).toLocaleDateString('en-US', {
+                          month: '2-digit', day: '2-digit'
+                        })}
+                      </span>
+                      <div className="item">
+                        <strong>{item.content}</strong>
+                        <small>{item.preacher}</small>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  className="view-all"
+                  onClick={() => navigate('/worship-media/all')}
+                >
+                  전체목록
+                </button>
+              </aside>
+            </div>
+
+            {/* 스크립트 + 성경구절 */}
+            <div className="media-transcript">
+              <h3>설교본문 | {selected.bibleText} 말씀</h3>
+              {selected.transcriptLines?.map((line, i) => (
+                <p key={i}><strong>{line.ref}</strong> {line.text}</p>
+              ))}
+            </div>
+            <div className="media-transcript">
+              {selected.bibleVerses && selected.bibleVerses.length > 0
+                ? selected.bibleVerses.map((txt, idx) => <p key={idx}>{txt}</p>)
+                : <p>성경구절 정보가 없습니다.</p>
+              }
+            </div>
+          </>
+        )}
+
+        {/* ─── 기타 탭: 준비중 안내 ─── */}
+        {activeTab !== 'sunday' && (
+          <div className="placeholder">
+            <p>
+              "{TABS.find(t => t.key === activeTab).label}" 콘텐츠는<br/>
+              준비 중입니다.
+            </p>
+          </div>
+        )}
+      </div>
+    </>
   );
 }

@@ -1,5 +1,5 @@
 .footer {
-  background-color: #fff;
+  background-color: ##f6f7f9;
   padding: 58px 0;
   width: 100%;
   font-size: 14px;
@@ -39,7 +39,7 @@
 }
 
 .global-btn {
-  background-color: #0033cc;
+  background-color: #7D4CFC;
   color: white;
   border: none;
   padding: 8px 16px;

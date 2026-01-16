@@ -3,7 +3,7 @@ import './MainIntroSection.css';
 import CardSlider from './CardSlider';
 
 // hero 일러스트 import
-import heroImage from './images/hero-illustration.png';
+import heroImage from './images/hero-illustration7.png';
 
 const MainIntroSection = () => (
   <section className="intro-section">

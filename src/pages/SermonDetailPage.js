@@ -24,10 +24,10 @@ const SermonDetailPage = () => {
 
   return (
     <div className="page-container">
-      <h1>{sermon.title}</h1>
+      <h1>{sermon.content}</h1>
       <p><strong>설교자:</strong> {sermon.preacher}</p>
       <p><strong>날짜:</strong> {sermon.sermonDate}</p>
-      <p><strong>본문:</strong> {sermon.bibleText}</p>
+      <p><strong>성경봉독:</strong> {sermon.bibleText}</p>
 
       <iframe
         width="100%"
