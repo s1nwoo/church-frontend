@@ -14,6 +14,7 @@
   border-radius: 16px;
   overflow: hidden;
   height: 240px; /* 고정 높이 */
+  position: relative; /* 텍스트 오버레이를 위한 relative */
 }
 
 /* 배너 이미지 - 박스에 꽉 차게 */
@@ -22,6 +23,38 @@
   height: 100%;
   object-fit: cover; /* 박스 크기에 맞춰서 이미지 채우기 */
   display: block;
+}
+
+/* 배너 텍스트 오버레이 */
+.banner-text-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 60px;
+  pointer-events: none; /* 클릭 방지 */
+}
+
+.banner-overlay-title {
+  font-family: 'Pretendard', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #000;
+  margin: 0 0 12px 0;
+  line-height: 1.2;
+}
+
+.banner-overlay-subtitle {
+  font-family: 'Pretendard', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #000;
+  margin: 0;
+  line-height: 1.6;
 }
 
 /* 기존 텍스트 배너 스타일 (다른 페이지용) */
@@ -198,6 +231,18 @@
     height: 180px; /* 모바일에서 높이 축소 */
   }
 
+  .banner-text-overlay {
+    padding: 0 30px;
+  }
+
+  .banner-overlay-title {
+    font-size: 24px;
+  }
+
+  .banner-overlay-subtitle {
+    font-size: 14px;
+  }
+
   .intro-banner-inner.text-banner {
     padding: 40px 24px;
     height: auto; /* 텍스트 배너는 높이 자동 */
@@ -271,6 +316,18 @@
 
   .intro-banner-inner {
     height: 140px; /* 작은 모바일에서 높이 더 축소 */
+  }
+
+  .banner-text-overlay {
+    padding: 0 20px;
+  }
+
+  .banner-overlay-title {
+    font-size: 20px;
+  }
+
+  .banner-overlay-subtitle {
+    font-size: 12px;
   }
 
   .intro-banner-inner.text-banner {

@@ -1,13 +1,15 @@
 // src/pages/WorshipMediaPage.js
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams, NavLink } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import topBanner5 from '../components/images/top_banner5.png';
+import topBanner6 from '../components/images/top_banner6.png';
 import './WorshipMediaPage.css';
 import './ChurchIntroPage.css';
 
 const TABS = [
   { key: 'sunday',  label: '주일예배' },
-  { key: 'outdoor', label: '야외예배' },
+  { key: 'community', label: '공동체영상' },
 ];
 
 // YouTube URL에서 11자리 ID만 추출
@@ -20,6 +22,8 @@ function extractYoutubeId(url) {
 export default function WorshipMediaPage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const scrollPositionRef = useRef(0); // 스크롤 위치 저장
+  const isNavigatingRef = useRef(false); // 네비게이션 중인지 체크
 
   const [activeTab, setActiveTab] = useState('sunday');
   const [allItems,   setAllItems] = useState([]);   // 전체 데이터
@@ -38,12 +42,28 @@ export default function WorshipMediaPage() {
   // 2) URL id가 바뀔 때 상세 데이터 로드
   useEffect(() => {
     if (!id) return;
+
     axios.get(`/api/sermons/${id}`)
-      .then(res => setSelected(res.data))
+      .then(res => {
+        setSelected(res.data);
+      })
       .catch(console.error);
   }, [id]);
 
-  // 3) selected와 allItems가 로드되면 현재 글 기준 전후 설교 표시
+  // 3) selected가 변경되면 스크롤 복원
+  useEffect(() => {
+    if (!selected) return;
+
+    // 네비게이션 중이었다면 스크롤 복원
+    if (isNavigatingRef.current) {
+      setTimeout(() => {
+        window.scrollTo(0, scrollPositionRef.current);
+        isNavigatingRef.current = false;
+      }, 100);
+    }
+  }, [selected]);
+
+  // 4) selected와 allItems가 로드되면 현재 글 기준 전후 설교 표시
   useEffect(() => {
     if (allItems.length === 0 || !selected) return;
 
@@ -74,6 +94,22 @@ export default function WorshipMediaPage() {
     setList(relatedSermons.reverse());
   }, [allItems, selected]);
 
+  // 우측 리스트 클릭 핸들러
+  const handleListClick = (e, itemId) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // 현재 보고 있는 글과 같으면 아무 동작 안 함
+    if (selected && selected.id === itemId) return;
+
+    // 현재 스크롤 위치 저장
+    scrollPositionRef.current = window.scrollY;
+    isNavigatingRef.current = true;
+
+    // URL만 변경
+    navigate(`/worship-media/${itemId}`, { replace: true });
+  };
+
   // 로딩 상태 (Sunday 탭용)
   if (activeTab === 'sunday' && !selected) {
     return <div className="page-container">로딩 중…</div>;
@@ -82,20 +118,43 @@ export default function WorshipMediaPage() {
   const videoId  = selected && extractYoutubeId(selected.youtubeUrl);
   const embedUrl = selected && `https://www.youtube.com/embed/${videoId}`;
 
+  // 탭에 따른 배너 설정
+  const bannerConfig = {
+    sunday: {
+      image: topBanner5,
+      title: '주일예배',
+      subtitle: '방화침례교회 설교 영상을 시청하세요\n하나님의 말씀으로 은혜받는 시간'
+    },
+    community: {
+      image: topBanner6,
+      title: '공동체 영상',
+      subtitle: '공동체 안에서 역사하신 하나님의 은혜를 나눕니다\n교제의 기쁨과 감사의 순간'
+    }
+  };
+
+  const currentBanner = bannerConfig[activeTab] || bannerConfig.sunday;
+
   return (
     <>
-      {/* ─── 상단 배너 박스 (임시) ─── */}
+      {/* ─── 상단 배너 박스 (이미지 + 텍스트) ─── */}
       <div className="intro-banner">
-        <div className="intro-banner-inner text-banner">
-          <h1 className="banner-title">예배 미디어</h1>
-          <p className="banner-subtitle">
-            방화침례교회 설교 영상을 시청하세요<br />
-            하나님의 말씀으로 은혜받는 시간
-          </p>
+        <div className="intro-banner-inner">
+          <img src={currentBanner.image} alt={`${currentBanner.title} 배너`} className="banner-image" />
+          <div className="banner-text-overlay">
+            <h1 className="banner-overlay-title">{currentBanner.title}</h1>
+            <p className="banner-overlay-subtitle">
+              {currentBanner.subtitle.split('\n').map((line, i) => (
+                <React.Fragment key={i}>
+                  {line}
+                  {i < currentBanner.subtitle.split('\n').length - 1 && <br />}
+                </React.Fragment>
+              ))}
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* ─── 탭 메뉴 (주일예배/야외예배) ─── */}
+      {/* ─── 탭 메뉴 (주일예배/공동체영상) ─── */}
       <nav className="intro-tabs">
         <div className="intro-tabs-inner">
           {TABS.map(tab => (
@@ -151,7 +210,7 @@ export default function WorshipMediaPage() {
                     <li
                       key={item.id}
                       className={selected.id === item.id ? 'active' : undefined}
-                      onClick={() => navigate(`/worship-media/${item.id}`)}
+                      onClick={(e) => handleListClick(e, item.id)}
                     >
                       <span className="date">
                         {new Date(item.sermonDate).toLocaleDateString('en-US', {
@@ -190,8 +249,27 @@ export default function WorshipMediaPage() {
           </>
         )}
 
+        {/* ─── 기타 탭: 공동체영상 ─── */}
+        {activeTab === 'community' && (
+          <div className="community-videos">
+            <div className="video-grid">
+              {/* 임시 비디오 카드 8개 */}
+              {[1, 2, 3, 4, 5, 6, 7, 8].map(num => (
+                <div key={num} className="video-card">
+                  <div className="video-thumbnail">
+                    <div className="thumbnail-placeholder">영상 {num}</div>
+                    <span className="video-duration">0:30</span>
+                  </div>
+                  <h3 className="video-title">공동체 영상 제목 {num}</h3>
+                  <p className="video-date">2025.01.{10 + num}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* ─── 기타 탭: 준비중 안내 ─── */}
-        {activeTab !== 'sunday' && (
+        {activeTab !== 'sunday' && activeTab !== 'community' && (
           <div className="placeholder">
             <p>
               "{TABS.find(t => t.key === activeTab).label}" 콘텐츠는<br/>

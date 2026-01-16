@@ -2,11 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
+import topBanner7 from '../components/images/top_banner7.png';
 import './PostsPage.css';
+import './ChurchIntroPage.css';
 
 const TABS = [
   { key: '공지사항', label: '공지사항' },
-  { key: '성도소식', label: '성도소식' },
 ];
 
 export default function PostsPage() {
@@ -68,77 +69,90 @@ export default function PostsPage() {
   };
 
   return (
-    <div className="posts-container page-container">
-      <h1 className="page-title">소식 나눔</h1>
+    <>
+      {/* ─── 상단 배너 박스 (이미지 + 텍스트) ─── */}
+      <div className="intro-banner">
+        <div className="intro-banner-inner">
+          <img src={topBanner7} alt="공지사항 배너" className="banner-image" />
+          <div className="banner-text-overlay">
+            <h1 className="banner-overlay-title">공지사항</h1>
+            <p className="banner-overlay-subtitle">
+              방화침례교회 공지사항을 확인하세요<br />
+              하나님의 계획하심을 따르는 우리
+            </p>
+          </div>
+        </div>
+      </div>
 
-      {/* 카테고리 탭 */}
-      <nav className="location-submenu">
-        <ul>
+      {/* ─── 탭 메뉴 ─── */}
+      <nav className="intro-tabs">
+        <div className="intro-tabs-inner">
           {TABS.map(tab => (
-            <li key={tab.key}>
-              <button
-                className={activeTab === tab.key ? 'active' : undefined}
-                onClick={() => changeTab(tab.key)}
-              >
-                {tab.label}
-              </button>
-            </li>
+            <button
+              key={tab.key}
+              className={activeTab === tab.key ? 'tab-item active' : 'tab-item'}
+              onClick={() => changeTab(tab.key)}
+            >
+              {tab.label}
+            </button>
           ))}
-        </ul>
+        </div>
       </nav>
 
-      {/* 검색 바 */}
-      <div className="posts-search">
-        <input
-          type="text"
-          placeholder="검색어를 입력하세요"
-          value={keyword}
-          onChange={e => setKeyword(e.target.value)}
-          onKeyDown={e => e.key === 'Enter' && onSearch()}
-        />
-        <button onClick={onSearch}>검색</button>
-      </div>
+      <div className="intro-container page-container">
+        {/* 검색 바 */}
+        <div className="posts-search">
+          <input
+            type="text"
+            placeholder="검색어를 입력하세요"
+            value={keyword}
+            onChange={e => setKeyword(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && onSearch()}
+          />
+          <button onClick={onSearch}>검색</button>
+        </div>
 
-      {/* 리스트 or 빈 안내 */}
-      {data.content.length === 0 ? (
-        <p className="no-data">등록된 글이 없습니다.</p>
-      ) : (
-        <ul className="posts-list">
-          {data.content.map(post => (
-            <li key={post.id} onClick={() => navigate(`/posts/${post.id}`)}>
-              <div className="left">
-                <p className="title">{post.title}</p>
-              </div>
-              <div className="right">
-                <p className="meta">
-                  {new Date(post.createdDate)
-                     .toLocaleDateString('ko-KR')}
-                  &nbsp;|&nbsp;{post.writer}
-                </p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+        {/* 리스트 or 빈 안내 */}
+        {data.content.length === 0 ? (
+          <p className="no-data">등록된 글이 없습니다.</p>
+        ) : (
+          <ul className="posts-list">
+            {data.content.map(post => (
+              <li key={post.id} onClick={() => navigate(`/posts/${post.id}`)}>
+                <div className="left">
+                  <p className="title">{post.title}</p>
+                </div>
+                <div className="right">
+                  <p className="meta">
+                    {new Date(post.createdDate)
+                       .toLocaleDateString('ko-KR')}
+                    &nbsp;|&nbsp;{post.writer}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
 
-      {/* 페이지네이션 */}
-      <div className="pagination">
-        <button
-          disabled={page === 0}
-          onClick={() => setPage(p => Math.max(p - 1, 0))}
-        >
-          &lt; 이전
-        </button>
-        <span>
-          {page + 1} / {data.totalPages}
-        </span>
-        <button
-          disabled={page + 1 >= data.totalPages}
-          onClick={() => setPage(p => Math.min(p + 1, data.totalPages - 1))}
-        >
-          다음 &gt;
-        </button>
+        {/* 페이지네이션 */}
+        <div className="pagination">
+          <button
+            disabled={page === 0}
+            onClick={() => setPage(p => Math.max(p - 1, 0))}
+          >
+            &lt; 이전
+          </button>
+          <span>
+            {page + 1} / {data.totalPages}
+          </span>
+          <button
+            disabled={page + 1 >= data.totalPages}
+            onClick={() => setPage(p => Math.min(p + 1, data.totalPages - 1))}
+          >
+            다음 &gt;
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

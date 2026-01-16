@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { NavLink } from 'react-router-dom';    // ← 추가
+import { NavLink } from 'react-router-dom';
 import topBanner from '../components/images/top_banner4.png';
 import './LocationPage.css';
 import './ChurchIntroPage.css';
@@ -47,10 +47,17 @@ function LocationPage() {
 
   return (
     <>
-      {/* ─── 상단 배너 박스 (이미지) ─── */}
+      {/* ─── 상단 배너 박스 (이미지 + 텍스트) ─── */}
       <div className="intro-banner">
         <div className="intro-banner-inner">
           <img src={topBanner} alt="오시는길 배너" className="banner-image" />
+          <div className="banner-text-overlay">
+            <h1 className="banner-overlay-title">오시는길</h1>
+            <p className="banner-overlay-subtitle">
+              방화침례교회 찾아오시는 길을 안내합니다<br />
+              함께 나누는 주님의 은혜
+            </p>
+          </div>
         </div>
       </div>
 
@@ -84,100 +91,101 @@ function LocationPage() {
         </div>
       </nav>
 
+      {/* ─── 콘텐츠 영역 (흰색 박스) ─── */}
       <div className="intro-container page-container">
+        <div className="location-container">
+          {/* 카카오맵 */}
+          <div id="map" className="location-map" />
 
-        {/* ─ 현재 페이지 제목 ─ */}
-
-        <div id="map" className="location-map" />
-
-        {/* 주소 */}
-        <div className="info-row">
-          <div className="icon-wrapper">
-            <img src={iconCar} alt="주소" />
+          {/* 주소 */}
+          <div className="info-row">
+            <div className="icon-wrapper">
+              <img src={iconCar} alt="주소" />
+            </div>
+            <div className="inline-text">
+              <span className="content">
+                07607 서울특별시 강서구 방화동로 115, 2층 (방화동 580-25)
+              </span>
+            </div>
           </div>
-          <div className="inline-text">
-            <span className="content">
-              07607 서울특별시 강서구 방화동로 115, 2층 (방화동 580-25)
-            </span>
-          </div>
-        </div>
 
-        {/* 교회안내 */}
-        <div className="info-row">
-          <div className="icon-wrapper">
-            <img src={iconCall} alt="교회안내" />
+          {/* 교회안내 */}
+          <div className="info-row">
+            <div className="icon-wrapper">
+              <img src={iconCall} alt="교회안내" />
+            </div>
+            <div className="inline-text">
+              <span className="content">02-XXXX-XXXX</span>
+            </div>
           </div>
-          <div className="inline-text">
-            <span className="content">02-XXXX-XXXX</span>
-          </div>
-        </div>
 
-        {/* 지하철 */}
-        <div className="info-row">
-          <div className="icon-wrapper">
-            <img src={iconSubway} alt="지하철" />
+          {/* 지하철 */}
+          <div className="info-row">
+            <div className="icon-wrapper">
+              <img src={iconSubway} alt="지하철" />
+            </div>
+            <div className="inline-text">
+              <span className="content">
+                <div>
+                  <span className="subway-tag line5">5호선</span> 개화산역 1번출구 – 도보 11분
+                </div>
+                <div style={{ marginTop: '4px' }}>
+                  <span className="subway-tag line9">9호선</span> 신방화역 1번출구 – 도보 7분
+                </div>
+              </span>
+            </div>
           </div>
-          <div className="inline-text">
-            <span className="content">
-              <div>
-                <span className="subway-tag line5">5호선</span> 개화산역 1번출구 – 도보 11분
-              </div>
-              <div style={{ marginTop: '4px' }}>
-                <span className="subway-tag line9">9호선</span> 신방화역 1번출구 – 도보 7분
-              </div>
-            </span>
-          </div>
-        </div>
 
-        {/* 버스 */}
-        <div className="info-row no-border">
-          <div className="icon-wrapper">
-            <img src={iconBus} alt="버스" />
-          </div>
-          <div className="inline-text">
-            <span className="content">
-              <div className="bus-stop">
-                <strong>방신시장전통입구</strong>
-                <p>
-                  <span className="bus-type">
-                    <span className="bus-dot blue" /> 간선 605
-                  </span>
-                </p>
-                <p>
-                  <span className="bus-type">
-                    <span className="bus-dot green" /> 지선 6647 6629
-                  </span>
-                </p>
-              </div>
+          {/* 버스 */}
+          <div className="info-row no-border">
+            <div className="icon-wrapper">
+              <img src={iconBus} alt="버스" />
+            </div>
+            <div className="inline-text">
+              <span className="content">
+                <div className="bus-stop">
+                  <strong>방신시장전통입구</strong>
+                  <p>
+                    <span className="bus-type">
+                      <span className="bus-dot blue" /> 간선 605
+                    </span>
+                  </p>
+                  <p>
+                    <span className="bus-type">
+                      <span className="bus-dot green" /> 지선 6647 6629
+                    </span>
+                  </p>
+                </div>
 
-              <div className="bus-stop">
-                <strong>방신전통시장정문 · 방화사거리</strong>
-                <p>
-                  <span className="bus-type">
-                    <span className="bus-dot blue" /> 간선 605 654
-                  </span>
-                </p>
-                <p>
-                  <span className="bus-type">
-                    <span className="bus-dot green" /> 지선 6629 6631 6647
-                  </span>
-                </p>
-              </div>
+                <div className="bus-stop">
+                  <strong>방신전통시장정문 · 방화사거리</strong>
+                  <p>
+                    <span className="bus-type">
+                      <span className="bus-dot blue" /> 간선 605 654
+                    </span>
+                  </p>
+                  <p>
+                    <span className="bus-type">
+                      <span className="bus-dot green" /> 지선 6629 6631 6647
+                    </span>
+                  </p>
+                </div>
 
-              <div className="bus-stop">
-                <strong>마곡우이촌아파트</strong>
-                <p>
-                  <span className="bus-type">
-                    <span className="bus-dot blue" /> 간선 605
-                  </span>
-                </p>
-                <p>
-                  <span className="bus-type">
-                    <span className="bus-dot green" /> 지선 6631
-                  </span>
-                </p>
-              </div>
-            </span>
+                <div className="bus-stop">
+                  <strong>마곡우이이촌아파트</strong>
+                  <p>
+                    <span className="bus-type">
+                      <span className="bus-dot blue" /> 간선 605
+                    </span>
+                  </p>
+                  <p>
+                    <span className="bus-type">
+                      <span className="bus-dot green" /> 지선 6631
+                    </span>
+                  </p>
+                </div>
+              </span>
+            </div>
           </div>
         </div>
       </div>

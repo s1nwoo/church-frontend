@@ -9,10 +9,17 @@ import './ChurchIntroPage.css';
 function ChurchIntroPage() {
   return (
     <>
-      {/* ─── 상단 배너 박스 (이미지) ─── */}
+      {/* ─── 상단 배너 박스 (이미지 + 텍스트) ─── */}
       <div className="intro-banner">
         <div className="intro-banner-inner">
           <img src={topBanner} alt="교회소개 배너" className="banner-image" />
+          <div className="banner-text-overlay">
+            <h1 className="banner-overlay-title">교회소개</h1>
+            <p className="banner-overlay-subtitle">
+              방화침례교회를 소개합니다<br />
+              하나님의 사랑과 은혜가 넘치는 교회
+            </p>
+          </div>
         </div>
       </div>
 

@@ -8,10 +8,17 @@ import './ChurchIntroPage.css';
 function WorshipInfoPage() {
   return (
     <>
-      {/* ─── 상단 배너 박스 (이미지) ─── */}
+      {/* ─── 상단 배너 박스 (이미지 + 텍스트) ─── */}
       <div className="intro-banner">
         <div className="intro-banner-inner">
           <img src={topBanner} alt="예배안내 배너" className="banner-image" />
+          <div className="banner-text-overlay">
+            <h1 className="banner-overlay-title">예배안내</h1>
+            <p className="banner-overlay-subtitle">
+              방화침례교회 예배 시간을 안내합니다<br />
+              하나님께 드리는 거룩한 예배
+            </p>
+          </div>
         </div>
       </div>
 
@@ -51,14 +58,20 @@ function WorshipInfoPage() {
         <h2 className="section-title">주일예배</h2>
         <div className="service-table">
           <div className="service-row">
-            <div className="service-col label">1부</div>
-            <div className="service-col time">오전 11시</div>
-            <div className="service-col location">찬양 및 예배</div>
+            <div className="service-col time">오전 9시 30분</div>
+            <div className="service-col location">다음세대 주일학교</div>
           </div>
           <div className="service-row">
-            <div className="service-col label">2부</div>
+            <div className="service-col time">오전 11시 00분</div>
+            <div className="service-col location">1부 찬양 및 오전예배</div>
+          </div>
+          <div className="service-row">
             <div className="service-col time">오후 1시 30분</div>
-            <div className="service-col location">본당</div>
+            <div className="service-col location">오후예배</div>
+          </div>
+          <div className="service-row">
+            <div className="service-col time">오후 1시 30분</div>
+            <div className="service-col location">청년부</div>
           </div>
         </div>
 
@@ -66,19 +79,12 @@ function WorshipInfoPage() {
         <h2 className="section-title">주중예배</h2>
         <div className="service-table">
           <div className="service-row">
-            <div className="service-col label">수요예배</div>
-            <div className="service-col time">오후 7시 30분</div>
-            <div className="service-col location">본당</div>
+            <div className="service-col time">오전 11시 00분</div>
+            <div className="service-col location">수요예배</div>
           </div>
           <div className="service-row">
-            <div className="service-col label">금요철야</div>
-            <div className="service-col time">오후 10시</div>
-            <div className="service-col location">본당</div>
-          </div>
-          <div className="service-row">
-            <div className="service-col label">새벽기도회</div>
-            <div className="service-col time">오전 5시 30분</div>
-            <div className="service-col location">본당</div>
+            <div className="service-col time">오후 9시 00분</div>
+            <div className="service-col location">금요 기도회</div>
           </div>
         </div>
       </div>

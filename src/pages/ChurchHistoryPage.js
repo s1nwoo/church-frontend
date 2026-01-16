@@ -8,10 +8,17 @@ import './ChurchIntroPage.css';
 export default function ChurchHistoryPage() {
   return (
     <>
-      {/* ─── 상단 배너 박스 (이미지) ─── */}
+      {/* ─── 상단 배너 박스 (이미지 + 텍스트) ─── */}
       <div className="intro-banner">
         <div className="intro-banner-inner">
           <img src={topBanner} alt="교회연혁 배너" className="banner-image" />
+          <div className="banner-text-overlay">
+            <h1 className="banner-overlay-title">교회연혁</h1>
+            <p className="banner-overlay-subtitle">
+              방화침례교회의 역사를 소개합니다<br />
+              하나님의 인도하심 가운데 걸어온 발자취
+            </p>
+          </div>
         </div>
       </div>
 

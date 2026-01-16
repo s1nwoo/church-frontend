@@ -1,5 +1,41 @@
 /* src/pages/PostsPage.css */
 
+/* ===== intro-container 스타일 추가 ===== */
+.intro-container {
+  max-width: 1200px;
+  padding: 40px 20px;
+  color: #222;
+  background: #fff;
+  margin: 0 auto 30px auto;
+  border-radius: 16px;
+}
+
+/* ===== 탭 메뉴 버튼 스타일 ===== */
+.intro-tabs .tab-item {
+  background: none;
+  border: none;
+  padding: 20px 32px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #666;
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-family: 'Pretendard', sans-serif;
+}
+
+.intro-tabs .tab-item:hover {
+  color: #333;
+  background: #f9f9f9;
+}
+
+.intro-tabs .tab-item.active {
+  color: #333;
+  font-weight: 700;
+  border-bottom-color: #7D4CFC;
+}
+
 .posts-container {
   max-width: 1200px;
   padding: 2rem;
@@ -88,6 +124,14 @@
   white-space: nowrap;
 }
 
+/* ─── 빈 데이터 안내 ─── */
+.no-data {
+  text-align: center;
+  padding: 3rem 0;
+  color: #999;
+  font-size: 1rem;
+}
+
 /* ─── 페이지네이션 ─── */
 .pagination {
   display: flex;
@@ -114,6 +158,10 @@
 
 /* ─── 반응형 (≤768px) ─── */
 @media screen and (max-width: 768px) {
+  .intro-container {
+    padding: 30px 20px;
+  }
+
   .posts-search {
     flex-direction: column;
     gap: 0.25rem;

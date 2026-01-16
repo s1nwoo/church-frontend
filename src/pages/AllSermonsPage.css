@@ -1,49 +1,5 @@
 /* src/pages/AllSermonsPage.css */
 
-/* ─── 전체 컨테이너 ─── */
-.sermon-list-container {
-  max-width: 1200px;
-  padding: 2rem;
-}
-
-/* ─── 페이지 타이틀 ─── */
-.page-title {
-  font-size: 1.5rem;
-  font-variation-settings: 'wght' 700 !important;
-  margin: 0 0 1rem;
-}
-
-/* ─── 서브메뉴 (기존 CSS 그대로 사용) ─── */
-.location-submenu {
-  margin-bottom: 1rem;
-}
-.location-submenu ul {
-  display: flex;
-  gap: 1.5rem;
-  list-style: none;
-  margin: 0;
-  padding: 0 0 0.5rem;
-  border-bottom: 1px solid #e0e0e0;
-}
-.location-submenu button {
-  background: none;
-  border: none;
-  padding: 0;
-  font-size: 0.95rem;
-  color: #c9c9c9;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-.location-submenu button:hover,
-.location-submenu button.active {
-  color: #000;
-  font-variation-settings: 'wght' 900 !important;
-}
-.video-icon {
-  margin-left: 4px;
-  font-size: 0.8rem;
-}
-
 /* ─── 리스트 ─── */
 .sermon-list {
   list-style: none;
@@ -57,6 +13,7 @@
   padding: 1rem 0;
   border-bottom: 1px solid #e0e0e0;
   cursor: pointer;
+  transition: background 0.2s;
 }
 .sermon-list li:hover {
   background: #fafafa;
@@ -83,7 +40,95 @@
   white-space: nowrap;
 }
 
-/* ─── 반응형 (≤768px) ─── */
+/* ─── 공동체영상 그리드만 300 x 200 적용 ─── */
+.community-videos {
+  padding: 0;
+}
+
+.community-videos .video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.community-videos .video-card {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.community-videos .video-card:hover {
+  transform: translateY(-4px);
+}
+
+.community-videos .video-thumbnail {
+  position: relative;
+  width: 300px;
+  height: 200px;
+  background: #f0f0f0;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.community-videos .thumbnail-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.community-videos .video-duration {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.community-videos .video-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 4px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 300px;
+}
+
+.community-videos .video-date {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+}
+
+/* ─── 반응형 (태블릿) ─── */
+@media screen and (max-width: 1024px) {
+  .community-videos .video-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+
+  .community-videos .video-thumbnail {
+    width: 250px;
+    height: 167px;
+  }
+
+  .community-videos .video-title {
+    width: 250px;
+  }
+}
+
+/* ─── 반응형 (모바일) ─── */
 @media screen and (max-width: 768px) {
   .sermon-list li {
     flex-direction: column;
@@ -91,5 +136,43 @@
   }
   .sermon-list .right {
     margin-top: 0.5rem;
+  }
+
+  .community-videos .video-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .community-videos .video-thumbnail {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+  }
+
+  .community-videos .video-title {
+    width: 100%;
+  }
+}
+
+/* ─── 작은 모바일 ─── */
+@media screen and (max-width: 480px) {
+  .community-videos .video-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .community-videos .video-thumbnail {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+  }
+
+  .community-videos .video-title {
+    width: 100%;
+    font-size: 13px;
+  }
+
+  .community-videos .video-date {
+    font-size: 12px;
   }
 }
