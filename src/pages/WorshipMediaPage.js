@@ -1,6 +1,6 @@
 // src/pages/WorshipMediaPage.js
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, NavLink } from 'react-router-dom';
 import axios from 'axios';
 import topBanner5 from '../components/images/top_banner5.png';
 import topBanner6 from '../components/images/top_banner6.png';
@@ -94,7 +94,7 @@ export default function WorshipMediaPage() {
     setList(relatedSermons.reverse());
   }, [allItems, selected]);
 
-  // 우측 리스트 클릭 핸들러
+  // 우측 리스트 클릭 핸들러 (스크롤 위치 고정)
   const handleListClick = (e, itemId) => {
     e.preventDefault();
     e.stopPropagation();
@@ -249,32 +249,14 @@ export default function WorshipMediaPage() {
           </>
         )}
 
-        {/* ─── 기타 탭: 공동체영상 ─── */}
+        {/* ─── 공동체영상 탭: 준비중 안내 ─── */}
         {activeTab === 'community' && (
-          <div className="community-videos">
-            <div className="video-grid">
-              {/* 임시 비디오 카드 8개 */}
-              {[1, 2, 3, 4, 5, 6, 7, 8].map(num => (
-                <div key={num} className="video-card">
-                  <div className="video-thumbnail">
-                    <div className="thumbnail-placeholder">영상 {num}</div>
-                    <span className="video-duration">0:30</span>
-                  </div>
-                  <h3 className="video-title">공동체 영상 제목 {num}</h3>
-                  <p className="video-date">2025.01.{10 + num}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* ─── 기타 탭: 준비중 안내 ─── */}
-        {activeTab !== 'sunday' && activeTab !== 'community' && (
-          <div className="placeholder">
+          <div className="community-notice">
+            <h2>공동체영상 콘텐츠는 준비중입니다.</h2>
             <p>
-              "{TABS.find(t => t.key === activeTab).label}" 콘텐츠는<br/>
-              준비 중입니다.
+              유튜브 &gt; 재생목록 &gt; 공동체활동 영상에서 확인 할 수 있습니다.
             </p>
+            <p>감사합니다.</p>
           </div>
         )}
       </div>
