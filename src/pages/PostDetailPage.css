@@ -1,80 +1,80 @@
 /* src/pages/PostDetailPage.css */
 
-.post-detail-container {
-  max-width: 1200px;
-  padding: 2rem;
+/* ===== 콘텐츠 컨테이너 ===== */
+.post-detail-content {
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-.page-title {
-  font-size: 1.5rem;
-  font-variation-settings: 'wght' 700 !important;
-  margin-bottom: 1rem;
-}
-
-/* 카테고리 탭 (기존 .location-submenu 재사용) */
-.location-submenu {
-  margin-bottom: 1.5rem;
-}
-.location-submenu ul {
-  display: flex;
-  gap: 1.5rem;
-  list-style: none;
-  padding: 0 0 0.5rem;
-  border-bottom: 1px solid #e0e0e0;
-  margin: 0;
-}
-.location-submenu button {
-  background: none;
-  border: none;
-  padding: 0;
-  font-size: 0.95rem;
-  color: #c9c9c9;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-.location-submenu button:hover,
-.location-submenu button.active {
-  color: #000;
-  font-variation-settings: 'wght' 900 !important;
-}
-
-/* 제목/메타 */
+/* ===== 제목 ===== */
 .post-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: 1rem 0 0.5rem;
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 16px 0;
+  padding-bottom: 16px;
+  /* border-bottom 제거 */
+  /* border-left 제거 */
 }
+
+/* ===== 메타 정보 (날짜 | 작성자) ===== */
 .post-meta {
-  font-size: 0.9rem;
-  color: #666;
-  margin-bottom: 1.5rem;
+  font-size: 14px;
+  color: #999;
+  margin: 0 0 32px 0;
 }
 
-/* 본문 내용 */
+/* ===== 본문 ===== */
+.post-content {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #333;
+  margin-bottom: 40px;
+  min-height: 200px;
+}
+
 .post-content p {
-  margin: 0.75rem 0;
-  line-height: 1.6;
-  font-size: 1rem;
+  margin: 12px 0;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
-/* 목록으로 돌아가기 버튼 */
+/* ===== 목록으로 버튼 (메인 컬러 적용) ===== */
 .btn-list {
   display: inline-block;
-  margin-top: 2rem;
-  padding: 0.5rem 0.5rem;
-  background: #fff;
-  border: 1px solid #333;
-  font-size: 1rem;
+  padding: 12px 32px;
+  background-color: #fff;
+  border: 1px solid #7D4CFC;  /* 보라색 테두리 */
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #7D4CFC;  /* 보라색 텍스트 */
   cursor: pointer;
-  text-align: center;
+  transition: all 0.2s;
 }
 
-/* 반응형 (≤768px) */
+.btn-list:hover {
+  background-color: #FF6B9D;  /* 핑크색 배경 */
+  border-color: #FF6B9D;      /* 핑크색 테두리 */
+  color: #fff;                /* 흰색 텍스트 */
+}
+
+/* ===== 반응형 ===== */
 @media screen and (max-width: 768px) {
-  .post-detail-container {
-    padding: 1rem;
+  .post-detail-content {
+    max-width: 100%;
   }
+
+  .post-title {
+    font-size: 22px;
+  }
+
+  .post-content {
+    font-size: 15px;
+  }
+
   .btn-list {
     width: 100%;
+    text-align: center;
   }
 }

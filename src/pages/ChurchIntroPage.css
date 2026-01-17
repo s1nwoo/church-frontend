@@ -1,31 +1,27 @@
 /* src/pages/ChurchIntroPage.css */
 
-/* ===== 상단 배너 박스 ===== */
+/* ===== 배너 (공통) ===== */
 .intro-banner {
   width: 100%;
-  background: #f6f7f9;
-  padding: 30px 0;
+  background-color: #f6f7f9;
+  padding: 0;
 }
 
 .intro-banner-inner {
+  position: relative;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0;
+  height: 240px;
   border-radius: 16px;
   overflow: hidden;
-  height: 240px; /* 고정 높이 */
-  position: relative; /* 텍스트 오버레이를 위한 relative */
 }
 
-/* 배너 이미지 - 박스에 꽉 차게 */
 .banner-image {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* 박스 크기에 맞춰서 이미지 채우기 */
-  display: block;
+  object-fit: cover;
 }
 
-/* 배너 텍스트 오버레이 */
 .banner-text-overlay {
   position: absolute;
   top: 0;
@@ -36,7 +32,6 @@
   flex-direction: column;
   justify-content: center;
   padding: 0 60px;
-  pointer-events: none; /* 클릭 방지 */
 }
 
 .banner-overlay-title {
@@ -44,8 +39,7 @@
   font-size: 32px;
   font-weight: 700;
   color: #000;
-  margin: 0 0 12px 0;
-  line-height: 1.2;
+  margin: 0 0 8px 0;
 }
 
 .banner-overlay-subtitle {
@@ -53,49 +47,27 @@
   font-size: 16px;
   font-weight: 400;
   color: #000;
-  margin: 0;
-  line-height: 1.6;
-}
-
-/* 기존 텍스트 배너 스타일 (다른 페이지용) */
-.intro-banner-inner.text-banner {
-  padding: 60px 40px;
-  background: linear-gradient(135deg, #FFE5EC 0%, #FFF0F5 100%);
-}
-
-.banner-title {
-  font-size: 36px;
-  font-weight: 700;
-  color: #333;
-  margin: 0 0 16px 0;
-  font-family: 'Pretendard', sans-serif;
-}
-
-.banner-subtitle {
-  font-size: 16px;
-  color: #666;
   line-height: 1.6;
   margin: 0;
 }
 
-/* ===== 탭 메뉴 ===== */
+/* ===== 탭 메뉴 (공통) ===== */
 .intro-tabs {
   width: 100%;
-  background: #f6f7f9;
+  background-color: #f6f7f9;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .intro-tabs-inner {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
   display: flex;
   gap: 0;
-  background: #f6f7f9;
-  border-radius: 8px;
-  overflow: hidden;
 }
 
-.tab-item {
+.intro-tabs .tab-item {
+  background: none;
+  border: none;
   padding: 20px 32px;
   font-size: 16px;
   font-weight: 500;
@@ -103,136 +75,280 @@
   text-decoration: none;
   border-bottom: 3px solid transparent;
   transition: all 0.3s ease;
-  position: relative;
+  cursor: pointer;
   font-family: 'Pretendard', sans-serif;
 }
 
-.tab-item:hover {
+.intro-tabs .tab-item:hover {
   color: #333;
   background: #f9f9f9;
 }
 
-.tab-item.active {
+.intro-tabs .tab-item.active {
   color: #333;
   font-weight: 700;
   border-bottom-color: #7D4CFC;
 }
 
-/* ===== 컨테이너 ===== */
+/* ===== 콘텐츠 컨테이너 (공통) ===== */
 .intro-container {
   max-width: 1200px;
-  padding: 40px 20px;
-  color: #222;
-  background: #fff;
   margin: 0 auto 30px auto;
-  border-radius : 16px;
+  padding: 80px 60px;
+  background: #fff;
+  border-radius: 16px;
 }
 
-/* ===== 본문 임시 컨텐츠 ===== */
-.intro-content {
-  margin-bottom: 40px;
+/* ===== 교회 소개 헤더 섹션 ===== */
+.intro-header-section {
+  margin-bottom: 20px;
 }
 
-.intro-content h2 {
-  font-size: 28px;
+.intro-hero-title {
+  font-size: 60px;
   font-weight: 700;
-  margin: 0 0 20px;
-  color: #333;
+  color: #222;
+  margin: 0 0 30px 0;
+  line-height: 1.2;
 }
 
-.intro-content p {
-  margin: 0 0 16px;
-  line-height: 1.8;
-  font-size: 16px;
-  color: #666;
+.intro-hero-text {
+  font-size: 18px;
+  line-height: 1.9;
+  color: #444;
+  margin: 0;
 }
 
-/* ===== 이미지 + 텍스트 피처 블록 ===== */
-.intro-feature {
-  display: flex;
-  border-radius: 12px;
-  overflow: hidden;
-  margin: 40px 0;
-  background: #f9f9f9;
-  border: 1px solid #e0e0e0;
+/* ===== 메인 타이틀 ===== */
+.main-title {
+  font-size: 40px;
+  font-weight: 700;
+  color: #222;
+  margin: 0 0 40px 0;
+  line-height: 1.3;
 }
 
-.feature-image {
-  flex: 0 0 320px;
-  height: auto;
+/* ===== 비전 히어로 섹션 (큰 이미지 1장) ===== */
+.vision-hero-section {
+  margin-bottom: 100px;
 }
 
-.feature-image img {
+.vision-full-image {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 1120px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.vision-full-image img {
+  width: 100%;
+  height: auto;
   display: block;
 }
 
-.feature-text {
-  flex: 1;
-  padding: 40px;
-  color: #292929;
+/* ===== 상세 비전 설명 섹션 ===== */
+.vision-detail-section {
+  margin-bottom: 100px;
+}
+
+.section-subtitle {
+  font-size: 22px;
+  font-weight: 600;
+  color: #444;
+  margin: 0 0 50px 0;
+  text-align: left;
+}
+
+.vision-detail-list {
   display: flex;
   flex-direction: column;
+  gap: 40px;
+}
+
+.vision-detail-item {
+  display: flex;
+  gap: 30px;
+  padding: 30px;
+  background: #fafafa;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.vision-detail-item:hover {
+  background: #f5f0ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(125, 76, 252, 0.1);
+}
+
+.vision-detail-number {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  background: #ffffff;
-}
-
-.feature-text h2 {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
-  margin: 0 0 16px;
-  color: #333;
+  color: #fff;
+  background: linear-gradient(135deg, #7D4CFC 0%, #FF6B9D 100%);
+  border-radius: 50%;
 }
 
-.feature-text p {
-  margin: 0;
-  line-height: 1.8;
+.vision-detail-content {
+  flex: 1;
+}
+
+.vision-detail-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #222;
+  margin: 0 0 12px 0;
+}
+
+.vision-detail-verse {
+  font-size: 14px;
+  font-style: italic;
+  color: #7D4CFC;
+  line-height: 1.6;
+}
+
+.vision-detail-text {
   font-size: 15px;
+  line-height: 1.8;
+  color: #555;
+  margin: 0;
+}
+
+/* ===== 공동담임목사 섹션 ===== */
+.pastor-section {
+  margin-bottom: 0;
+}
+
+.pastor-title {
+  margin-bottom: 40px;
+}
+
+.pastor-names {
+  font-size: 40px;
+  font-weight: 700;
+  color: #222;
+  margin-right: 20px;
+}
+
+.pastor-role {
+  font-size: 24px;
+  font-weight: 400;
   color: #666;
+}
+
+.pastor-content {
+  position: relative;
+}
+
+.pastor-image-wrapper {
+  float: right;
+  width: 380px;
+  margin-left: 40px;
+  margin-bottom: 20px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.pastor-image-wrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 16px;
+}
+
+.pastor-intro {
+  font-size: 17px;
+  line-height: 1.9;
+  color: #444;
+}
+
+.pastor-intro p {
+  margin: 0 0 24px 0;
+}
+
+.pastor-intro p:last-child {
+  margin-bottom: 0;
+}
+
+.pastor-content::after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 /* ===== 반응형 (태블릿) ===== */
 @media screen and (max-width: 1024px) {
-  .intro-banner {
-    padding: 30px 20px;
+  .intro-container {
+    padding: 60px 40px;
   }
 
-  .intro-banner-inner.text-banner {
-    padding: 50px 30px;
-  }
-
-  .intro-tabs {
-    padding-bottom: 30px;
-  }
-
-  .intro-tabs-inner {
+  .banner-text-overlay {
     padding: 0 40px;
   }
 
-  .intro-container {
-    padding: 40px;
+  .banner-overlay-title {
+    font-size: 28px;
   }
 
-  .tab-item {
-    padding: 20px 24px;
+  .banner-overlay-subtitle {
     font-size: 15px;
+  }
+
+  .intro-hero-title {
+    font-size: 48px;
+  }
+
+  .intro-hero-text {
+    font-size: 17px;
+  }
+
+  .main-title {
+    font-size: 32px;
+  }
+
+  .vision-full-image {
+    max-width: 100%;
+  }
+
+  .vision-detail-item {
+    gap: 24px;
+    padding: 24px;
+  }
+
+  .vision-detail-number {
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+  }
+
+  .pastor-names {
+    font-size: 32px;
+  }
+
+  .pastor-role {
+    font-size: 20px;
+  }
+
+  .pastor-image-wrapper {
+    width: 320px;
   }
 }
 
 /* ===== 반응형 (모바일) ===== */
 @media screen and (max-width: 768px) {
-  .intro-banner {
-    padding: 20px 16px;
-  }
-
   .intro-banner-inner {
-    height: 180px; /* 모바일에서 높이 축소 */
+    height: 180px;
   }
 
   .banner-text-overlay {
-    padding: 0 30px;
+    padding: 0 20px;
   }
 
   .banner-overlay-title {
@@ -243,83 +359,94 @@
     font-size: 14px;
   }
 
-  .intro-banner-inner.text-banner {
-    padding: 40px 24px;
-    height: auto; /* 텍스트 배너는 높이 자동 */
-  }
-
-  .banner-title {
-    font-size: 28px;
-    margin-bottom: 12px;
-  }
-
-  .banner-subtitle {
-    font-size: 14px;
-  }
-
-  .intro-tabs {
-    padding-bottom: 20px;
-  }
-
-  .intro-tabs-inner {
-    padding: 0 16px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .tab-item {
+  .intro-tabs .tab-item {
     padding: 16px 20px;
     font-size: 14px;
-    white-space: nowrap;
   }
 
   .intro-container {
-    padding: 30px 20px;
+    padding: 50px 24px;
   }
 
-  .intro-content h2 {
-    font-size: 22px;
+  .intro-hero-title {
+    font-size: 36px;
   }
 
-  .intro-content p {
-    font-size: 14px;
+  .intro-hero-text {
+    font-size: 16px;
   }
 
-  .intro-feature {
+  .main-title {
+    font-size: 28px;
+    margin-bottom: 30px;
+  }
+
+  .intro-header-section,
+  .vision-hero-section,
+  .vision-detail-section {
+    margin-bottom: 70px;
+  }
+
+  .vision-full-image {
+    max-width: 100%;
+  }
+
+  .section-subtitle {
+    font-size: 18px;
+    margin-bottom: 30px;
+  }
+
+  .vision-detail-item {
     flex-direction: column;
+    gap: 20px;
+    padding: 24px 20px;
   }
 
-  .feature-image {
-    flex: none;
-    width: 100%;
-    height: 200px;
+  .vision-detail-number {
+    width: 45px;
+    height: 45px;
   }
 
-  .feature-text {
-    padding: 24px;
+  .vision-detail-title {
+    font-size: 18px;
   }
 
-  .feature-text h2 {
-    font-size: 20px;
+  .vision-detail-verse {
+    font-size: 13px;
   }
 
-  .feature-text p {
+  .vision-detail-text {
     font-size: 14px;
+  }
+
+  .pastor-names {
+    font-size: 28px;
+  }
+
+  .pastor-role {
+    font-size: 18px;
+  }
+
+  .pastor-image-wrapper {
+    float: none;
+    width: 100%;
+    max-width: 380px;
+    margin: 0 auto 30px auto;
+  }
+
+  .pastor-intro {
+    font-size: 15px;
+  }
+
+  .pastor-intro br {
+    display: none;
   }
 }
 
-/* ===== 반응형 (작은 모바일) ===== */
+/* ===== 작은 모바일 ===== */
 @media screen and (max-width: 480px) {
-  .intro-banner {
-    padding: 16px;
-  }
-
   .intro-banner-inner {
-    height: 140px; /* 작은 모바일에서 높이 더 축소 */
-  }
-
-  .banner-text-overlay {
-    padding: 0 20px;
+    height: 140px;
   }
 
   .banner-overlay-title {
@@ -330,37 +457,40 @@
     font-size: 12px;
   }
 
-  .intro-banner-inner.text-banner {
-    padding: 30px 20px;
-    height: auto; /* 텍스트 배너는 높이 자동 */
-  }
-
-  .banner-title {
-    font-size: 24px;
-  }
-
-  .banner-subtitle {
-    font-size: 13px;
-  }
-
-  .intro-tabs {
-    padding-bottom: 16px;
-  }
-
-  .tab-item {
+  .intro-tabs .tab-item {
     padding: 14px 16px;
     font-size: 13px;
   }
 
-  .intro-content h2 {
-    font-size: 20px;
+  .intro-container {
+    padding: 40px 20px;
   }
 
-  .feature-text {
-    padding: 20px;
+  .intro-hero-title {
+    font-size: 28px;
   }
 
-  .feature-text h2 {
-    font-size: 18px;
+  .intro-hero-text {
+    font-size: 15px;
+  }
+
+  .main-title {
+    font-size: 24px;
+  }
+
+  .vision-full-image {
+    max-width: 100%;
+  }
+
+  .vision-hero-text {
+    font-size: 14px;
+  }
+
+  .pastor-names {
+    font-size: 24px;
+  }
+
+  .pastor-role {
+    font-size: 16px;
   }
 }
