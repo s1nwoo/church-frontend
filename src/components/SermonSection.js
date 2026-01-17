@@ -116,10 +116,10 @@ export default function SermonSection() {
           {/* 아이콘 버튼들 - 첫번째 이미지로 고정 */}
           <div className="sermon-emoji-buttons">
             <div className="emoji-header">
-              <p style={{ fontSize: '22px', margin: '6px 0' }}>
+              <p style={{ fontSize: '20px', margin: '6px 0' }}>
                 하나님이 찾으시는 교회
               </p>
-              <p style={{ fontSize: '22px', margin: '6px 0' }}>
+              <p style={{ fontSize: '20px', margin: '6px 0' }}>
                 기독교한국침례회 방화침례교회입니다
               </p>
               <p style={{ fontSize: '16px', margin: '6px 0', marginTop: '20px' }}>

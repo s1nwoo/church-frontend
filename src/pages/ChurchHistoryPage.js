@@ -54,38 +54,63 @@ export default function ChurchHistoryPage() {
 
       {/* ─── 콘텐츠 영역 ─── */}
       <div className="intro-container page-container">
-        {/* ─── 본문 연혁 설명 ─── */}
-        <div className="history-description">
-          <p>방화침례교회는 XXXX년 XX월 강서구 방화동에서 시작되었습니다.</p>
-          <p>XXXX년 블라블라블라블라블라블라블라블라,</p>
-          <p>XXXX년 블라블라블라블라블라블라블라블라.</p>
-          <p>XXXX년 블라블라블라블라블라블라블라블라</p>
-          <p>XXXX년 선블라블라블라블라블라블라블라블라.</p>
-        </div>
 
-        {/* ─── 연혁 타임라인 ─── */}
+        {/* ─── 교회 연혁 타임라인 ─── */}
         <div className="history-timeline">
+
+          {/* 1987년 */}
           <div className="timeline-item">
-            <div className="timeline-year">2023</div>
+            <div className="timeline-year">1987</div>
             <div className="timeline-content">
-              <p>세계선교의 원년</p>
-              <p>5월 임직감사예배 및 전교인 선교 제비뽑기</p>
+              <p>3월 2일</p>
+              <p>서석우 목사 군목 제대 후</p>
+              <p>기독교한국침례회</p>
+              <p>방화침례교회 개척</p>
             </div>
           </div>
+
+          {/* 2017년 */}
           <div className="timeline-item">
-            <div className="timeline-year">2022</div>
+            <div className="timeline-year">2017</div>
             <div className="timeline-content">
-              <p>김포 트리라운지, 팜라인 예원 미션 센터 및 DMC 개원</p>
-              <p>본당 헌당 및 설립 35주년 감사예배</p>
+              <p>9월</p>
+              <p>임주빈 강도사 부임 및</p>
+              <p>서석우 목사 안식년</p>
+              <p>필리핀 선교 파송</p>
             </div>
           </div>
+
+          {/* 2018년 */}
+          <div className="timeline-item">
+            <div className="timeline-year">2018</div>
+            <div className="timeline-content">
+              <p>9월 9일</p>
+              <p>임주빈 목사 안수</p>
+              <p>(방화침례교회)</p>
+            </div>
+          </div>
+
+          {/* 2021년 */}
           <div className="timeline-item">
             <div className="timeline-year">2021</div>
             <div className="timeline-content">
-              <p>퍼스트 무버, 러스트 천</p>
-              <p>김포 트리라운지 설립</p>
+              <p>1월 3일</p>
+              <p>임주빈 담임목사 취임 및</p>
+              <p>서석우 목사 은퇴</p>
             </div>
           </div>
+
+          {/* 2022년 */}
+          <div className="timeline-item">
+            <div className="timeline-year">2022</div>
+            <div className="timeline-content">
+              <p>3월</p>
+              <p>김성휘 목사 부임 및</p>
+              <p>임주빈 목사와</p>
+              <p>공동담임목사 사역 시작</p>
+            </div>
+          </div>
+
         </div>
       </div>
     </>
