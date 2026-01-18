@@ -226,6 +226,36 @@
   margin-bottom: 0;
 }
 
+/*
+  핵심 요구사항 반영:
+  - 가운데 gap(텍스트↔이미지): 0
+  - 없앤 gap만큼을 오른쪽 padding으로 이동 → 이미지가 왼쪽으로 당겨짐
+*/
+.pastor-grid {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  gap: 0;               /* 가운데 gap 제거 */
+  padding-right: 60px;  /* 오른쪽에 동일한 여백 생성 (원하는 만큼 조절) */
+}
+
+.pastor-left {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.pastor-right {
+  flex: 0 0 380px;
+}
+
+.pastor-right img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 16px;
+}
+
 .pastor-title {
   margin-bottom: 40px;
 }
@@ -243,26 +273,6 @@
   color: #666;
 }
 
-.pastor-content {
-  position: relative;
-}
-
-.pastor-image-wrapper {
-  float: right;
-  width: 380px;
-  margin-left: 40px;
-  margin-bottom: 20px;
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-.pastor-image-wrapper img {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 16px;
-}
-
 .pastor-intro {
   font-size: 17px;
   line-height: 1.9;
@@ -275,12 +285,6 @@
 
 .pastor-intro p:last-child {
   margin-bottom: 0;
-}
-
-.pastor-content::after {
-  content: "";
-  display: table;
-  clear: both;
 }
 
 /* ===== 반응형 (태블릿) ===== */
@@ -336,8 +340,12 @@
     font-size: 20px;
   }
 
-  .pastor-image-wrapper {
-    width: 320px;
+  .pastor-right {
+    flex-basis: 320px;
+  }
+
+  .pastor-grid {
+    padding-right: 40px; /* 태블릿은 우측 여백 조금 축소 */
   }
 }
 
@@ -427,11 +435,17 @@
     font-size: 18px;
   }
 
-  .pastor-image-wrapper {
-    float: none;
+  .pastor-grid {
+    flex-direction: column;
+    gap: 24px;        /* 모바일에서는 세로 간격(가독성) */
+    padding-right: 0; /* 세로배치에서는 우측 여백 불필요 */
+  }
+
+  .pastor-right {
+    flex-basis: auto;
     width: 100%;
     max-width: 380px;
-    margin: 0 auto 30px auto;
+    margin: 0 auto;
   }
 
   .pastor-intro {

@@ -56,7 +56,6 @@ function ChurchIntroPage() {
 
       {/* ─── 콘텐츠 영역 ─── */}
       <div className="intro-container page-container">
-
         {/* ─── 교회 소개 헤더 ─── */}
         <section className="intro-header-section">
           <h2 className="intro-hero-title">방화침례교회는,</h2>
@@ -65,7 +64,7 @@ function ChurchIntroPage() {
             우리는 숫자보다 본질을, 외형보다 중심을 소중히 여기며 예수님께서 설계하신<br />
             교회의 참모습을 따라 한 걸음씩 걸어가고 있습니다.
           </p>
-          <br/>
+          <br />
           <h2 className="section-subtitle">방화침례교회는 다섯 가지 소망을 품고 사역합니다.</h2>
         </section>
 
@@ -76,32 +75,35 @@ function ChurchIntroPage() {
           </div>
         </section>
 
-        {/* ─── 공동담임목사 소개 섹션 ─── */}
+        {/* ─── 공동담임목사 소개 섹션 (좌 텍스트 / 우 이미지) ─── */}
         <section className="pastor-section">
-          <h2 className="pastor-title">
-            <span className="pastor-names">김성휘, 임주빈</span>
-            <span className="pastor-role">담임목사</span>
-          </h2>
+          <div className="pastor-grid">
+            {/* 좌측: 타이틀 + 소개 텍스트 */}
+            <div className="pastor-left">
+              <h2 className="pastor-title">
+                <span className="pastor-names">김성휘, 임주빈</span>
+                <span className="pastor-role">담임목사</span>
+              </h2>
 
-          <div className="pastor-content">
-            <div className="pastor-image-wrapper">
-              <img src={pastorImage} alt="담임목사님" />
+              <div className="pastor-intro">
+                <p>
+                  김성휘 목사와 임주빈 목사는 북한에서 예수쟁이라는 죄목으로 순교하신 조부와<br />
+                  평생 목사로 헌신하셨던 부모의 신앙을 물려받은 부부목사입니다.
+                </p>
+                <p>
+                  임주빈 목사는 기도의 영성으로 방화침례교회를 믿음의 공동체로 이끌고 있으며,<br />
+                  김성휘 목사는 부친의 유지를 따라 극동방송에서 32년간의 북방선교사역을 마치고<br />
+                  방화침례교회 공동담임목사로 섬기고 있습니다.
+                </p>
+              </div>
             </div>
 
-            <div className="pastor-intro">
-              <p>
-                김성휘 목사와 임주빈 목사는 북한에서 예수쟁이라는 죄목으로 순교하신 조부와<br />
-                평생 목사로 헌신하셨던 부모의 신앙을 물려받은 부부목사입니다.
-              </p>
-              <p>
-                임주빈 목사는 기도의 영성으로 방화침례교회를 믿음의 공동체로 이끌고 있으며,<br />
-                김성휘 목사는 부친의 유지를 따라 극동방송에서 32년간의 북방선교사역을 마치고<br />
-                방화침례교회 공동담임목사로 섬기고 있습니다.
-              </p>
+            {/* 우측: 이미지 */}
+            <div className="pastor-right">
+              <img src={pastorImage} alt="담임목사님" />
             </div>
           </div>
         </section>
-
       </div>
     </>
   );
