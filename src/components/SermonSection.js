@@ -45,8 +45,6 @@ export default function SermonSection() {
     return match ? match[1] : null;
   };
 
-  // ✅ 아이콘 순환 제거 (iconIndex state 및 useEffect 삭제)
-
   // 최신 설교
   const latest = sermons[0];
 
@@ -113,15 +111,17 @@ export default function SermonSection() {
             </div>
           )}
 
-          {/* 아이콘 버튼들 - 첫번째 이미지로 고정 */}
+          {/* 아이콘 버튼들 */}
           <div className="sermon-emoji-buttons">
             <div className="emoji-header">
-              <p style={{ fontSize: '20px', margin: '6px 0' }}>
-                하나님이 찾으시는 교회
+              <p style={{ fontSize: '20px', margin: '6px 0', color: '#4B2CFF', fontWeight: 900 }}>
+                "하나님이 찾으시는 교회"
               </p>
-              <p style={{ fontSize: '20px', margin: '6px 0' }}>
-                기독교한국침례회 방화침례교회입니다
+
+              <p style={{ fontSize: '20px', margin: '6px 0', fontWeight: 900 }}>
+                <span className="hl-mid">기독교한국침례회</span> 방화침례교회입니다
               </p>
+
               <p style={{ fontSize: '16px', margin: '6px 0', marginTop: '20px' }}>
                 복음으로, 은혜로, 사랑으로, 믿음으로
               </p>
@@ -129,6 +129,7 @@ export default function SermonSection() {
                 하나님을 만나길 간절히 소망합니다
               </p>
             </div>
+
             {icons.map((icon, idx) => (
               <div
                 key={idx}
