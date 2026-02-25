@@ -81,8 +81,8 @@
 .intro-tabs .tab-item {
   background: none;
   border: none;
-  padding: 20px 20px;   /* 32px → 20px으로 줄임 */
-  font-size: 15px;      /* 16px → 15px */
+  padding: 20px 20px;
+  font-size: 15px;
   font-weight: 500;
   color: #666;
   text-decoration: none;
@@ -90,8 +90,8 @@
   transition: all 0.3s ease;
   cursor: pointer;
   font-family: 'Pretendard', sans-serif;
-  white-space: nowrap;  /* 텍스트 줄바꿈 방지 */
-  flex-shrink: 0;       /* 탭 너비 축소 방지 */
+  white-space: nowrap;
+  /* flex-shrink: 0 제거 - 모바일에서 flex:1이 동작하려면 없어야 함 */
 }
 
 .intro-tabs .tab-item:hover {
