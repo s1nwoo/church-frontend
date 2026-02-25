@@ -129,12 +129,17 @@
   text-decoration: none;
 }
 
+/* ─── 비디오 메인 영역 ─── */
+.media-main {
+  display: flex;
+  flex-direction: column;
+}
+
 /* ─── 사이드바 ─── */
 .media-sidebar {
   padding-left: 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* 리스트는 위, 전체목록 버튼은 아래 */
 }
 
 /* ─── 리스트 컨테이너에 상/하단 라인 ─── */
@@ -197,10 +202,9 @@
 .view-all {
   display: block;
   width: 100%;
-  max-width: 690px;    /* PC 에서 video-wrapper와 동일한 max-width */
   box-sizing: border-box;
   padding: 0.75rem;
-  margin: auto auto 0; /* margin-top: auto → 사이드바 하단으로 밀어냄 */
+  margin-top: auto; /* 사이드바 남은 공간 모두 흡수 → 버튼 하단 고정 */
   background: #fff;
   border: 1px solid #333;
   font-size: 1rem;
