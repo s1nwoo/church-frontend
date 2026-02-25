@@ -29,11 +29,12 @@ const CardSlider = () => {
   const [idx, setIdx] = useState(total);
   const [transOn, setTransOn] = useState(true);
   const wrapRef = useRef(null);
+  const touchStartX = useRef(null); /* 터치 시작 X 좌표 저장 */
 
     useEffect(() => {
       const w = wrapRef.current;
       if (!w) return;
-    
+
       // 트랜지션 설정
       w.style.transition = transOn
         ? `transform ${DURATION}ms ease`
@@ -81,6 +82,20 @@ const CardSlider = () => {
   const next = () => { setIdx(i => i + 1); setTransOn(true); };
   const prev = () => { setIdx(i => i - 1); setTransOn(true); };
 
+  /* 터치 시작: X 좌표 저장 */
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  /* 터치 끝: 이동 거리 50px 이상이면 슬라이드 전환 */
+  const handleTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (diff > 50) next();       /* 왼쪽으로 스와이프 → 다음 */
+    else if (diff < -50) prev(); /* 오른쪽으로 스와이프 → 이전 */
+    touchStartX.current = null;
+  };
+
   const handleClick = i => {
     const cardNum = i % total;
     if (cardNum === 0) {
@@ -100,7 +115,11 @@ const CardSlider = () => {
         <img src={allowL} alt="이전" />
       </button>
 
-      <div className="slides-container">
+      <div
+          className="slides-container"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
         <div
           ref={wrapRef}
           className="slides-wrapper"
