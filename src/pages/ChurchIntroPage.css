@@ -81,8 +81,8 @@
 .intro-tabs .tab-item {
   background: none;
   border: none;
-  padding: 20px 32px;
-  font-size: 16px;
+  padding: 20px 20px;   /* 32px → 20px으로 줄임 */
+  font-size: 15px;      /* 16px → 15px */
   font-weight: 500;
   color: #666;
   text-decoration: none;
@@ -383,7 +383,7 @@
   }
 
   .intro-tabs .tab-item {
-    padding: 16px 20px;
+    padding: 14px 14px;
     font-size: 14px;
   }
 
@@ -487,7 +487,7 @@
   }
 
   .intro-tabs .tab-item {
-    padding: 14px 16px;
+    padding: 12px 12px;
     font-size: 13px;
   }
 

@@ -257,6 +257,7 @@
   border-bottom: 1px solid #eee;
   display: flex;
   align-items: center;
+  position: relative;  /* mobile-nav absolute 기준점 */
 }
 
 /* 로그인 페이지 헤더 (배경 흰색) */
@@ -371,16 +372,18 @@
     font-size: 12px;
   }
 }
-/* ✅ 모바일 드롭다운 내비게이션 */
+/* ✅ 모바일 드롭다운 내비게이션 - 헤더 바로 아래 절대위치 */
 .mobile-nav {
   display: flex;
   flex-direction: column;
   background: #fff;
   border-top: 1px solid #eee;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  /* 헤더 아래 자연스럽게 붙도록 */
-  position: relative;
-  z-index: 999;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  position: absolute;       /* 헤더를 기준으로 절대위치 */
+  top: 100%;                /* 헤더 바로 아래 */
+  left: 0;
+  right: 0;
+  z-index: 1100;            /* 다른 요소 위에 표시 */
 }
 
 .mobile-nav-item {
