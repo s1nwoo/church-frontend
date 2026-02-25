@@ -51,16 +51,21 @@
   }
 
   .hero {
-    /* 카드 슬라이더(615×360)의 모바일 비율과 유사하게 맞춤 */
     width: 100%;
     height: auto;
   }
 
+  /* picture 태그가 block으로 동작하도록 */
+  .hero picture {
+    display: block;
+    width: 100%;
+  }
+
   .hero-full-image {
     width: 100%;
-    height: auto;       /* 이미지 원본 비율 그대로 유지 */
-    object-fit: contain; /* 잘림 없이 전체 표시 */
+    height: auto;        /* 세로형 이미지 비율 그대로 유지 */
+    object-fit: contain;
     display: block;
-    transform: none;    /* 기존 scale 제거 */
+    transform: none;     /* 기존 scale 제거 */
   }
 }
