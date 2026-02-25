@@ -4,6 +4,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import bannerImg from '../components/images/top_banner_img.png'; /* 배너 우측 일러스트 이미지 */
 import churchIllust from '../components/images/intro.png';
+import churchIllustApp from '../components/images/intro_app1.png'; /* 모바일용 이미지 */
 import pastorImage from '../components/images/intro2.png';
 import './ChurchIntroPage.css';
 
@@ -73,7 +74,11 @@ function ChurchIntroPage() {
         {/* ─── 다섯 가지 비전 섹션 (큰 이미지 1장) ─── */}
         <section className="vision-hero-section">
           <div className="vision-full-image">
-            <img src={churchIllust} alt="방화침례교회 다섯 가지 소망" />
+            {/* 768px 이하 → intro_app1.png, 이상 → intro.png */}
+            <picture>
+              <source media="(max-width: 768px)" srcSet={churchIllustApp} />
+              <img src={churchIllust} alt="방화침례교회 다섯 가지 소망" />
+            </picture>
           </div>
         </section>
 
