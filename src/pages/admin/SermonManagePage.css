@@ -245,3 +245,97 @@
     width: 100%;
   }
 }
+
+/* ===== 성경 약어표 툴팁 ===== */
+
+/* ? 버튼 */
+.bible-tooltip-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-left: 6px;
+  background: #7D4CFC;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  position: relative;
+  vertical-align: middle;
+  user-select: none;
+  transition: background 0.2s;
+}
+
+/* 클릭 시 핑크색으로 변경 (열린 상태 표시) */
+.bible-tooltip-trigger.active {
+  background: #FF6B9D;
+}
+
+/* 툴팁 박스 */
+.bible-tooltip {
+  position: absolute;
+  top: 24px;
+  left: 0;
+  z-index: 9999;
+  width: 480px;
+  max-height: 400px;
+  overflow-y: auto; /* 툴팁 안에서 스크롤 가능 */
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  font-weight: 400;
+  color: #333;
+  /* 툴팁 자체 클릭/스크롤 이벤트 허용 */
+  pointer-events: auto;
+}
+
+/* 툴팁 제목 */
+.bible-tooltip-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #7D4CFC;
+  margin: 0 0 4px 0;
+}
+
+/* 입력 예시 */
+.bible-tooltip-usage {
+  font-size: 12px;
+  color: #888;
+  margin: 0 0 12px 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+/* 그룹 */
+.bible-tooltip-group {
+  margin-bottom: 10px;
+}
+
+.bible-tooltip-group-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #999;
+  margin: 0 0 6px 0;
+}
+
+/* 책 목록 */
+.bible-tooltip-books {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+
+.bible-tooltip-book {
+  font-size: 13px;
+  color: #444;
+  white-space: nowrap;
+}
+
+.bible-tooltip-book strong {
+  color: #7D4CFC;
+  margin-right: 2px;
+}
