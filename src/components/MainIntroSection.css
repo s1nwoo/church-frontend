@@ -39,29 +39,49 @@
   justify-content: center;
 }
 
+/* 반응형 처리 (태블릿) */
+@media screen and (max-width: 1024px) {
+  .hero-full-image {
+    object-fit: cover;
+    object-position: 30% center; /* 텍스트+캐릭터 모두 보이도록 */
+  }
+}
+
 /* 반응형 처리 (모바일) */
 @media screen and (max-width: 768px) {
   .intro-section {
     height: auto;
-    padding: 20px 0;
+    padding: 0;
   }
 
   .intro-inner {
-    padding: 0 16px;
+    padding: 0;
   }
 
   .hero {
-    height: auto;
-    align-items: flex-start;
-    justify-content: center;
+    /* 원본이 가로로 긴 배너형 → 모바일 고정 높이로 크롭 */
+    height: 180px;
+    overflow: hidden;
   }
 
   .hero-full-image {
     width: 100%;
-    height: auto;
-    object-fit: contain;
-    transform: scale(1.4);
-    transform-origin: center center;
-    transition: transform 0.5s ease;
+    height: 100%;
+    object-fit: cover;
+    /* 원본에서 텍스트가 좌측 40% → 25% left 기준으로 크롭 */
+    object-position: 25% center;
+    transform: none; /* 기존 scale 제거 */
+  }
+}
+
+/* 반응형 처리 (작은 모바일 480px 이하) */
+@media screen and (max-width: 480px) {
+  .hero {
+    height: 150px;
+  }
+
+  .hero-full-image {
+    /* 더 작은 화면에서는 텍스트 쪽으로 더 집중 */
+    object-position: 20% center;
   }
 }
