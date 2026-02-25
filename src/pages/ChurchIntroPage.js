@@ -3,6 +3,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import topBanner from '../components/images/top_banner1.png';
+import topBannerMobile from '../components/images/top_app_banner1.png'; /* 모바일용 배너 */
 import churchIllust from '../components/images/intro.png';
 import pastorImage from '../components/images/intro2.png';
 import './ChurchIntroPage.css';
@@ -13,7 +14,10 @@ function ChurchIntroPage() {
       {/* ─── 상단 배너 박스 (이미지 + 텍스트) ─── */}
       <div className="intro-banner">
         <div className="intro-banner-inner">
-          <img src={topBanner} alt="교회소개 배너" className="banner-image" fetchpriority="high" loading="eager" />
+          <picture>
+            <source media="(max-width: 768px)" srcSet={topBannerMobile} />
+            <img src={topBanner} alt="교회소개 배너" className="banner-image" fetchpriority="high" loading="eager" />
+          </picture>
           <div className="banner-text-overlay">
             <h1 className="banner-overlay-title">교회소개</h1>
             <p className="banner-overlay-subtitle">
