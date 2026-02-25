@@ -10,6 +10,15 @@
   border-radius: 16px;
 }
 
+/* ===== 배너 배경색 (탭별) ===== */
+/* ChurchIntroPage.css의 .banner-deco-img 구조와 동일하게 사용 */
+.banner-worship-sunday {
+  background-color: #FFD9E6;
+}
+.banner-worship-community {
+  background-color: #FFB5CE;
+}
+
 /* ===== 탭 메뉴 버튼 스타일 (주일예배/야외예배) ===== */
 .intro-tabs .tab-item {
   background: none;

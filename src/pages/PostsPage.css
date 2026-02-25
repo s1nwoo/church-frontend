@@ -10,6 +10,12 @@
   border-radius: 16px;
 }
 
+/* ===== 배너 배경색 ===== */
+/* ChurchIntroPage.css의 .banner-deco-img 구조와 동일하게 사용 */
+.banner-posts {
+  background-color: #FF97BA;
+}
+
 /* ===== 탭 메뉴 버튼 스타일 ===== */
 .intro-tabs .tab-item {
   background: none;

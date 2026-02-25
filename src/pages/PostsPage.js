@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
-import topBanner7 from '../components/images/top_banner7.png';
+import bannerImg7 from '../components/images/top_banner_img7.png'; /* 소식나눔 배너 우측 일러스트 */
 import './PostsPage.css';
 import './ChurchIntroPage.css';
 
@@ -70,10 +70,10 @@ export default function PostsPage() {
 
   return (
     <>
-      {/* ─── 상단 배너 박스 (이미지 + 텍스트) ─── */}
+      {/* ─── 상단 배너 박스 (배경색 + 우측 일러스트) ─── */}
       <div className="intro-banner">
-        <div className="intro-banner-inner">
-          <img src={topBanner7} alt="공지사항 배너" className="banner-image" fetchpriority="high" loading="eager" />
+        <div className="intro-banner-inner banner-posts">
+          <img src={bannerImg7} alt="" className="banner-deco-img" fetchpriority="high" loading="eager" />
           <div className="banner-text-overlay">
             <h1 className="banner-overlay-title">공지사항</h1>
             <p className="banner-overlay-subtitle">
