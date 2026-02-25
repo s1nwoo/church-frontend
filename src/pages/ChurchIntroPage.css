@@ -180,6 +180,15 @@
   display: block;
 }
 
+/* 데스크톱: desktop 표시, mobile 숨김 */
+.vision-desktop-img {
+  display: block;
+  width: 100%;
+}
+.vision-mobile-imgs {
+  display: none;
+}
+
 /* ===== 상세 비전 설명 섹션 ===== */
 .vision-detail-section {
   margin-bottom: 100px;
@@ -441,6 +450,22 @@
 
   .vision-full-image {
     max-width: 100%;
+  }
+
+  /* 모바일: 데스크톱 이미지 숨기고 앱 이미지 5장 세로 나열 */
+  .vision-desktop-img {
+    display: none;
+  }
+  .vision-mobile-imgs {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    width: 100%;
+  }
+  .vision-mobile-imgs img {
+    width: 100%;
+    height: auto;
+    display: block;
   }
 
   .section-subtitle {
