@@ -14,28 +14,24 @@
   height: 240px;
   border-radius: 16px;
   overflow: hidden;
-  background-color: #e8e4f0; /* 이미지 로딩 전 보라 계열 skeleton 배경 */
-  contain: layout;            /* 레이아웃 재계산 최소화 */
+  display: flex;
+  align-items: center;
 }
 
-.banner-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;               /* 이미지 하단 여백 제거 */
-  will-change: transform;       /* GPU 레이어 미리 확보 */
+/* ===== 교회소개 배너 배경색 ===== */
+.banner-church-intro {
+  background-color: #f0e6fa;
 }
 
+/* 좌측 텍스트 */
 .banner-text-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 0 60px;
+  flex: 1;
 }
 
 .banner-overlay-title {
@@ -53,6 +49,17 @@
   color: #000;
   line-height: 1.6;
   margin: 0;
+}
+
+/* 우측 일러스트 이미지 */
+.banner-deco-img {
+  position: absolute;
+  right: 40px;
+  bottom: 0;
+  height: 90%;
+  width: auto;
+  object-fit: contain;
+  object-position: bottom;
 }
 
 /* ===== 탭 메뉴 (공통) ===== */
@@ -374,11 +381,17 @@
   }
 
   .intro-banner-inner {
-    height: 180px;
+    height: 160px;
   }
 
   .banner-text-overlay {
     padding: 0 20px;
+  }
+
+  /* 모바일 우측 이미지 크기 조정 */
+  .banner-deco-img {
+    height: 80%;
+    right: 16px;
   }
 
   .banner-overlay-title {

@@ -2,8 +2,7 @@
 
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import topBanner from '../components/images/top_banner1.png';
-import topBannerMobile from '../components/images/top_app_banner1.png'; /* 모바일용 배너 */
+import bannerImg from '../components/images/top_banner_img.png'; /* 배너 우측 일러스트 이미지 */
 import churchIllust from '../components/images/intro.png';
 import pastorImage from '../components/images/intro2.png';
 import './ChurchIntroPage.css';
@@ -11,13 +10,10 @@ import './ChurchIntroPage.css';
 function ChurchIntroPage() {
   return (
     <>
-      {/* ─── 상단 배너 박스 (이미지 + 텍스트) ─── */}
+      {/* ─── 상단 배너 (배경색 + 텍스트 + 우측 이미지) ─── */}
       <div className="intro-banner">
-        <div className="intro-banner-inner">
-          <picture>
-            <source media="(max-width: 768px)" srcSet={topBannerMobile} />
-            <img src={topBanner} alt="교회소개 배너" className="banner-image" fetchpriority="high" loading="eager" />
-          </picture>
+        <div className="intro-banner-inner banner-church-intro">
+          {/* 좌측 텍스트 */}
           <div className="banner-text-overlay">
             <h1 className="banner-overlay-title">교회소개</h1>
             <p className="banner-overlay-subtitle">
@@ -25,6 +21,8 @@ function ChurchIntroPage() {
               하나님의 사랑과 은혜가 넘치는 교회
             </p>
           </div>
+          {/* 우측 이미지 */}
+          <img src={bannerImg} alt="" className="banner-deco-img" fetchpriority="high" loading="eager" />
         </div>
       </div>
 
