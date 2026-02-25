@@ -366,6 +366,11 @@
 
 /* ===== 반응형 (모바일) ===== */
 @media screen and (max-width: 768px) {
+  /* 탭 4개를 균등 분할 - 스크롤 불필요하므로 overflow 해제 */
+  .intro-tabs-inner {
+    overflow-x: visible;
+  }
+
   .intro-banner-inner {
     height: 180px;
   }
@@ -383,8 +388,10 @@
   }
 
   .intro-tabs .tab-item {
-    padding: 14px 14px;
-    font-size: 14px;
+    padding: 14px 0;    /* 좌우 패딩 제거, 상하만 유지 */
+    font-size: 13px;
+    flex: 1;            /* 4개 탭을 균등하게 나눔 */
+    text-align: center; /* 텍스트 가운데 정렬 */
   }
 
   .intro-container {
@@ -487,8 +494,10 @@
   }
 
   .intro-tabs .tab-item {
-    padding: 12px 12px;
-    font-size: 13px;
+    padding: 12px 0;
+    font-size: 12px;
+    flex: 1;
+    text-align: center;
   }
 
   .intro-container {
