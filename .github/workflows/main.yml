@@ -19,9 +19,12 @@ jobs:
         with:
           node-version: '20'
 
-      # 3. 패키지 설치
+      # 3. 패키지 설치 (yocto-queue 403 우회)
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: |
+          echo "registry=https://registry.npmjs.org/" > .npmrc
+          echo "strict-ssl=false" >> .npmrc
+          npm install --legacy-peer-deps --force
 
       # 4. 프로덕션 빌드
       - name: Build
