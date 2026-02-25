@@ -298,7 +298,7 @@ const SermonManagePage = () => {
                       type={type}
                       placeholder={
                         key === 'youtubeUrl' ? 'https://www.youtube.com/watch?v=...' :
-                        key === 'bibleText' ? '예: 요3:16 또는 요3:16-21' :
+                        key === 'bibleText' ? '예: 요3:16 또는 요3:16-21 또는 요3:16, 요5:14-15' :
                         key === 'content' ? '말씀의 제목을 입력하세요' :
                         ''
                       }
