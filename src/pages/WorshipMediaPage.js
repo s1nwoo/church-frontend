@@ -139,7 +139,7 @@ export default function WorshipMediaPage() {
       {/* ─── 상단 배너 박스 (이미지 + 텍스트) ─── */}
       <div className="intro-banner">
         <div className="intro-banner-inner">
-          <img src={currentBanner.image} alt={`${currentBanner.title} 배너`} className="banner-image" />
+          <img src={currentBanner.image} alt={`${currentBanner.title} 배너`} className="banner-image" fetchpriority="high" loading="eager" />
           <div className="banner-text-overlay">
             <h1 className="banner-overlay-title">{currentBanner.title}</h1>
             <p className="banner-overlay-subtitle">

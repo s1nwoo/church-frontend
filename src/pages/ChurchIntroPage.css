@@ -14,12 +14,16 @@
   height: 240px;
   border-radius: 16px;
   overflow: hidden;
+  background-color: #e8e4f0; /* 이미지 로딩 전 보라 계열 skeleton 배경 */
+  contain: layout;            /* 레이아웃 재계산 최소화 */
 }
 
 .banner-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;               /* 이미지 하단 여백 제거 */
+  will-change: transform;       /* GPU 레이어 미리 확보 */
 }
 
 .banner-text-overlay {

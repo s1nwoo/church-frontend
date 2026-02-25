@@ -88,8 +88,8 @@ const Header = () => {
                   <Link to="/" className="church-home-link">방화침례교회 홈</Link>
                 ) : (
                   <>
-                    <Link to="/login" className="header-auth-btn header-login-btn">로그인</Link>
-                    <Link to="/signup" className="header-auth-btn header-signup-btn">회원가입</Link>
+//                    <Link to="/login" className="header-auth-btn header-login-btn">로그인</Link>
+//                    <Link to="/signup" className="header-auth-btn header-signup-btn">회원가입</Link>
                   </>
                 )}
               </>
