@@ -63,7 +63,7 @@ function WorshipInfoPage() {
           </div>
           <div className="service-row">
             <div className="service-col time">오전 11시 00분</div>
-            <div className="service-col location">1부 찬양 및 오전예배</div>
+            <div className="service-col location">찬양 및 오전예배</div>
           </div>
           <div className="service-row">
             <div className="service-col time">오후 1시 30분</div>

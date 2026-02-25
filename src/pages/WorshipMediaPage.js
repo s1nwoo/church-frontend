@@ -130,7 +130,7 @@ export default function WorshipMediaPage() {
       decoImg: bannerImg6,         /* 우측 일러스트 이미지 */
       bgClass: 'banner-worship-community', /* CSS에서 배경색 #FFB5CE 적용 */
       title: '공동체 영상',
-      subtitle: '공동체 안에서 역사하신 하나님의 은혜를 나눕니다\n교제의 기쁨과 감사의 순간'
+      subtitle: '함께 역사하신 하나님의 은혜를 나눕니다\n교제의 기쁨과 감사의 순간'
     }
   };
 

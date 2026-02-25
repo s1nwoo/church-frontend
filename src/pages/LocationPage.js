@@ -109,16 +109,6 @@ function LocationPage() {
             </div>
           </div>
 
-          {/* 교회안내 */}
-          <div className="info-row">
-            <div className="icon-wrapper">
-              <img src={iconCall} alt="교회안내" />
-            </div>
-            <div className="inline-text">
-              <span className="content">02-XXXX-XXXX</span>
-            </div>
-          </div>
-
           {/* 지하철 */}
           <div className="info-row">
             <div className="icon-wrapper">
