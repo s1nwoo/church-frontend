@@ -18,9 +18,18 @@
   align-items: center;
 }
 
-/* ===== 교회소개 배너 배경색 ===== */
+/* ===== 각 페이지별 배너 배경색 ===== */
 .banner-church-intro {
-  background-color: #f0e6fa;
+  background-color: #f0e6fa; /* 교회소개 */
+}
+.banner-church-history {
+  background-color: #D3C1FF; /* 교회연혁 */
+}
+.banner-worship-info {
+  background-color: #BEA6FE; /* 예배안내 */
+}
+.banner-location {
+  background-color: #AB8AFD; /* 오시는길 */
 }
 
 /* 좌측 텍스트 */

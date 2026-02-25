@@ -1,7 +1,7 @@
 // src/pages/WorshipInfoPage.js
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import topBanner from '../components/images/top_banner3.png';
+import bannerImg from '../components/images/top_banner_img3.png'; /* 배너 우측 일러스트 */
 import './WorshipInfoPage.css';
 import './ChurchIntroPage.css';
 
@@ -10,8 +10,8 @@ function WorshipInfoPage() {
     <>
       {/* ─── 상단 배너 박스 (이미지 + 텍스트) ─── */}
       <div className="intro-banner">
-        <div className="intro-banner-inner">
-          <img src={topBanner} alt="예배안내 배너" className="banner-image" fetchpriority="high" loading="eager" />
+        <div className="intro-banner-inner banner-worship-info">
+          <img src={bannerImg} alt="" className="banner-deco-img" fetchpriority="high" loading="eager" />
           <div className="banner-text-overlay">
             <h1 className="banner-overlay-title">예배안내</h1>
             <p className="banner-overlay-subtitle">
