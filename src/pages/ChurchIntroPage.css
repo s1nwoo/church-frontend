@@ -67,10 +67,11 @@
   margin: 0 auto;
   display: flex;
   gap: 0;
-  flex-wrap: nowrap;        /* 줄바꿈 방지 */
-  overflow-x: auto;         /* 넘치면 가로 스크롤 */
-  -webkit-overflow-scrolling: touch; /* iOS 부드러운 스크롤 */
-  scrollbar-width: none;    /* 스크롤바 숨김 (Firefox) */
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  justify-content: space-around; /* 모든 탭 균등 간격 */
 }
 
 /* 스크롤바 숨김 (Chrome/Safari) */
@@ -366,6 +367,12 @@
 
 /* ===== 반응형 (모바일) ===== */
 @media screen and (max-width: 768px) {
+  /* 탭 4개 균등 배분 */
+  .intro-tabs-inner {
+    justify-content: space-evenly;
+    overflow-x: visible;
+  }
+
   .intro-banner-inner {
     height: 180px;
   }
@@ -487,8 +494,10 @@
   }
 
   .intro-tabs .tab-item {
-    padding: 20px 10px;
+    padding: 20px 0;
     font-size: 12px;
+    flex: 1;
+    text-align: center;
   }
 
   .intro-container {

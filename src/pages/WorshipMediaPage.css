@@ -258,9 +258,14 @@
     padding: 30px 20px;
   }
 
-  /* 탭 모바일 패딩 - ChurchIntroPage와 동일하게 맞춤 */
+  /* 탭 균등 배분 */
+  .intro-tabs-inner {
+    justify-content: space-evenly;
+    overflow-x: visible;
+  }
+
   .intro-tabs .tab-item {
-    padding: 20px 10px;
+    padding: 20px 8px;
     font-size: 13px;
   }
 
