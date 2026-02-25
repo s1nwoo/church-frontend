@@ -10,15 +10,6 @@
   border-radius: 16px;
 }
 
-/* ===== 배너 배경색 (탭별) ===== */
-/* ChurchIntroPage.css의 .banner-deco-img 구조와 동일하게 사용 */
-.banner-worship-sunday {
-  background-color: #FFD9E6;
-}
-.banner-worship-community {
-  background-color: #FFB5CE;
-}
-
 /* ===== 탭 메뉴 버튼 스타일 (주일예배/야외예배) ===== */
 .intro-tabs .tab-item {
   background: none;
@@ -109,7 +100,7 @@
   display: grid;
   grid-template-columns: 1.5fr 1fr;
   gap: 0.2rem;
-  align-items: start;
+  align-items: stretch; /* 사이드바가 유튜브 영역 높이만큼 늘어남 */
 }
 
 /* ─── 비디오 래퍼 ─── */
@@ -141,6 +132,9 @@
 /* ─── 사이드바 ─── */
 .media-sidebar {
   padding-left: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* 리스트는 위, 전체목록 버튼은 아래 */
 }
 
 /* ─── 리스트 컨테이너에 상/하단 라인 ─── */
