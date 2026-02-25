@@ -4,15 +4,11 @@ import './index.css';
 import App from './App';
 import axios from 'axios';
 
-// 1) 세션 쿠키(JSESSIONID) 전송
+// 세션 쿠키(JSESSIONID) 전송
 axios.defaults.withCredentials = true;
 
-// 2) 백엔드 기본 URL 설정
-if (process.env.NODE_ENV === 'production') {
-  axios.defaults.baseURL = 'https://church-s7rv.onrender.com'; // 🔥 배포용 Render 서버 주소
-} else {
-  axios.defaults.baseURL = 'http://localhost:8080'; // 🔥 로컬 개발용 서버 주소
-}
+// 백엔드 기본 URL 설정 (환경변수 우선, 없으면 로컬)
+axios.defaults.baseURL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
