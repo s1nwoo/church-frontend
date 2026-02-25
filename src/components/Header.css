@@ -371,3 +371,49 @@
     font-size: 12px;
   }
 }
+/* ✅ 모바일 드롭다운 내비게이션 */
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-top: 1px solid #eee;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  /* 헤더 아래 자연스럽게 붙도록 */
+  position: relative;
+  z-index: 999;
+}
+
+.mobile-nav-item {
+  padding: 16px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1D1829;
+  text-decoration: none;
+  border-bottom: 1px solid #f0f0f0;
+  font-family: 'Pretendard', sans-serif;
+  transition: background 0.2s, color 0.2s;
+}
+
+.mobile-nav-item:last-child {
+  border-bottom: none;
+}
+
+.mobile-nav-item:hover,
+.mobile-nav-item:active {
+  background: #f6f3ff;
+  color: #7D4CFC;
+}
+
+/* ✅ 햄버거 → X 애니메이션 */
+.hamburger-button.open .bar:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+.hamburger-button.open .bar:nth-child(2) {
+  opacity: 0;
+}
+.hamburger-button.open .bar:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+.hamburger-button .bar {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}

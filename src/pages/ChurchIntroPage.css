@@ -67,6 +67,15 @@
   margin: 0 auto;
   display: flex;
   gap: 0;
+  flex-wrap: nowrap;        /* 줄바꿈 방지 */
+  overflow-x: auto;         /* 넘치면 가로 스크롤 */
+  -webkit-overflow-scrolling: touch; /* iOS 부드러운 스크롤 */
+  scrollbar-width: none;    /* 스크롤바 숨김 (Firefox) */
+}
+
+/* 스크롤바 숨김 (Chrome/Safari) */
+.intro-tabs-inner::-webkit-scrollbar {
+  display: none;
 }
 
 .intro-tabs .tab-item {
@@ -81,6 +90,8 @@
   transition: all 0.3s ease;
   cursor: pointer;
   font-family: 'Pretendard', sans-serif;
+  white-space: nowrap;  /* 텍스트 줄바꿈 방지 */
+  flex-shrink: 0;       /* 탭 너비 축소 방지 */
 }
 
 .intro-tabs .tab-item:hover {
