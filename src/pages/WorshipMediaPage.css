@@ -258,6 +258,12 @@
     padding: 30px 20px;
   }
 
+  /* 탭 모바일 패딩 - ChurchIntroPage와 동일하게 맞춤 */
+  .intro-tabs .tab-item {
+    padding: 20px 10px;
+    font-size: 13px;
+  }
+
   .media-content {
     grid-template-columns: 1fr;
   }
