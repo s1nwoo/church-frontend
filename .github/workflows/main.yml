@@ -27,12 +27,12 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          REACT_APP_API_URL: https://api.bhch.kr
+          REACT_APP_API_URL: https://api.bhbc.kr  # bhch.kr → bhbc.kr 변경
           CI: false
 
       # 5. S3 업로드
       - name: Deploy to S3
-        run: aws s3 sync build/ s3://bhch-frontend --delete
+        run: aws s3 sync build/ s3://bhbc-frontend --delete  # bhch-frontend → bhbc-frontend 변경
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
