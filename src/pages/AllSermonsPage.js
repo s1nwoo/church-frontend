@@ -126,22 +126,14 @@ export default function AllSermonsPage() {
           </ul>
         )}
 
-        {/* ─── 공동체영상 그리드 ─── */}
+        {/* ─── 공동체영상 탭: 준비중 안내 ─── */}
         {activeTab === 'community' && (
-          <div className="community-videos">
-            <div className="video-grid">
-              {/* 임시 비디오 카드 8개 */}
-              {[1, 2, 3, 4, 5, 6, 7, 8].map(num => (
-                <div key={num} className="video-card">
-                  <div className="video-thumbnail">
-                    <div className="thumbnail-placeholder">영상 {num}</div>
-                    <span className="video-duration">0:30</span>
-                  </div>
-                  <h3 className="video-title">공동체 영상 제목 {num}</h3>
-                  <p className="video-date">2025.01.{10 + num}</p>
-                </div>
-              ))}
-            </div>
+          <div className="community-notice">
+            <h2>공동체영상 콘텐츠는 준비중입니다.</h2>
+            <p>
+              유튜브 &gt; 재생목록 &gt; 공동체활동 영상에서 확인 할 수 있습니다.
+            </p>
+            <p>감사합니다.</p>
           </div>
         )}
       </div>
