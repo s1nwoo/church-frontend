@@ -60,7 +60,7 @@ export default function ChurchHistoryPage() {
 
           {/* 1987년 */}
           <div className="timeline-item">
-            <div className="timeline-year">1987</div>
+            <div className="timeline-year">1986</div>
             <div className="timeline-content">
               <p>3월 2일</p>
               <p>서석우 목사 군목 제대 후</p>
