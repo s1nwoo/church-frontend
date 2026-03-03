@@ -3,49 +3,49 @@
 
   <!-- 메인 페이지 -->
   <url>
-    <loc>https://bhch.kr/</loc>
+    <loc>https://bhbc.kr/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
   <!-- 교회소개 -->
   <url>
-    <loc>https://bhch.kr/church-intro</loc>
+    <loc>https://bhbc.kr/church-intro</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- 교회연혁 -->
   <url>
-    <loc>https://bhch.kr/church-history</loc>
+    <loc>https://bhbc.kr/church-history</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- 예배안내 -->
   <url>
-    <loc>https://bhch.kr/worship-info</loc>
+    <loc>https://bhbc.kr/worship-info</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <!-- 오시는길 -->
   <url>
-    <loc>https://bhch.kr/location</loc>
+    <loc>https://bhbc.kr/location</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <!-- 예배 미디어 전체 -->
   <url>
-    <loc>https://bhch.kr/worship-media/all</loc>
+    <loc>https://bhbc.kr/worship-media/all</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <!-- 소식나눔 -->
   <url>
-    <loc>https://bhch.kr/posts</loc>
+    <loc>https://bhbc.kr/posts</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
