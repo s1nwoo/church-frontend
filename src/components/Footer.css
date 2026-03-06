@@ -1,5 +1,6 @@
+/* src/components/Footer.css */
 .footer {
-  background-color: ##f6f7f9;
+  background-color: #f6f7f9;
   padding: 58px 0;
   width: 100%;
   font-size: 14px;
@@ -36,6 +37,30 @@
 
 .footer-bottom {
   text-align: right;
+}
+
+/* 방문자 카운터 */
+.footer-visitor {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: #888;
+}
+
+.visitor-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.visitor-item strong {
+  color: #7D4CFC;
+  font-weight: 600;
+}
+
+.visitor-divider {
+  color: #ccc;
 }
 
 .global-btn {
