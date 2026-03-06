@@ -11,26 +11,27 @@ const Footer = () => {
   useEffect(() => {
     const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
-    // 이미 이번 세션에서 카운트했는지 확인
-    // sessionStorage는 브라우저 탭을 닫으면 초기화됨
-    const alreadyCounted = sessionStorage.getItem('visitor_counted');
+    // 오늘 날짜 (예: "2026-03-07")
+    const today = new Date().toISOString().slice(0, 10);
+    // localStorage에 저장된 마지막 방문 날짜
+    const lastVisitDate = localStorage.getItem('visitor_date');
 
-    if (!alreadyCounted) {
-      // 이번 세션 첫 방문 → 카운트 증가 API 호출
+    if (lastVisitDate !== today) {
+      // 오늘 아직 방문 안 한 경우 → 카운트 증가 API 호출
       fetch(`${API_BASE}/api/visitor/count`, { method: 'POST' })
         .then(res => res.json())
         .then(data => {
           setTodayCount(data.today);
           setTotalCount(data.total);
-          // 세션에 방문 완료 표시 (브라우저 닫기 전까지 유지)
-          sessionStorage.setItem('visitor_counted', 'true');
+          // 오늘 날짜 저장 (자정이 지나면 다시 카운트됨)
+          localStorage.setItem('visitor_date', today);
         })
         .catch(() => {
           // API 실패 시 조회만 시도
           fetchCountOnly(API_BASE);
         });
     } else {
-      // 이미 카운트된 세션 → 증가 없이 현재 수치만 조회
+      // 오늘 이미 방문한 경우 → 증가 없이 현재 수치만 조회
       fetchCountOnly(API_BASE);
     }
   }, []);
