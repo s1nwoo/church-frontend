@@ -264,6 +264,24 @@
   color: #666;
 }
 
+/* 유튜브 바로가기 버튼 */
+.community-youtube-btn {
+  display: inline-block;
+  margin-top: 24px;
+  padding: 10px 24px;
+  background-color: #7D4CFC;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.community-youtube-btn:hover {
+  background-color: #FF6B9D;
+}
+
 /* ─── 반응형 (≤768px) ─── */
 @media screen and (max-width: 768px) {
   .intro-container {

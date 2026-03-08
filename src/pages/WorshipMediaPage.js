@@ -259,6 +259,15 @@ export default function WorshipMediaPage() {
               유튜브 &gt; 재생목록 &gt; 공동체활동 영상에서 확인 할 수 있습니다.
             </p>
             <p>감사합니다.</p>
+            {/* 유튜브 바로가기 버튼 */}
+            <a
+              href="https://www.youtube.com/@%EB%B0%A9%ED%99%94%EC%B9%A8%EB%A1%80%EA%B5%90%ED%9A%8C/videos"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="community-youtube-btn"
+            >
+              공동체영상 바로가기
+            </a>
           </div>
         )}
       </div>
