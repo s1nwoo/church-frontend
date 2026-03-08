@@ -11,8 +11,8 @@ const Footer = () => {
   useEffect(() => {
     const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
-    // 오늘 날짜 (예: "2026-03-07")
-    const today = new Date().toISOString().slice(0, 10);
+    // 오늘 날짜 KST 기준 (한국 자정에 초기화)
+    const today = new Date().toLocaleDateString('ko-KR', { timeZone: 'Asia/Seoul' }).replace(/\. /g, '-').replace('.', '');
     // localStorage에 저장된 마지막 방문 날짜
     const lastVisitDate = localStorage.getItem('visitor_date');
 
