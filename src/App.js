@@ -28,6 +28,7 @@ import PostsPage from './pages/PostsPage';
 import PostDetailPage from './pages/PostDetailPage'
 import MemberManagePage from './pages/admin/MemberManagePage'
 import ProfilePage from './pages/ProfilePage'; // ✅ 내 정보 페이지
+import CardSliderManagePage from './pages/admin/CardSliderManagePage';
 
 // 전체목록 페이지 컴포넌트
 import AllSermonsPage from './pages/AllSermonsPage';
@@ -67,6 +68,7 @@ function App() {
             <Route path="/admin/sermons" element={<div className="page-container"><SermonManagePage /></div>} />
             <Route path="/admin/posts" element={<div className="page-container"><PostManagePage /></div>} />
             <Route path="/admin/members" element={<div className="page-container"><MemberManagePage /></div>} />
+            <Route path="/admin/card-slider" element={<CardSliderManagePage />} />
             <Route path="/worship-info" element={<div className="page-container"><WorshipInfoPage /></div>} />
             <Route path="/church-intro" element={<div className="page-container"><ChurchIntroPage /></div>} />
             <Route path="/church-history" element={<div className="page-container"><ChurchHistoryPage /></div>} />

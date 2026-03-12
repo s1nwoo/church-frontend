@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AdminDashboardPage.css';
-import { FaUsers, FaChalkboardTeacher, FaNewspaper } from 'react-icons/fa';
+import { FaUsers, FaChalkboardTeacher, FaNewspaper, FaImages } from 'react-icons/fa';
 
 const AdminDashboardPage = () => {
   const navigate = useNavigate();
@@ -25,6 +25,12 @@ const AdminDashboardPage = () => {
       description: '공지사항과 성도소식을 등록하고 관리할 수 있습니다.',
       icon: <FaNewspaper size={32} />,
       path: '/admin/posts',
+    },
+    {
+      title: '카드 슬라이더 관리',
+      description: '메인 페이지 카드 슬라이더 이미지와 링크를 관리합니다.',
+      icon: <FaImages size={32} />,
+      path: '/admin/card-slider',
     },
   ];
 

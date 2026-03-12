@@ -6,109 +6,139 @@ import './CardSlider.css';
 import allowL from './images/allow_l.png';
 import allowR from './images/allow_r.png';
 
-import card1 from './images/card/card3.png';
-import card2 from './images/card/card2.png';
-import card3 from './images/card/card4.png';
-import card4 from './images/card/card1.png';
-import card5 from './images/card/card5.png';
-
-const ORIGINAL = [card1, card2, card3, card4, card5];
 const VISIBLE = 3;
 const WIDTH = 615;
 const GAP = 30;
 const DURATION = 500;
-const CONTAINER_WIDTH = VISIBLE * WIDTH + (VISIBLE - 1) * GAP;   // 3*615 + 2*30 = 1905
-const CENTER_OFFSET = (CONTAINER_WIDTH - WIDTH) / 2;              // (1905 - 615)/2 = 645
+const CONTAINER_WIDTH = VISIBLE * WIDTH + (VISIBLE - 1) * GAP; // 1905
+const CENTER_OFFSET = (CONTAINER_WIDTH - WIDTH) / 2;           // 645
+
+// 기본 이미지 폴백 (API 데이터 없을 때 사용)
+const FALLBACK_CARDS = [
+  { id: 1, imageUrl: '/images/card/card3.png', linkType: 'external', linkUrl: 'https://www.youtube.com/@%EB%B0%A9%ED%99%94%EC%B9%A8%EB%A1%80%EA%B5%90%ED%9A%8C', title: '유튜브 채널' },
+  { id: 2, imageUrl: '/images/card/card2.png', linkType: 'internal', linkUrl: '/church-intro', title: '교회 소개' },
+  { id: 3, imageUrl: '/images/card/card4.png', linkType: 'internal', linkUrl: '/location', title: '오시는 길' },
+  { id: 4, imageUrl: '/images/card/card1.png', linkType: 'none',     linkUrl: '',             title: '카드 4' },
+  { id: 5, imageUrl: '/images/card/card5.png', linkType: 'internal', linkUrl: '/worship-info', title: '예배 안내' },
+];
 
 const CardSlider = () => {
   const navigate = useNavigate();
-  const total = ORIGINAL.length;
-  // 원본을 세 번 반복해서 양 옆으로 무한 스크롤 효과
-  const extended = [...ORIGINAL, ...ORIGINAL, ...ORIGINAL];
 
-  const [idx, setIdx] = useState(total);
+  // API에서 받아온 카드 목록
+  const [cards, setCards] = useState([]);
+
+  // 슬라이더 상태
+  const [idx, setIdx] = useState(0);
   const [transOn, setTransOn] = useState(true);
   const wrapRef = useRef(null);
-  const touchStartX = useRef(null); /* 터치 시작 X 좌표 저장 */
+  const touchStartX = useRef(null);
 
-    useEffect(() => {
-      const w = wrapRef.current;
-      if (!w) return;
-
-      // 트랜지션 설정
-      w.style.transition = transOn
-        ? `transform ${DURATION}ms ease`
-        : 'none';
-
-      // 슬라이딩 거리 계산
-      let x;
-
-      if (window.innerWidth <= 768) {
-        // ★ 모바일(≤768px)일 때: 컨테이너 너비 + gap 만큼 이동
-        const container  = w.parentElement;       // .slides-container
-        const slideWidth = container.offsetWidth; // 모바일에선 100% 폭
-        const mobileGap  = 16;                    // CSS에서 설정한 gap 값
-        x = (slideWidth + mobileGap) * (idx - total);
-      } else {
-        // ★ PC(>768px)일 때: 기존 로직 유지
-        x = (WIDTH + GAP) * idx - CENTER_OFFSET;
+  /* ------------------------------------------------------------------
+   * API 로딩: 활성 카드 목록 가져오기
+   * ------------------------------------------------------------------ */
+  useEffect(() => {
+    const fetchCards = async () => {
+      try {
+        const res = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:8080'}/api/banner-cards`);
+        if (!res.ok) throw new Error('API 오류');
+        const data = await res.json();
+        // 데이터 없으면 폴백 사용
+        setCards(data.length > 0 ? data : FALLBACK_CARDS);
+      } catch (e) {
+        console.warn('카드 슬라이더 API 로딩 실패, 기본 이미지 사용', e);
+        setCards(FALLBACK_CARDS);
       }
+    };
+    fetchCards();
+  }, []);
 
-      w.style.transform = `translateX(-${x}px)`;
-    }, [idx, transOn, total]);
+  // 카드가 로딩되면 인덱스 초기화
+  const total = cards.length;
+  const extended = total > 0 ? [...cards, ...cards, ...cards] : [];
 
-  // 무한 루프 보정
+  useEffect(() => {
+    if (total > 0) setIdx(total);
+  }, [total]);
+
+  /* ------------------------------------------------------------------
+   * 슬라이드 위치 계산
+   * ------------------------------------------------------------------ */
+  useEffect(() => {
+    const w = wrapRef.current;
+    if (!w || total === 0) return;
+
+    w.style.transition = transOn ? `transform ${DURATION}ms ease` : 'none';
+
+    let x;
+    if (window.innerWidth <= 768) {
+      const container  = w.parentElement;
+      const slideWidth = container.offsetWidth;
+      const mobileGap  = 16;
+      x = (slideWidth + mobileGap) * (idx - total);
+    } else {
+      x = (WIDTH + GAP) * idx - CENTER_OFFSET;
+    }
+    w.style.transform = `translateX(-${x}px)`;
+  }, [idx, transOn, total]);
+
+  /* ------------------------------------------------------------------
+   * 무한 루프 보정
+   * ------------------------------------------------------------------ */
   const onEnd = () => {
-    if (idx >= total * 2) {
-      setTransOn(false);
-      setIdx(total);
-    }
-    if (idx < total) {
-      setTransOn(false);
-      setIdx(total + (idx % total));
-    }
+    if (idx >= total * 2) { setTransOn(false); setIdx(total); }
+    if (idx < total)      { setTransOn(false); setIdx(total + (idx % total)); }
   };
 
-  // 자동 재생 (선택사항)
+  /* ------------------------------------------------------------------
+   * 자동 재생
+   * ------------------------------------------------------------------ */
   useEffect(() => {
-    const play = () => {
+    if (total === 0) return;
+    const id = setInterval(() => {
       setIdx(i => i + 1);
       setTransOn(true);
-    };
-    const id = setInterval(play, 5000);
+    }, 5000);
     return () => clearInterval(id);
-  }, []);
+  }, [total]);
 
   const next = () => { setIdx(i => i + 1); setTransOn(true); };
   const prev = () => { setIdx(i => i - 1); setTransOn(true); };
 
-  /* 터치 시작: X 좌표 저장 */
-  const handleTouchStart = (e) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
-
-  /* 터치 끝: 이동 거리 50px 이상이면 슬라이드 전환 */
-  const handleTouchEnd = (e) => {
+  /* ------------------------------------------------------------------
+   * 터치 스와이프
+   * ------------------------------------------------------------------ */
+  const handleTouchStart = (e) => { touchStartX.current = e.touches[0].clientX; };
+  const handleTouchEnd   = (e) => {
     if (touchStartX.current === null) return;
     const diff = touchStartX.current - e.changedTouches[0].clientX;
-    if (diff > 50) next();       /* 왼쪽으로 스와이프 → 다음 */
-    else if (diff < -50) prev(); /* 오른쪽으로 스와이프 → 이전 */
+    if (diff > 50) next();
+    else if (diff < -50) prev();
     touchStartX.current = null;
   };
 
-  const handleClick = i => {
-    const cardNum = i % total;
-    if (cardNum === 0) {
-      window.open('https://www.youtube.com/@%EB%B0%A9%ED%99%94%EC%B9%A8%EB%A1%80%EA%B5%90%ED%9A%8C', '_blank');
-    } else if (cardNum === 1) {
-      navigate('/church-intro');
-    } else if (cardNum === 2) {
-      navigate('/location');
-    } else if (cardNum === 4) {
-      navigate('/worship-info');
+  /* ------------------------------------------------------------------
+   * 카드 클릭 처리
+   * ------------------------------------------------------------------ */
+  const handleClick = (card) => {
+    if (!card.linkType || card.linkType === 'none' || !card.linkUrl) return;
+    if (card.linkType === 'external') {
+      window.open(card.linkUrl, '_blank');
+    } else if (card.linkType === 'internal') {
+      navigate(card.linkUrl);
     }
   };
 
+  /* ------------------------------------------------------------------
+   * 로딩 중 표시
+   * ------------------------------------------------------------------ */
+  if (total === 0) {
+    return <div className="card-slider-loading">로딩 중...</div>;
+  }
+
+  /* ------------------------------------------------------------------
+   * 렌더링
+   * ------------------------------------------------------------------ */
   return (
     <div className="card-slider">
       <button className="arrow arrow-left" onClick={prev} aria-label="이전">
@@ -116,23 +146,30 @@ const CardSlider = () => {
       </button>
 
       <div
-          className="slides-container"
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        >
+        className="slides-container"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         <div
           ref={wrapRef}
           className="slides-wrapper"
           onTransitionEnd={onEnd}
         >
-          {extended.map((src, i) => (
+          {extended.map((card, i) => (
             <div
               key={i}
               className="slide"
-              style={{ cursor: 'pointer' }}
-              onClick={() => handleClick(i)}
+              style={{ cursor: card.linkType !== 'none' ? 'pointer' : 'default' }}
+              onClick={() => handleClick(card)}
             >
-              <img src={src} alt={`card-${(i % total) + 1}`} />
+              <img
+                src={
+                  /* 외부 URL이면 그대로, 내부 경로면 public 폴더 기준 */
+                  card.imageUrl.startsWith('http') ? card.imageUrl : `${process.env.PUBLIC_URL}/${card.imageUrl}`
+                }
+                alt={card.title || `card-${(i % total) + 1}`}
+                onError={(e) => { e.target.style.background = '#eee'; }} // 이미지 깨질 때 회색
+              />
             </div>
           ))}
         </div>
@@ -143,10 +180,10 @@ const CardSlider = () => {
       </button>
 
       <div className="dots">
-        {ORIGINAL.map((_, i) => (
+        {cards.map((_, i) => (
           <span
             key={i}
-            className={`dot ${(idx - total) % total === i ? 'active' : ''}`}
+            className={`dot ${(idx - total + total * 10) % total === i ? 'active' : ''}`}
             onClick={() => { setIdx(total + i); setTransOn(true); }}
           />
         ))}
