@@ -6,21 +6,49 @@ import './CardSlider.css';
 import allowL from './images/allow_l.png';
 import allowR from './images/allow_r.png';
 
+// 카드 이미지 import (webpack 번들링 → S3 배포 시에도 정상 동작)
+import card1 from './images/card/card1.png';
+import card2 from './images/card/card2.png';
+import card3 from './images/card/card3.png';
+import card4 from './images/card/card4.png';
+import card5 from './images/card/card5.png';
+
+// 키: DB에 저장된 imageUrl 값 → 값: 실제 번들된 이미지
+// DB에 새 이미지를 추가할 때는 여기에도 추가 후 재배포 필요
+const LOCAL_IMAGE_MAP = {
+  'images/card/card1.png': card1,
+  'images/card/card2.png': card2,
+  'images/card/card3.png': card3,
+  'images/card/card4.png': card4,
+  'images/card/card5.png': card5,
+};
+
+// API 실패 시 폴백 (기존 카드 5장 그대로 유지)
+const FALLBACK_CARDS = [
+  { id: 1, imageUrl: 'images/card/card3.png', linkType: 'external', linkUrl: 'https://www.youtube.com/@%EB%B0%A9%ED%99%94%EC%B9%A8%EB%A1%80%EA%B5%90%ED%9A%8C', title: '유튜브 채널' },
+  { id: 2, imageUrl: 'images/card/card2.png', linkType: 'internal', linkUrl: '/church-intro', title: '교회 소개' },
+  { id: 3, imageUrl: 'images/card/card4.png', linkType: 'internal', linkUrl: '/location',     title: '오시는 길' },
+  { id: 4, imageUrl: 'images/card/card1.png', linkType: 'none',     linkUrl: '',              title: '카드 4' },
+  { id: 5, imageUrl: 'images/card/card5.png', linkType: 'internal', linkUrl: '/worship-info', title: '예배 안내' },
+];
+
+/**
+ * imageUrl 값을 실제 표시 가능한 src로 변환
+ * - DB에 저장된 로컬 키 → import된 번들 이미지
+ * - 외부 URL (https://...) → 그대로 사용
+ */
+const resolveImageSrc = (imageUrl) => {
+  if (!imageUrl) return '';
+  if (imageUrl.startsWith('http')) return imageUrl; // 외부 URL
+  return LOCAL_IMAGE_MAP[imageUrl] || ''; // 로컬 키 → 번들 이미지
+};
+
 const VISIBLE = 3;
 const WIDTH = 615;
 const GAP = 30;
 const DURATION = 500;
 const CONTAINER_WIDTH = VISIBLE * WIDTH + (VISIBLE - 1) * GAP; // 1905
 const CENTER_OFFSET = (CONTAINER_WIDTH - WIDTH) / 2;           // 645
-
-// 기본 이미지 폴백 (API 데이터 없을 때 사용)
-const FALLBACK_CARDS = [
-  { id: 1, imageUrl: '/images/card/card3.png', linkType: 'external', linkUrl: 'https://www.youtube.com/@%EB%B0%A9%ED%99%94%EC%B9%A8%EB%A1%80%EA%B5%90%ED%9A%8C', title: '유튜브 채널' },
-  { id: 2, imageUrl: '/images/card/card2.png', linkType: 'internal', linkUrl: '/church-intro', title: '교회 소개' },
-  { id: 3, imageUrl: '/images/card/card4.png', linkType: 'internal', linkUrl: '/location', title: '오시는 길' },
-  { id: 4, imageUrl: '/images/card/card1.png', linkType: 'none',     linkUrl: '',             title: '카드 4' },
-  { id: 5, imageUrl: '/images/card/card5.png', linkType: 'internal', linkUrl: '/worship-info', title: '예배 안내' },
-];
 
 const CardSlider = () => {
   const navigate = useNavigate();
@@ -163,12 +191,9 @@ const CardSlider = () => {
               onClick={() => handleClick(card)}
             >
               <img
-                src={
-                  /* 외부 URL이면 그대로, 내부 경로면 public 폴더 기준 */
-                  card.imageUrl.startsWith('http') ? card.imageUrl : `${process.env.PUBLIC_URL}/${card.imageUrl}`
-                }
+                src={resolveImageSrc(card.imageUrl)}
                 alt={card.title || `card-${(i % total) + 1}`}
-                onError={(e) => { e.target.style.background = '#eee'; }} // 이미지 깨질 때 회색
+                onError={(e) => { e.target.style.background = '#eee'; }}
               />
             </div>
           ))}
