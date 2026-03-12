@@ -5,23 +5,8 @@ import './CardSlider.css';
 
 import allowL from './images/allow_l.png';
 import allowR from './images/allow_r.png';
-
-// 카드 이미지 import (webpack 번들링 → S3 배포 시에도 정상 동작)
-import card1 from './images/card/card1.png';
-import card2 from './images/card/card2.png';
-import card3 from './images/card/card3.png';
-import card4 from './images/card/card4.png';
-import card5 from './images/card/card5.png';
-
-// 키: DB에 저장된 imageUrl 값 → 값: 실제 번들된 이미지
-// DB에 새 이미지를 추가할 때는 여기에도 추가 후 재배포 필요
-const LOCAL_IMAGE_MAP = {
-  'images/card/card1.png': card1,
-  'images/card/card2.png': card2,
-  'images/card/card3.png': card3,
-  'images/card/card4.png': card4,
-  'images/card/card5.png': card5,
-};
+// 이미지 맵 유틸 (관리 페이지와 공유)
+import { resolveImageSrc } from '../utils/cardImageMap';
 
 // API 실패 시 폴백 (기존 카드 5장 그대로 유지)
 const FALLBACK_CARDS = [
@@ -31,17 +16,6 @@ const FALLBACK_CARDS = [
   { id: 4, imageUrl: 'images/card/card1.png', linkType: 'none',     linkUrl: '',              title: '카드 4' },
   { id: 5, imageUrl: 'images/card/card5.png', linkType: 'internal', linkUrl: '/worship-info', title: '예배 안내' },
 ];
-
-/**
- * imageUrl 값을 실제 표시 가능한 src로 변환
- * - DB에 저장된 로컬 키 → import된 번들 이미지
- * - 외부 URL (https://...) → 그대로 사용
- */
-const resolveImageSrc = (imageUrl) => {
-  if (!imageUrl) return '';
-  if (imageUrl.startsWith('http')) return imageUrl; // 외부 URL
-  return LOCAL_IMAGE_MAP[imageUrl] || ''; // 로컬 키 → 번들 이미지
-};
 
 const VISIBLE = 3;
 const WIDTH = 615;

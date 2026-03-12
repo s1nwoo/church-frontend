@@ -319,3 +319,122 @@
   .csm-field-row { flex-direction: column; gap: 16px; }
   .csm-field-small { flex: unset; }
 }
+
+/* ── 이미지 업로드 UI ── */
+.csm-upload-area {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 미리보기 클릭 영역 */
+.csm-upload-preview {
+  width: 100%;
+  max-width: 400px;
+  height: 200px;
+  border: 2px dashed #d0c4f7;
+  border-radius: 12px;
+  background: #faf8ff;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.2s, background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.csm-upload-preview:hover {
+  border-color: #7D4CFC;
+  background: #f3eeff;
+}
+.csm-upload-preview.has-image {
+  border-style: solid;
+  border-color: #7D4CFC;
+  background: #000;
+}
+.csm-upload-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 플레이스홀더 */
+.csm-upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #999;
+  font-size: 14px;
+  pointer-events: none;
+}
+.csm-upload-icon {
+  font-size: 36px;
+  line-height: 1;
+}
+
+/* 버튼 + 파일명 행 */
+.csm-upload-controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.csm-btn-file {
+  background: #f0ebff;
+  color: #7D4CFC;
+  border: 1.5px solid #d0c4f7;
+  padding: 9px 18px;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.csm-btn-file:hover { background: #e3d5ff; border-color: #7D4CFC; }
+
+.csm-btn-upload {
+  background: #7D4CFC;
+  color: #fff;
+  border: none;
+  padding: 9px 18px;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+.csm-btn-upload:hover:not(:disabled) { background: #FF6B9D; }
+.csm-btn-upload:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.csm-filename {
+  font-size: 13px;
+  color: #555;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.csm-upload-done {
+  font-size: 13px;
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.csm-upload-notice {
+  font-size: 13px;
+  color: #e65100;
+  margin: 0;
+  padding: 8px 12px;
+  background: #fff3e0;
+  border-radius: 6px;
+  border-left: 3px solid #ff9800;
+}
+
+@media (max-width: 768px) {
+  .csm-upload-preview { max-width: 100%; height: 160px; }
+  .csm-upload-controls { gap: 8px; }
+  .csm-filename { max-width: 130px; }
+}
