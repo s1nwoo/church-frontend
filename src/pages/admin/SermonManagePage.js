@@ -68,7 +68,7 @@ const BIBLE_ABBREVIATIONS = [
   ]},
 ];
 
-// 필드 설정: content를 메인 제목으로, title은 자동 생성
+// 필드 설정: content를 메인 제목으로 사용 (title 제거)
 const fieldConfig = [
   { key: 'content',      label: '말씀 제목',    type: 'text',   editable: true, required: true },
   { key: 'preacher',     label: '설교자',       type: 'preacher-select', editable: true, required: true },
@@ -130,11 +130,10 @@ const SermonManagePage = () => {
 
   const openCreateModal = () => {
     setEditingId(null);
-    // 초기화: title은 비워두고, content를 메인으로 사용
+    // title 제거 - content를 메인 제목으로 사용
     setForm({
-      title: '',
-      content: '',  // 말씀 제목
-      preacher: '김성휘 목사님',  // 기본값
+      content: '',
+      preacher: '김성휘 목사님',
       sermonDate: '',
       bibleText: '',
       youtubeUrl: '',
@@ -159,12 +158,10 @@ const SermonManagePage = () => {
     );
 
     if (!isPresetPreacher && preacherValue) {
-      // 직접입력된 설교자인 경우
       setIsCustomPreacher(true);
       setCustomPreacherValue(preacherValue);
       setForm(prev => ({ ...prev, preacher: preacherValue }));
     } else {
-      // 미리 정의된 설교자인 경우
       setIsCustomPreacher(false);
       setCustomPreacherValue('');
     }
@@ -219,11 +216,8 @@ const SermonManagePage = () => {
     }
 
     try {
-      // title을 content(말씀 제목)와 동일하게 설정
-      const submitData = {
-        ...form,
-        title: form.content  // title = content (말씀 제목)
-      };
+      // title 제거 - content만 전송
+      const submitData = { ...form };
 
       if (editingId) {
         await axios.put(`/api/sermons/${editingId}`, submitData);
@@ -273,6 +267,7 @@ const SermonManagePage = () => {
         <tbody>
           {sermons.map(s => (
             <tr key={s.id} className={s.deleted ? 'deleted-row' : ''}>
+              {/* title → content 변경 */}
               <td>{s.content}</td>
               <td>{s.preacher}</td>
               <td>{s.sermonDate}</td>
@@ -293,9 +288,6 @@ const SermonManagePage = () => {
             <h3>{editingId ? '설교 수정' : '설교 등록'}</h3>
 
             {fieldConfig.map(({ key, label, type, editable, options, required }) => {
-              // id, title 필드는 모달에 표시하지 않음 (title은 자동 생성)
-              if (key === 'id' || key === 'title') return null;
-
               // 설교자 필드: 특별 처리
               if (key === 'preacher') {
                 return (

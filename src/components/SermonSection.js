@@ -14,7 +14,7 @@ import iconImage6 from './images/6.png';
 export default function SermonSection() {
   const navigate = useNavigate();
   const [sermons, setSermons] = useState([]);
-  const [thumbnail, setThumbnail] = useState(''); // ✅ 유튜브 썸네일
+  const [thumbnail, setThumbnail] = useState(''); // 유튜브 썸네일
 
   // 설교 데이터 가져오기
   useEffect(() => {
@@ -25,10 +25,10 @@ export default function SermonSection() {
       const sortedSermons = res.data.content.slice().sort((a, b) => b.id - a.id);
       setSermons(sortedSermons);
 
-      // ✅ 최신 설교의 유튜브 썸네일 추출
+      // 최신 설교의 유튜브 썸네일 추출
       if (sortedSermons.length > 0) {
         const latestSermon = sortedSermons[0];
-        const videoId = extractYoutubeId(latestSermon.youtubeUrl); // ✅ videoUrl → youtubeUrl
+        const videoId = extractYoutubeId(latestSermon.youtubeUrl);
         if (videoId) {
           setThumbnail(`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`);
         }
@@ -37,7 +37,7 @@ export default function SermonSection() {
     .catch(console.error);
   }, []);
 
-  // ✅ 유튜브 비디오 ID 추출 함수
+  // 유튜브 비디오 ID 추출 함수
   const extractYoutubeId = (url) => {
     if (!url) return null;
     const regex = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
@@ -54,7 +54,7 @@ export default function SermonSection() {
   };
 
   // 유튜브 채널 URL
-  const youtubeChannelUrl = 'https://www.youtube.com/@%EB%B0%A9%ED%99%94%EC%B9%A8%EB%A1%80%EA%B5%90%ED%9A%8C';
+  const youtubeChannelUrl = 'https://www.youtube.com/@%EB%B0%A9%ED%99%94%EC%B9%A8%EB%A1%00%EA%B5%90%ED%9A%8C';
 
   // 내부 라우트
   const paths = [
@@ -93,7 +93,8 @@ export default function SermonSection() {
               </div>
               <div className="feature-meta">
                 <div className="meta-info">
-                  <h4 className="meta-title">{latest.title}</h4>
+                  {/* title → content 변경 */}
+                  <h4 className="meta-title">{latest.content}</h4>
                   {latest.bibleText && (
                     <p className="meta-subtitle">{latest.bibleText}</p>
                   )}
