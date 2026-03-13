@@ -54,7 +54,7 @@ export default function SermonSection() {
   };
 
   // 유튜브 채널 URL
-  const youtubeChannelUrl = 'https://www.youtube.com/@%EB%B0%A9%ED%99%94%EC%B9%A8%EB%A1%00%EA%B5%90%ED%9A%8C';
+  const youtubeChannelUrl = 'https://www.youtube.com/@%EB%B0%A9%ED%99%94%EC%B9%A8%EB%A1%80%EA%B5%90%ED%9A%8C';
 
   // 내부 라우트
   const paths = [
