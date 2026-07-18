@@ -84,6 +84,59 @@
   opacity: 0.7;
 }
 
+/* ===== 페이지네이션 ===== */
+.sermon-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 20px;
+}
+
+.sermon-pagination .page-btn {
+  min-width: 36px;
+  padding: 6px 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  color: #333;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.sermon-pagination .page-btn:hover:not(:disabled) {
+  border-color: #7D4CFC;
+  color: #7D4CFC;
+}
+
+.sermon-pagination .page-btn.active {
+  background-color: #7D4CFC;
+  border-color: #7D4CFC;
+  color: #fff;
+  font-weight: 700;
+}
+
+.sermon-pagination .page-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.sermon-pagination .page-info {
+  margin-left: 10px;
+  font-size: 13px;
+  color: #888;
+}
+
+@media screen and (max-width: 768px) {
+  .sermon-pagination .page-info {
+    width: 100%;
+    margin-left: 0;
+    text-align: center;
+  }
+}
+
 /* ===== 모달 오버레이 ===== */
 .modal-overlay {
   position: fixed;

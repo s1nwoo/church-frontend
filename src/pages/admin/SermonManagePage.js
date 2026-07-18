@@ -87,12 +87,19 @@ const fieldConfig = [
   { key: 'deletedDate',  label: '삭제날짜',     type: 'text',   editable: false },
 ];
 
+const PAGE_SIZE = 10; // 한 페이지에 보여줄 설교 수
+
 const SermonManagePage = () => {
   const [sermons, setSermons] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState({});
   const [search, setSearch] = useState('');
+
+  // 페이지네이션 상태
+  const [page, setPage] = useState(0);           // 현재 페이지(0-based)
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalElements, setTotalElements] = useState(0);
 
   // 설교자 직접입력 모드 상태
   const [isCustomPreacher, setIsCustomPreacher] = useState(false);
@@ -114,18 +121,30 @@ const SermonManagePage = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showBibleTooltip]);
 
-  const fetchSermons = useCallback(async () => {
+  const fetchSermons = useCallback(async (targetPage = 0) => {
     try {
-      const res = await axios.get(`/api/sermons?keyword=${search}&includeDeleted=true`);
+      const res = await axios.get('/api/sermons', {
+        params: {
+          keyword: search,
+          page: targetPage,
+          size: PAGE_SIZE,
+          includeDeleted: true,
+        },
+      });
       setSermons(res.data.content || []);
+      setTotalPages(res.data.totalPages || 0);
+      setTotalElements(res.data.totalElements || 0);
+      // 서버가 응답한 실제 페이지 번호로 동기화 (범위를 벗어난 요청 대비)
+      setPage(res.data.number ?? targetPage);
     } catch (err) {
       console.error(err);
       alert('목록 조회 중 오류 발생');
     }
   }, [search]);
 
+  // 검색어 변경 시 첫 페이지부터 다시 조회
   useEffect(() => {
-    fetchSermons();
+    fetchSermons(0);
   }, [fetchSermons]);
 
   const openCreateModal = () => {
@@ -221,11 +240,13 @@ const SermonManagePage = () => {
 
       if (editingId) {
         await axios.put(`/api/sermons/${editingId}`, submitData);
+        closeModal();
+        fetchSermons(page);      // 수정: 현재 페이지 유지
       } else {
         await axios.post('/api/sermons', submitData);
+        closeModal();
+        fetchSermons(0);         // 등록: 최신 항목이 보이는 첫 페이지로
       }
-      closeModal();
-      fetchSermons();
     } catch (err) {
       console.error(err);
       alert(err.response?.data?.message || '저장 중 오류 발생');
@@ -236,7 +257,7 @@ const SermonManagePage = () => {
     if (!window.confirm('정말 삭제하시겠습니까?')) return;
     try {
       await axios.delete(`/api/sermons/${id}`);
-      fetchSermons();
+      fetchSermons(page);   // 소프트 삭제라 목록에 남음 → 현재 페이지 유지
     } catch {
       alert('삭제 중 오류 발생');
     }
@@ -253,7 +274,7 @@ const SermonManagePage = () => {
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
-        <button onClick={fetchSermons}>검색</button>
+        <button onClick={() => fetchSermons(0)}>검색</button>
         <button onClick={openCreateModal} className="create-btn">등록</button>
       </div>
 
@@ -281,6 +302,56 @@ const SermonManagePage = () => {
           ))}
         </tbody>
       </table>
+
+      {/* ─── 페이지네이션 ─── */}
+      {totalPages > 1 && (() => {
+        const WINDOW = 5;
+        let start = Math.max(0, page - Math.floor(WINDOW / 2));
+        let end = Math.min(totalPages, start + WINDOW);
+        start = Math.max(0, end - WINDOW);
+        const pageNumbers = [];
+        for (let p = start; p < end; p++) pageNumbers.push(p);
+
+        return (
+          <div className="sermon-pagination">
+            <button
+              className="page-btn"
+              onClick={() => fetchSermons(0)}
+              disabled={page === 0}
+            >«</button>
+            <button
+              className="page-btn"
+              onClick={() => fetchSermons(page - 1)}
+              disabled={page === 0}
+            >이전</button>
+
+            {pageNumbers.map(p => (
+              <button
+                key={p}
+                className={`page-btn${p === page ? ' active' : ''}`}
+                onClick={() => fetchSermons(p)}
+              >
+                {p + 1}
+              </button>
+            ))}
+
+            <button
+              className="page-btn"
+              onClick={() => fetchSermons(page + 1)}
+              disabled={page >= totalPages - 1}
+            >다음</button>
+            <button
+              className="page-btn"
+              onClick={() => fetchSermons(totalPages - 1)}
+              disabled={page >= totalPages - 1}
+            >»</button>
+
+            <span className="page-info">
+              {page + 1} / {totalPages} 페이지 (총 {totalElements}건)
+            </span>
+          </div>
+        );
+      })()}
 
       {modalOpen && (
         <div className="modal-overlay">
