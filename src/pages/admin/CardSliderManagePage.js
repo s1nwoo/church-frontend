@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CardSliderManagePage.css';
-import { resolveImageSrc } from '../../utils/cardImageMap';
+import { resolveImageSrc, handleImageError, handleImageLoad } from '../../utils/cardImageMap';
 
 const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
@@ -334,7 +334,9 @@ const CardSliderManagePage = () => {
                     <td className="csm-td-order">{card.sortOrder}</td>
                     <td className="csm-td-thumb">
                       <img src={resolveImageSrc(card.imageUrl)} alt={card.title} className="csm-thumb"
-                        onError={(e) => { e.target.style.background = '#eee'; e.target.src = ''; }} />
+                        loading="lazy"
+                        onError={(e) => handleImageError(e, card.imageUrl)}
+                        onLoad={handleImageLoad} />
                     </td>
                     <td className="csm-td-title">{card.title}</td>
                     <td className="csm-td-link">

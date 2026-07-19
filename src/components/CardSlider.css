@@ -60,6 +60,12 @@
   object-fit: cover;
   border-radius: 20px;
 }
+/* 이미지 로드 최종 실패 시 placeholder (깨진 아이콘/alt 텍스트 숨김) */
+.slide img.img-load-error {
+  background: #eee;
+  color: transparent;
+  font-size: 0;
+}
 
 .dots {
   display: flex;

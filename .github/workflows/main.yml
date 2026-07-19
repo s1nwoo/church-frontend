@@ -31,16 +31,23 @@ jobs:
           CI: false
 
       # 5. S3 업로드
+      #    --exclude "uploads/*" : 관리자가 업로드한 카드 이미지(uploads/cards/...)를
+      #    프론트 배포가 건드리지 않도록 제외. (--delete가 업로드 이미지를 지우는 사고 방지)
       - name: Deploy to S3
-        run: aws s3 sync build/ s3://bhbc-frontend --delete  # bhch-frontend → bhbc-frontend 변경
+        run: aws s3 sync build/ s3://bhbc-frontend --delete --exclude "uploads/*"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ap-northeast-2
 
       # 6. CloudFront 캐시 무효화
+      #    앱 셸/정적 자산만 무효화. "/uploads/*"(업로드 이미지)는 무효화하지 않아
+      #    배포 직후 콜드 미스로 이미지가 잠깐 깨져 보이는 현상을 방지.
       - name: Invalidate CloudFront
-        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
+        run: >
+          aws cloudfront create-invalidation
+          --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
+          --paths "/" "/index.html" "/asset-manifest.json" "/manifest.json" "/static/*"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

@@ -6,7 +6,7 @@ import './CardSlider.css';
 import allowL from './images/allow_l.png';
 import allowR from './images/allow_r.png';
 // 이미지 맵 유틸 (관리 페이지와 공유)
-import { resolveImageSrc } from '../utils/cardImageMap';
+import { resolveImageSrc, handleImageError, handleImageLoad } from '../utils/cardImageMap';
 
 // API 실패 시 폴백 (기존 카드 5장 그대로 유지)
 const FALLBACK_CARDS = [
@@ -167,7 +167,8 @@ const CardSlider = () => {
               <img
                 src={resolveImageSrc(card.imageUrl)}
                 alt={card.title || `card-${(i % total) + 1}`}
-                onError={(e) => { e.target.style.background = '#eee'; }}
+                onError={(e) => handleImageError(e, card.imageUrl)}
+                onLoad={handleImageLoad}
               />
             </div>
           ))}
