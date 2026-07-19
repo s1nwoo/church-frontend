@@ -174,9 +174,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
   cursor: pointer;
-  /* ✅ 좌우 마진을 음수로 주면 아이콘들이 더 가까워집니다 */
-  margin: 0 -8px;
+  background: transparent;          /* ✅ 카드 배경 투명(단색 없음) */
+  padding: 12px 8px;
+  border-radius: 12px;
+  transition: transform .15s ease, background .15s ease;
+}
+/* 마우스 오버 시 살짝 강조(배경은 투명 유지, 아주 옅은 하이라이트만) */
+.emoji-button:hover {
+  transform: translateY(-3px);
+  background: rgba(125, 76, 252, 0.06);
 }
 
 .emoji-button .emoji {
@@ -184,15 +192,20 @@
   margin-bottom: 4px;
 }
 .emoji-button .label {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
   color: #333;
   text-align: center;
+  margin-top: 8px;
+  white-space: nowrap;
 }
 
-/* ✅ 아이콘 이미지에 좌우 음수 마진 적용 */
+/* ✅ 글씨를 뗀 아이콘: 권장 표시 크기 80px 정사각(반응형 clamp) */
 .emoji-button .icon-image {
-  margin: 0 -35px;
+  width: clamp(64px, 6vw, 80px);
+  height: clamp(64px, 6vw, 80px);
+  object-fit: contain;
+  margin: 0;
 }
 
 /* ───────────────────────────────────────────────────────── */
@@ -252,14 +265,21 @@
 
   .emoji-button {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
     min-width: 0;
+    padding: 8px 4px;
   }
 
   .emoji-button .icon-image {
-    width: 82px;
-    height: auto;
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+  }
+  .emoji-button .label {
+    font-size: 13px;
+    margin-top: 6px;
   }
 }
 

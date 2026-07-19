@@ -10,7 +10,7 @@ html, body {
 }
 
 html {
-  font-family: 'Pretendard';
+  font-family: 'A2z', 'Pretendard';
   font-weight: 400; /* Medium */
   font-variation-settings: 'wght' 400; /* 💡 브라우저 호환성 보완 */
   font-size: 22px; /* 필요에 따라 조절 가능 */

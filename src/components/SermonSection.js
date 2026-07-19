@@ -4,12 +4,13 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './SermonSection.css';
 
-import iconImage  from './images/1.png';
-import iconImage2 from './images/2.png';
-import iconImage3 from './images/3.png';
-import iconImage4 from './images/4.png';
-import iconImage5 from './images/5.png';
-import iconImage6 from './images/6.png';
+// 글씨 제거·투명 배경 처리된 아이콘 (텍스트는 아래에서 실제 글자로 렌더링)
+import iconChurchIntro from './images/card-icons/church-intro.png';
+import iconLocation    from './images/card-icons/location.png';
+import iconWorshipInfo from './images/card-icons/worship-info.png';
+import iconNews        from './images/card-icons/news.png';
+import iconHistory     from './images/card-icons/history.png';
+import iconYoutube     from './images/card-icons/youtube.png';
 
 export default function SermonSection() {
   const navigate = useNavigate();
@@ -66,7 +67,10 @@ export default function SermonSection() {
     '/youtube'
   ];
 
-  const icons = [iconImage, iconImage2, iconImage3, iconImage4, iconImage5, iconImage6];
+  const icons = [iconChurchIntro, iconLocation, iconWorshipInfo, iconNews, iconHistory, iconYoutube];
+
+  // 아이콘 아래에 표시할 실제 텍스트 (에이투지체 적용)
+  const labels = ['교회소개', '오시는길', '예배안내', '교회소식', '교회연혁', '유튜브채널'];
 
   return (
     <section className="sermon-section">
@@ -143,7 +147,8 @@ export default function SermonSection() {
                   }
                 }}
               >
-                <img src={icon} className="icon-image" alt="" />
+                <img src={icon} className="icon-image" alt={labels[idx]} />
+                <span className="label">{labels[idx]}</span>
               </div>
             ))}
           </div>

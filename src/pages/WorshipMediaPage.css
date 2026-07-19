@@ -30,7 +30,7 @@
   border-bottom: 3px solid transparent;
   transition: all 0.3s ease;
   cursor: pointer;
-  font-family: 'Pretendard', sans-serif;
+  font-family: 'A2z', 'Pretendard', sans-serif;
 }
 
 .intro-tabs .tab-item:hover {

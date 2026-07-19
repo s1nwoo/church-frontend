@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import './fonts/a2z.css'; // 에이투지체 폰트 정의(정의만, 적용은 컴포넌트 CSS에서)
 import App from './App';
 import axios from 'axios';
 
