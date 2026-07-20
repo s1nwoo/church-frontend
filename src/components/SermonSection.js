@@ -123,7 +123,7 @@ export default function SermonSection() {
                 "하나님이 찾으시는 교회"
               </p>
 
-              <p style={{ fontSize: '20px', margin: '6px 0', fontWeight: 900 }}>
+              <p className="church-name-line" style={{ margin: '6px 0', fontWeight: 900 }}>
                 <span className="hl-mid">기독교한국침례회</span> 방화침례교회입니다
               </p>
 

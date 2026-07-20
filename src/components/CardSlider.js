@@ -35,6 +35,10 @@ const CardSlider = () => {
   const [transOn, setTransOn] = useState(true);
   const wrapRef = useRef(null);
   const touchStartX = useRef(null);
+  // 애니메이션 진행 중 잠금: 트랜지션이 끝나기 전 중복 이동을 막아
+  // 복제본 범위를 넘어서며 생기는 '뚝뚝 끊김/되돌아옴'을 방지
+  const animatingRef = useRef(false);
+  const idxRef = useRef(0); // 타이머 콜백에서 최신 idx 참조용
 
   /* ------------------------------------------------------------------
    * API 로딩: 활성 카드 목록 가져오기
@@ -85,11 +89,26 @@ const CardSlider = () => {
   }, [idx, transOn, total]);
 
   /* ------------------------------------------------------------------
-   * 무한 루프 보정
+   * 한 칸 이동 + 무한 루프 보정 (모두 타이머 기반)
+   * transitionend 이벤트가 모바일에서 불안정하게 누락되면 잠금 해제·루프 보정이
+   * 안 되어 idx가 복제본 범위를 벗어나며 화면이 끊기거나 되돌아온다.
+   * → 애니메이션 시간(DURATION) 뒤 타이머로 확실히 처리한다.
    * ------------------------------------------------------------------ */
-  const onEnd = () => {
-    if (idx >= total * 2) { setTransOn(false); setIdx(total); }
-    if (idx < total)      { setTransOn(false); setIdx(total + (idx % total)); }
+  // 최신 idx를 타이머 콜백에서 참조하기 위한 ref (stale closure 방지)
+  useEffect(() => { idxRef.current = idx; }, [idx]);
+
+  const step = (dir) => {
+    if (animatingRef.current) return;      // 애니메이션 중 중복 이동 무시(빠른 연타 방지)
+    animatingRef.current = true;
+    setTransOn(true);
+    setIdx(i => i + dir);
+    setTimeout(() => {
+      animatingRef.current = false;        // 다음 이동 허용
+      // 애니메이션 완료 후, 안전 범위[total, total*2)를 벗어났으면 순간이동으로 보정
+      const cur = idxRef.current;
+      if (cur >= total * 2)  { setTransOn(false); setIdx(cur - total); }
+      else if (cur < total)  { setTransOn(false); setIdx(cur + total); }
+    }, DURATION);
   };
 
   /* ------------------------------------------------------------------
@@ -97,15 +116,14 @@ const CardSlider = () => {
    * ------------------------------------------------------------------ */
   useEffect(() => {
     if (total === 0) return;
-    const id = setInterval(() => {
-      setIdx(i => i + 1);
-      setTransOn(true);
-    }, 5000);
+    const id = setInterval(() => { step(1); }, 5000); // 잠금 로직 공유(step)
     return () => clearInterval(id);
+    // step은 ref/setter만 사용하므로 total만 의존해도 안전(매 렌더 인터벌 재생성 방지)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [total]);
 
-  const next = () => { setIdx(i => i + 1); setTransOn(true); };
-  const prev = () => { setIdx(i => i - 1); setTransOn(true); };
+  const next = () => step(1);
+  const prev = () => step(-1);
 
   /* ------------------------------------------------------------------
    * 터치 스와이프
@@ -155,7 +173,6 @@ const CardSlider = () => {
         <div
           ref={wrapRef}
           className="slides-wrapper"
-          onTransitionEnd={onEnd}
         >
           {extended.map((card, i) => (
             <div
