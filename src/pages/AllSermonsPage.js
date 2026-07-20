@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import topBanner5 from '../components/images/top_banner5.png';
-import topBanner6 from '../components/images/top_banner6.png';
+import bannerImg5 from '../components/images/top_banner_img5.png'; /* 주일예배 배너 우측 일러스트 */
+import bannerImg6 from '../components/images/top_banner_img6.png'; /* 공동체영상 배너 우측 일러스트 */
 import './AllSermonsPage.css';
 import './ChurchIntroPage.css';
 
@@ -42,17 +42,19 @@ export default function AllSermonsPage() {
     .catch(console.error);
   }, [activeTab]);
 
-  // 탭에 따른 배너 설정
+  // 탭에 따른 배너 설정 (예배미디어 첫 진입 배너와 동일: 배경색 + 우측 일러스트)
   const bannerConfig = {
     sunday: {
-      image: topBanner5,
+      decoImg: bannerImg5,
+      bgClass: 'banner-worship-sunday',
       title: '주일예배',
       subtitle: '방화침례교회 설교 영상을 시청하세요\n하나님의 말씀으로 은혜받는 시간'
     },
     community: {
-      image: topBanner6,
+      decoImg: bannerImg6,
+      bgClass: 'banner-worship-community',
       title: '공동체 영상',
-      subtitle: '공동체 안에서 역사하신 하나님의 은혜를 나눕니다\n교제의 기쁨과 감사의 순간'
+      subtitle: '함께 역사하신 하나님의 은혜를 나눕니다\n교제의 기쁨과 감사의 순간'
     }
   };
 
@@ -60,10 +62,10 @@ export default function AllSermonsPage() {
 
   return (
     <>
-      {/* ─── 상단 배너 박스 (이미지 + 텍스트) ─── */}
+      {/* ─── 상단 배너 박스 (배경색 + 우측 일러스트) ─── */}
       <div className="intro-banner">
-        <div className="intro-banner-inner">
-          <img src={currentBanner.image} alt={`${currentBanner.title} 배너`} className="banner-image" />
+        <div className={`intro-banner-inner ${currentBanner.bgClass}`}>
+          <img src={currentBanner.decoImg} alt="" className="banner-deco-img" fetchpriority="high" loading="eager" />
           <div className="banner-text-overlay">
             <h1 className="banner-overlay-title">{currentBanner.title}</h1>
             <p className="banner-overlay-subtitle">

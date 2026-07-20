@@ -31,6 +31,12 @@
 .banner-location {
   background-color: #AB8AFD; /* 오시는길 */
 }
+.banner-worship-sunday {
+  background-color: #FFD9E6; /* 예배미디어 - 주일예배 */
+}
+.banner-worship-community {
+  background-color: #FFB5CE; /* 예배미디어 - 공동체영상 */
+}
 
 /* 좌측 텍스트 */
 .banner-text-overlay {

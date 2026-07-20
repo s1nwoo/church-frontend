@@ -10,13 +10,8 @@
   border-radius: 16px;
 }
 
-/* ===== 배너 배경색 (탭별) ===== */
-.banner-worship-sunday {
-  background-color: #FFD9E6;
-}
-.banner-worship-community {
-  background-color: #FFB5CE;
-}
+/* 배너 배경색(탭별)은 공유 스타일 ChurchIntroPage.css 로 이동됨
+   (.banner-worship-sunday / .banner-worship-community) */
 
 /* ===== 탭 메뉴 버튼 스타일 (주일예배/야외예배) ===== */
 .intro-tabs .tab-item {
@@ -211,10 +206,19 @@
   padding: 0.75rem;
   margin: auto auto 0; /* margin-top: auto → 사이드바 하단으로 밀어냄 */
   background: #fff;
-  border: 1px solid #333;
+  border: 1.5px solid #7D4CFC;
+  border-radius: 10px;
+  color: #7D4CFC;
+  font-family: 'A2z', 'Pretendard', sans-serif;
   font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
   text-align: center;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.view-all:hover {
+  background: #7D4CFC;
+  color: #fff;
 }
 
 /* ─── 스크립트 ─── */
