@@ -172,8 +172,36 @@
     flex-direction: column;
     gap: 0.25rem;
   }
-  .pagination {
+
+  /* 제목 한 줄 → 날짜·작성자 다음 줄 (예배미디어 리스트와 동일한 형태)
+     공지사항은 제목이 핵심이므로 제목을 넓게·강조, 날짜/작성자는 보조로 축소 */
+  .posts-list li {
     flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+    padding: 0.9rem 0;
+  }
+  .posts-list .left {
+    width: 100%;
+  }
+  .posts-list .left .title {
+    font-size: 1.08rem;      /* 제목 강조 */
+    font-weight: 700;
+    line-height: 1.4;
+    white-space: normal;     /* 제목 줄바꿈 허용(넓게 표현) */
+  }
+  .posts-list .right .meta {
+    font-size: 0.8rem;       /* 날짜·작성자 축소(보조 정보) */
+    color: #999;
+  }
+
+  /* 이전/다음 버튼은 위아래가 아니라 좌우로 배치 */
+  .pagination {
+    flex-direction: row;
+    justify-content: space-between;
     gap: 0.5rem;
+  }
+  .pagination button {
+    flex: 0 0 auto;
   }
 }
