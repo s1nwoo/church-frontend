@@ -157,12 +157,14 @@
 /* ✅ "기독교한국침례회 방화침례교회입니다" 한 줄 고정 (모바일 포함)
  * white-space: nowrap  → 강제로 한 줄 유지 ("다"가 떨어지지 않음)
  * word-break: keep-all → 한글 어절 단위 줄바꿈(폴백)
- * font-size: min(20px, 4.27vw) → 데스크톱 20px, 모바일은 폭에 맞춰 축소하되
- *   아래(모바일)에서 흰 박스를 넓혀 좌우 여백이 형제 줄과 어색하지 않게 확보 */
+ * font-size: min(17px, 4.27vw)
+ *   데스크톱: 텍스트 블록이 아이콘 2열 폭(약 352px)에 맞춰지므로 20px면 꽉 차서 넘침
+ *            → 17px로 낮춰 좌우 여백(약 27px) 확보
+ *   모바일: 4.27vw로 화면 폭에 맞춰 축소(이미 17px 이하) */
 .emoji-header p.church-name-line {
   white-space: nowrap;
   word-break: keep-all;
-  font-size: min(20px, 4.27vw);
+  font-size: min(17px, 4.27vw);
 }
 
 /* ✅ 텍스트 가운데 밴드 형광펜 */
