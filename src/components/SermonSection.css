@@ -157,11 +157,12 @@
 /* ✅ "기독교한국침례회 방화침례교회입니다" 한 줄 고정 (모바일 포함)
  * white-space: nowrap  → 강제로 한 줄 유지 ("다"가 떨어지지 않음)
  * word-break: keep-all → 한글 어절 단위 줄바꿈(폴백)
- * font-size: min(20px, 4.7vw) → 데스크톱 20px, 좁은 화면에선 폭에 맞춰 자동 축소하여 넘침 방지 */
+ * font-size: min(20px, 4.27vw) → 데스크톱 20px, 모바일은 폭에 맞춰 축소하되
+ *   아래(모바일)에서 흰 박스를 넓혀 좌우 여백이 형제 줄과 어색하지 않게 확보 */
 .emoji-header p.church-name-line {
   white-space: nowrap;
   word-break: keep-all;
-  font-size: min(20px, 4.7vw);
+  font-size: min(20px, 4.27vw);
 }
 
 /* ✅ 텍스트 가운데 밴드 형광펜 */
@@ -228,6 +229,12 @@
     margin: 0 auto;
     padding: 0 16px;
     overflow-x: hidden;
+  }
+
+  /* 홈 설교 섹션 한정: 흰 카드 좌우 여백을 조금 줄여 박스를 넓힘
+     → 교회명 한 줄의 좌우 공백이 형제 줄과 어색하지 않게 됨 (다른 페이지 영향 없음) */
+  .sermon-section .page-container {
+    padding: 0 8px;
   }
 
   .sermon-section {
