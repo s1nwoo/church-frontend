@@ -8,10 +8,12 @@
   border-radius: 16px;
 }
 
-/* ===== 전체 컨테이너 ===== */
+/* ===== 전체 컨테이너 =====
+   흰 박스(.intro-container)가 이미 좌우 패딩을 주므로 여기서 추가 패딩을 주지 않음
+   (다른 페이지와 콘텐츠 좌우 여백을 20px로 통일) */
 .location-container {
   max-width: 1200px;
-  padding: 2rem;
+  padding: 0;
   color: #222;
 }
 
@@ -185,7 +187,7 @@
   }
 
   .location-container {
-    padding: 1.5rem;
+    padding: 0;
   }
 
   .location-map {
