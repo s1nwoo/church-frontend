@@ -13,7 +13,8 @@ const headers = () => ({ Authorization: `Bearer ${localStorage.getItem('accessTo
 const clone = value => JSON.parse(JSON.stringify(value));
 const today = () => new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' }).format(new Date());
 async function errorMessage(error) {
-  if ([401, 403].includes(error.response?.status)) return '관리자 로그인이 필요합니다. 다시 로그인해 주세요.';
+  if (error.response?.status === 401) return '로그인이 만료되었습니다. 다시 로그인해 주세요.';
+  if (error.response?.status === 403) return '이 계정에는 관리자 권한이 없습니다.';
   let data = error.response?.data;
   if (data instanceof Blob) { try { data = JSON.parse(await data.text()); } catch { data = null; } }
   return data?.message || '요청을 처리하지 못했습니다. 잠시 후 다시 시도해 주세요.';
@@ -177,7 +178,7 @@ export default function BiblePptPage() {
     <div className="bp-heading"><div><AdminBackButton /><h1>성경 PPT 만들기</h1></div><p>성경 검색부터 미리보기·편집·PPT 저장까지 한 화면에서 준비하세요.</p></div>
     {error && <div role="alert" className="bp-error">{error}{!metadata && <button onClick={() => setRetry(v => v + 1)}>다시 불러오기</button>}</div>}
     {notice && <p role="status" className="bp-notice">{notice}</p>}
-    {!metadata || !globalStyle ? <p>성경 데이터와 템플릿을 불러오는 중입니다.</p> : <>
+    {!metadata || !globalStyle ? !error && <p>성경 데이터와 템플릿을 불러오는 중입니다.</p> : <>
       <div className="bp-studio"><div className="bp-input-column">
         <section className="bp-panel bp-search"><h2>① 성경 검색</h2>
           <label className="bp-sr-only" htmlFor="bp-book-search">성경 검색</label>

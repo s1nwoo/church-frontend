@@ -1,9 +1,10 @@
 import React from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import axios from 'axios';
 import App from './App';
 
-jest.mock('axios', () => ({ get: jest.fn(), post: jest.fn(), isCancel: jest.fn() }));
+jest.mock('axios', () => ({ get: jest.fn(), post: jest.fn(), isCancel: jest.fn(),
+  interceptors: { response: { use: jest.fn(), eject: jest.fn() } } }));
 jest.mock('./components/Header', () => () => null);
 jest.mock('./components/Footer', () => () => null);
 jest.mock('./components/ScrollToTop', () => () => null);
@@ -94,6 +95,29 @@ test('a logged-in normal member cannot open admin screens', async () => {
   window.history.replaceState({}, '', '/admin/members'); render(<App />);
   expect(await screen.findByRole('heading', { name: '관리자 권한이 필요합니다.' })).toBeInTheDocument();
   expect(axios.get).not.toHaveBeenCalled();
+});
+
+test('an expired token clears the stale login and returns to administrator login', async () => {
+  localStorage.setItem('user', JSON.stringify({ role: 'ROLE_ADMIN' }));
+  localStorage.setItem('accessToken', 'old-token');
+  window.history.replaceState({}, '', '/admin'); render(<App />);
+  const expired = { config: { url: '/api/admin/bible-ppt/metadata', headers: { Authorization: 'Bearer old-token' } }, response: { status: 401 } };
+  const onError = axios.interceptors.response.use.mock.calls[0][1];
+  await act(async () => { await expect(onError(expired)).rejects.toBe(expired); });
+  expect(await screen.findByRole('heading', { name: '관리자 로그인' })).toBeInTheDocument();
+  expect(localStorage.getItem('accessToken')).toBeNull();
+  expect(localStorage.getItem('user')).toBeNull();
+});
+
+test('a rejected request using an old token does not clear a newer login', async () => {
+  localStorage.setItem('user', JSON.stringify({ role: 'ROLE_ADMIN' }));
+  localStorage.setItem('accessToken', 'new-token');
+  window.history.replaceState({}, '', '/admin'); render(<App />);
+  const expired = { config: { url: '/api/admin/bible-ppt/metadata', headers: { Authorization: 'Bearer old-token' } }, response: { status: 401 } };
+  const onError = axios.interceptors.response.use.mock.calls[0][1];
+  await act(async () => { await expect(onError(expired)).rejects.toBe(expired); });
+  expect(localStorage.getItem('accessToken')).toBe('new-token');
+  expect(screen.getByRole('heading', { name: '관리자 메뉴' })).toBeInTheDocument();
 });
 
 test.each([
