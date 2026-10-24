@@ -63,6 +63,49 @@
   background-color: #f0f0f0;
 }
 
+.sermon-table .video-type-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 88px;
+  padding: 5px 10px;
+  box-sizing: border-box;
+  border: 1px solid;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.video-type-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.video-type-badge--sunday {
+  color: #1e40af;
+  background-color: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.video-type-badge--afternoon {
+  color: #6b21a8;
+  background-color: #f3e8ff;
+  border-color: #d8b4fe;
+}
+
+.video-type-badge--community {
+  color: #065f46;
+  background-color: #ecfdf5;
+  border-color: #a7f3d0;
+}
+
 .create-btn {
   background-color: #4caf50;
 }

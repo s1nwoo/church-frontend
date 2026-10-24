@@ -90,6 +90,7 @@ const fieldConfig = [
 ];
 
 const PAGE_SIZE = 10; // 한 페이지에 보여줄 설교 수
+const COMMUNITY_FIELDS = ['worshipType', 'content', 'sermonDate', 'youtubeUrl', 'deleted'];
 
 const SermonManagePage = () => {
   const [sermons, setSermons] = useState([]);
@@ -99,7 +100,9 @@ const SermonManagePage = () => {
   const [search, setSearch] = useState('');
   const [worshipType, setWorshipType] = useState('');
   const isCommunity = form.worshipType === 'COMMUNITY';
-  const visibleFields = fieldConfig.filter(field => !isCommunity || !['preacher', 'bibleText'].includes(field.key));
+  const visibleFields = fieldConfig
+    .map(field => ({ ...field, required: field.key === 'preacher' ? !isCommunity : field.required }))
+    .filter(field => !isCommunity || COMMUNITY_FIELDS.includes(field.key));
 
   // 페이지네이션 상태
   const [page, setPage] = useState(0);           // 현재 페이지(0-based)
@@ -203,6 +206,7 @@ const SermonManagePage = () => {
   };
 
   const handleChange = (key, value) => {
+    if (key === 'worshipType') setShowBibleTooltip(false);
     setForm(prev => ({ ...prev, [key]: value }));
   };
 
@@ -229,7 +233,7 @@ const SermonManagePage = () => {
     // 필수 필드 검사
     const requiredFields = visibleFields.filter(f => f.required);
     for (const field of requiredFields) {
-      if (!form[field.key]) {
+      if (!String(form[field.key] ?? '').trim()) {
         alert(`${field.label}을(를) 입력해주세요.`);
         return;
       }
@@ -302,7 +306,11 @@ const SermonManagePage = () => {
           {sermons.map(s => (
             <tr key={s.id} className={s.deleted ? 'deleted-row' : ''}>
               {/* title → content 변경 */}
-              <td>{worshipTypeLabel(s.worshipType)}</td>
+              <td>
+                <span className={`video-type-badge video-type-badge--${(s.worshipType || 'SUNDAY').toLowerCase()}`}>
+                  {worshipTypeLabel(s.worshipType)}
+                </span>
+              </td>
               <td>{s.content}</td>
               <td>{s.preacher}</td>
               <td>{s.sermonDate}</td>
@@ -386,6 +394,7 @@ const SermonManagePage = () => {
                       value={isCustomPreacher ? 'custom' : (form[key] || '')}
                       onChange={e => handlePreacherChange(e.target.value)}
                       disabled={!editable}
+                      required={Boolean(required)}
                     >
                       {PREACHER_OPTIONS.map(opt => (
                         <option key={opt.value} value={opt.value}>
@@ -417,7 +426,8 @@ const SermonManagePage = () => {
                     : e.target.value;
                   handleChange(key, val);
                 },
-                disabled: !editable
+                disabled: !editable,
+                required: Boolean(required)
               };
 
               return (

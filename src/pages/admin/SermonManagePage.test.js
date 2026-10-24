@@ -55,11 +55,48 @@ test('community registration hides sermon fields and submits without a preacher'
   fireEvent.change(screen.getByLabelText(/영상 구분\*/), { target: { value: 'COMMUNITY' } });
   expect(screen.queryByLabelText(/설교자/)).not.toBeInTheDocument();
   expect(screen.queryByLabelText(/성경봉독/)).not.toBeInTheDocument();
+  expect(screen.queryByLabelText('생성날짜')).not.toBeInTheDocument();
+  expect(screen.queryByLabelText('수정날짜')).not.toBeInTheDocument();
+  expect(screen.queryByLabelText('삭제날짜')).not.toBeInTheDocument();
   fireEvent.change(screen.getByLabelText(/영상 제목/), { target: { value: '가을 공동체 행사' } });
   fireEvent.change(screen.getByLabelText(/영상 날짜/), { target: { value: '2026-10-18' } });
   fireEvent.change(screen.getByLabelText(/유튜브 링크/), { target: { value: 'https://youtu.be/community01' } });
   fireEvent.click(screen.getByRole('button', { name: '저장' }));
   await waitFor(() => expect(axios.post).toHaveBeenCalledWith('/api/sermons', expect.objectContaining({
     worshipType: 'COMMUNITY', preacher: '', bibleText: null, content: '가을 공동체 행사',
+  })));
+});
+
+test('switching from an empty custom preacher to community does not block submission', async () => {
+  render(<SermonManagePage />);
+  await waitFor(() => expect(axios.get).toHaveBeenCalled());
+  fireEvent.click(screen.getByRole('button', { name: '등록' }));
+  fireEvent.change(screen.getByLabelText(/설교자/), { target: { value: 'custom' } });
+  fireEvent.change(screen.getByLabelText(/영상 구분\*/), { target: { value: 'COMMUNITY' } });
+  expect(screen.queryByPlaceholderText('설교자 이름을 입력하세요')).not.toBeInTheDocument();
+  expect(screen.queryByLabelText(/성경봉독/)).not.toBeInTheDocument();
+  fireEvent.change(screen.getByLabelText(/영상 제목/), { target: { value: '공동체 영상' } });
+  fireEvent.change(screen.getByLabelText(/영상 날짜/), { target: { value: '2026-10-24' } });
+  fireEvent.change(screen.getByLabelText(/유튜브 링크/), { target: { value: 'https://youtu.be/community01' } });
+  fireEvent.click(screen.getByRole('button', { name: '저장' }));
+  await waitFor(() => expect(axios.post).toHaveBeenCalledWith('/api/sermons', expect.objectContaining({
+    worshipType: 'COMMUNITY', preacher: '', bibleText: null,
+  })));
+});
+
+test('community edit hides sermon fields and switching to worship restores required preacher', async () => {
+  axios.get.mockResolvedValue({ data: { content: [{ id: 8, content: '공동체 영상', worshipType: 'COMMUNITY',
+    preacher: '', bibleText: null, sermonDate: '2026-10-24', youtubeUrl: 'https://youtu.be/community01', deleted: false }] } });
+  render(<SermonManagePage />);
+  fireEvent.click(await screen.findByRole('button', { name: '수정' }));
+  expect(screen.queryByLabelText(/설교자/)).not.toBeInTheDocument();
+  expect(screen.queryByLabelText(/성경봉독/)).not.toBeInTheDocument();
+  fireEvent.change(screen.getByLabelText(/영상 구분\*/), { target: { value: 'AFTERNOON' } });
+  expect(screen.getByLabelText(/설교자/)).toBeRequired();
+  expect(screen.getByLabelText(/성경봉독/)).toBeInTheDocument();
+  fireEvent.change(screen.getByLabelText(/영상 구분\*/), { target: { value: 'COMMUNITY' } });
+  fireEvent.click(screen.getByRole('button', { name: '저장' }));
+  await waitFor(() => expect(axios.put).toHaveBeenCalledWith('/api/sermons/8', expect.objectContaining({
+    worshipType: 'COMMUNITY', preacher: '', bibleText: null,
   })));
 });
