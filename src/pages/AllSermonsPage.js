@@ -110,7 +110,7 @@ export default function AllSermonsPage() {
         {loading && <p role="status">로딩 중…</p>}
         {error && <p role="alert">{error}</p>}
         {!loading && !error && list.length === 0 && (
-          <p className="worship-empty">아직 등록된 {worshipTypeLabel(worshipTypeForTab(activeTab))} 영상이 없습니다.</p>
+          <p className="worship-empty">아직 등록된 {activeTab === 'community' ? '공동체' : worshipTypeLabel(worshipTypeForTab(activeTab))} 영상이 없습니다.</p>
         )}
         {!loading && !error && (
           <ul className="sermon-list">

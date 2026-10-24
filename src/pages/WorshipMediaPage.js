@@ -210,7 +210,7 @@ export default function WorshipMediaPage() {
         {error && <p role="alert">{error}</p>}
         {!loading && !error && !selected && (
           <div className="worship-empty">
-            <p>아직 등록된 {worshipTypeLabel(worshipTypeForTab(activeTab))} 영상이 없습니다.</p>
+            <p>아직 등록된 {activeTab === 'community' ? '공동체' : worshipTypeLabel(worshipTypeForTab(activeTab))} 영상이 없습니다.</p>
             <button className="view-all" onClick={() => navigate(`/worship-media/all?tab=${activeTab}`)}>전체목록</button>
           </div>
         )}
