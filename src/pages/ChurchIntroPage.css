@@ -34,6 +34,9 @@
 .banner-worship-sunday {
   background-color: #FFD9E6; /* 예배미디어 - 주일예배 */
 }
+.banner-worship-afternoon {
+  background-color: #E5DCFA;
+}
 .banner-worship-community {
   background-color: #FFB5CE; /* 예배미디어 - 공동체영상 */
 }

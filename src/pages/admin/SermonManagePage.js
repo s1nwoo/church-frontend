@@ -1,6 +1,7 @@
 // src/pages/admin/SermonManagePage.js
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
+import { WORSHIP_TYPES, worshipTypeLabel } from '../../utils/worshipTypes';
 import './SermonManagePage.css';
 
 // 설교자 옵션 정의
@@ -70,6 +71,7 @@ const BIBLE_ABBREVIATIONS = [
 
 // 필드 설정: content를 메인 제목으로 사용 (title 제거)
 const fieldConfig = [
+  { key: 'worshipType', label: '예배 구분', type: 'select', editable: true, required: true, options: WORSHIP_TYPES },
   { key: 'content',      label: '말씀 제목',    type: 'text',   editable: true, required: true },
   { key: 'preacher',     label: '설교자',       type: 'preacher-select', editable: true, required: true },
   { key: 'sermonDate',   label: '설교 날짜',    type: 'date',   editable: true, required: true },
@@ -95,6 +97,7 @@ const SermonManagePage = () => {
   const [editingId, setEditingId] = useState(null);
   const [form, setForm] = useState({});
   const [search, setSearch] = useState('');
+  const [worshipType, setWorshipType] = useState('');
 
   // 페이지네이션 상태
   const [page, setPage] = useState(0);           // 현재 페이지(0-based)
@@ -129,6 +132,7 @@ const SermonManagePage = () => {
           page: targetPage,
           size: PAGE_SIZE,
           includeDeleted: true,
+          worshipType: worshipType || undefined,
         },
       });
       setSermons(res.data.content || []);
@@ -140,7 +144,7 @@ const SermonManagePage = () => {
       console.error(err);
       alert('목록 조회 중 오류 발생');
     }
-  }, [search]);
+  }, [search, worshipType]);
 
   // 검색어 변경 시 첫 페이지부터 다시 조회
   useEffect(() => {
@@ -151,6 +155,7 @@ const SermonManagePage = () => {
     setEditingId(null);
     // title 제거 - content를 메인 제목으로 사용
     setForm({
+      worshipType: worshipType || 'SUNDAY',
       content: '',
       preacher: '김성휘 목사님',
       sermonDate: '',
@@ -168,7 +173,7 @@ const SermonManagePage = () => {
 
   const openEditModal = (sermon) => {
     setEditingId(sermon.id);
-    setForm({ ...sermon });
+    setForm({ ...sermon, worshipType: sermon.worshipType || 'SUNDAY' });
 
     // 수정 시 설교자가 미리 정의된 옵션에 없으면 직접입력 모드로
     const preacherValue = sermon.preacher || '';
@@ -268,6 +273,12 @@ const SermonManagePage = () => {
       <h2 className="sermon-title">설교 관리</h2>
 
       <div className="sermon-manage-top">
+        <select aria-label="예배 구분 필터" value={worshipType} onChange={e => setWorshipType(e.target.value)}>
+          <option value="">전체 예배</option>
+          {WORSHIP_TYPES.map(option => (
+            <option key={option.value} value={option.value}>{option.label}</option>
+          ))}
+        </select>
         <input
           type="text"
           placeholder="말씀 제목 또는 설교자 검색"
@@ -281,7 +292,7 @@ const SermonManagePage = () => {
       <table className="sermon-table">
         <thead>
           <tr>
-            <th>말씀 제목</th><th>설교자</th><th>날짜</th><th>성경봉독</th>
+            <th>예배 구분</th><th>말씀 제목</th><th>설교자</th><th>날짜</th><th>성경봉독</th>
             <th>삭제 여부</th><th>관리</th>
           </tr>
         </thead>
@@ -289,6 +300,7 @@ const SermonManagePage = () => {
           {sermons.map(s => (
             <tr key={s.id} className={s.deleted ? 'deleted-row' : ''}>
               {/* title → content 변경 */}
+              <td>{worshipTypeLabel(s.worshipType)}</td>
               <td>{s.content}</td>
               <td>{s.preacher}</td>
               <td>{s.sermonDate}</td>
@@ -398,7 +410,7 @@ const SermonManagePage = () => {
                 id: key,
                 value: form[key] ?? '',
                 onChange: e => {
-                  const val = type === 'select'
+                  const val = key === 'deleted'
                     ? e.target.value === 'true'
                     : e.target.value;
                   handleChange(key, val);

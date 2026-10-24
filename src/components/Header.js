@@ -35,12 +35,13 @@ const Header = () => {
       .get('/api/sermons', {
         params: {
           page: 0,
-          size: 1000,
+          size: 1,
+          worshipType: 'SUNDAY',
           includeDeleted: false,
         },
       })
       .then((res) => {
-        const all = res.data.content.slice().sort((a, b) => b.id - a.id);
+        const all = res.data.content;
         if (all.length) setLatestId(all[0].id);
       })
       .catch(console.error);
@@ -195,7 +196,7 @@ const Header = () => {
                   예배 미디어
                 </Link>
               ) : (
-                <Link to="#" className="menu-item">
+                <Link to="/worship-media/all" className="menu-item">
                   예배 미디어
                 </Link>
               )}
@@ -233,7 +234,7 @@ const Header = () => {
                 예배 미디어
               </Link>
             ) : (
-              <Link to="#" className="mobile-nav-item">
+              <Link to="/worship-media/all" className="mobile-nav-item">
                 예배 미디어
               </Link>
             )}

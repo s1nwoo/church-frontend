@@ -3,3 +3,8 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
+import { TextEncoder, TextDecoder } from 'util';
+
+// React Router uses these browser APIs, which are absent from Jest's jsdom environment.
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;

@@ -1,16 +1,13 @@
 // src/pages/WorshipMediaPage.js
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, useParams, NavLink } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { WORSHIP_TABS as TABS, tabForWorshipType } from '../utils/worshipTypes';
 import axios from 'axios';
 import bannerImg5 from '../components/images/top_banner_img5.png'; /* 주일예배 배너 우측 일러스트 */
 import bannerImg6 from '../components/images/top_banner_img6.png'; /* 공동체영상 배너 우측 일러스트 */
 import './WorshipMediaPage.css';
 import './ChurchIntroPage.css';
 
-const TABS = [
-  { key: 'sunday',  label: '주일예배' },
-  { key: 'community', label: '공동체영상' },
-];
 
 // YouTube URL에서 11자리 ID만 추출
 function extractYoutubeId(url) {
@@ -26,28 +23,46 @@ export default function WorshipMediaPage() {
   const isNavigatingRef = useRef(false); // 네비게이션 중인지 체크
 
   const [activeTab, setActiveTab] = useState('sunday');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [allItems,   setAllItems] = useState([]);   // 전체 데이터
   const [list,       setList]     = useState([]);   // 사이드바용 최신 4개 (고정)
   const [selected,   setSelected] = useState(null); // 상세 데이터
 
-  // 1) 전체 데이터 로드
+  // 같은 예배 구분의 영상만 관련 목록에 표시한다.
+  const selectedWorshipType = selected?.worshipType || 'SUNDAY';
   useEffect(() => {
+    let cancelled = false;
+    setAllItems([]);
+    setList([]);
     axios.get('/api/sermons', {
-      params: { page: 0, size: 1000, includeDeleted: false }
+      params: { page: 0, size: 1000, includeDeleted: false, worshipType: selectedWorshipType }
     })
-    .then(res => setAllItems(res.data.content))
+    .then(res => { if (!cancelled) setAllItems(res.data.content || []); })
     .catch(console.error);
-  }, []);
+    return () => { cancelled = true; };
+  }, [selectedWorshipType]);
 
   // 2) URL id가 바뀔 때 상세 데이터 로드
   useEffect(() => {
     if (!id) return;
-
+    let cancelled = false;
+    setLoading(true);
+    setError('');
     axios.get(`/api/sermons/${id}`)
       .then(res => {
+        if (cancelled) return;
         setSelected(res.data);
+        setActiveTab(tabForWorshipType(res.data.worshipType));
       })
-      .catch(console.error);
+      .catch(() => {
+        if (!cancelled) {
+          setSelected(null);
+          setError('영상을 불러오지 못했습니다. 목록에서 다시 선택해주세요.');
+        }
+      })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
   }, [id]);
 
   // 3) selected가 변경되면 스크롤 복원
@@ -65,12 +80,15 @@ export default function WorshipMediaPage() {
 
   // 4) selected와 allItems가 로드되면 현재 글 기준 전후 설교 표시
   useEffect(() => {
-    if (allItems.length === 0 || !selected) return;
+    if (allItems.length === 0 || !selected) {
+      setList([]);
+      return;
+    }
 
-    // ID 기준 오름차순 정렬 (1, 2, 3, ... 순서)
+    // API의 설교 날짜 최신순을 뒤집어 현재 영상의 전후 목록을 찾는다.
     const sorted = allItems
-      .slice()
-      .sort((a, b) => a.id - b.id);
+      .filter(item => (item.worshipType || 'SUNDAY') === selectedWorshipType)
+      .slice().reverse();
 
     // 현재 글의 인덱스 찾기
     const currentIndex = sorted.findIndex(s => s.id === selected.id);
@@ -92,7 +110,7 @@ export default function WorshipMediaPage() {
 
     // 최신순으로 표시 (역순)
     setList(relatedSermons.reverse());
-  }, [allItems, selected]);
+  }, [allItems, selected, selectedWorshipType]);
 
   // 우측 리스트 클릭 핸들러 (스크롤 위치 고정)
   const handleListClick = (e, itemId) => {
@@ -110,10 +128,6 @@ export default function WorshipMediaPage() {
     navigate(`/worship-media/${itemId}`, { replace: true });
   };
 
-  // 로딩 상태 (Sunday 탭용)
-  if (activeTab === 'sunday' && !selected) {
-    return <div className="page-container">로딩 중…</div>;
-  }
 
   const videoId  = selected && extractYoutubeId(selected.youtubeUrl);
   const embedUrl = selected && `https://www.youtube.com/embed/${videoId}`;
@@ -125,6 +139,12 @@ export default function WorshipMediaPage() {
       bgClass: 'banner-worship-sunday', /* CSS에서 배경색 #FFD9E6 적용 */
       title: '주일예배',
       subtitle: '방화침례교회 설교 영상을 시청하세요\n하나님의 말씀으로 은혜받는 시간'
+    },
+    afternoon: {
+      decoImg: bannerImg5,
+      bgClass: 'banner-worship-afternoon',
+      title: '오후예배',
+      subtitle: '오후예배 말씀을 함께 나눕니다\n하나님의 말씀으로 은혜받는 시간'
     },
     community: {
       decoImg: bannerImg6,         /* 우측 일러스트 이미지 */
@@ -141,7 +161,7 @@ export default function WorshipMediaPage() {
       {/* ─── 상단 배너 박스 (배경색 + 우측 일러스트) ─── */}
       <div className="intro-banner">
         <div className={`intro-banner-inner ${currentBanner.bgClass}`}>
-          <img src={currentBanner.decoImg} alt="" className="banner-deco-img" fetchpriority="high" loading="eager" />
+          <img src={currentBanner.decoImg} alt="" className="banner-deco-img" fetchPriority="high" loading="eager" />
           <div className="banner-text-overlay">
             <h1 className="banner-overlay-title">{currentBanner.title}</h1>
             <p className="banner-overlay-subtitle">
@@ -156,14 +176,15 @@ export default function WorshipMediaPage() {
         </div>
       </div>
 
-      {/* ─── 탭 메뉴 (주일예배/공동체영상) ─── */}
+      {/* ─── 탭 메뉴 (주일예배/오후예배/공동체영상) ─── */}
       <nav className="intro-tabs">
         <div className="intro-tabs-inner">
           {TABS.map(tab => (
             <button
               key={tab.key}
               className={activeTab === tab.key ? 'tab-item active' : 'tab-item'}
-              onClick={() => setActiveTab(tab.key)}
+              onClick={() => navigate(`/worship-media/all?tab=${tab.key}`)}
+              aria-current={activeTab === tab.key ? 'page' : undefined}
             >
               {tab.label}
             </button>
@@ -172,8 +193,10 @@ export default function WorshipMediaPage() {
       </nav>
 
       <div className="intro-container page-container">
-        {/* ─── Sunday 탭: 상세 + 리스트 ─── */}
-        {activeTab === 'sunday' && selected && (
+        {/* ─── 예배 영상 상세 + 같은 예배의 리스트 ─── */}
+        {loading && <p role="status">로딩 중…</p>}
+        {error && <p role="alert">{error}</p>}
+        {!loading && !error && selected && (
           <>
             {/* 설교 헤더 */}
             <div className="sermon-header">
@@ -228,7 +251,7 @@ export default function WorshipMediaPage() {
                 </ul>
                 <button
                   className="view-all"
-                  onClick={() => navigate('/worship-media/all')}
+                  onClick={() => navigate(`/worship-media/all?tab=${activeTab}`)}
                 >
                   전체목록
                 </button>

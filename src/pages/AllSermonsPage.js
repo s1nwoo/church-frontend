@@ -1,45 +1,52 @@
 // src/pages/AllSermonsPage.js
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { WORSHIP_TABS as TABS, worshipTypeForTab } from '../utils/worshipTypes';
 import axios from 'axios';
 import bannerImg5 from '../components/images/top_banner_img5.png'; /* 주일예배 배너 우측 일러스트 */
 import bannerImg6 from '../components/images/top_banner_img6.png'; /* 공동체영상 배너 우측 일러스트 */
 import './AllSermonsPage.css';
 import './ChurchIntroPage.css';
 
-const TABS = [
-  { key: 'sunday',  label: '주일예배' },
-  { key: 'community', label: '공동체영상' },
-];
 
 export default function AllSermonsPage() {
-  const [activeTab, setActiveTab] = useState('sunday');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const requestedTab = searchParams.get('tab');
+  const activeTab = TABS.some(tab => tab.key === requestedTab) ? requestedTab : 'sunday';
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [list, setList]           = useState([]);
   const navigate = useNavigate();
 
   // 탭 변경 또는 마운트 시 전체 목록 불러오기
   useEffect(() => {
-    if (activeTab !== 'sunday') {
+    setList([]);
+    setError('');
+    if (activeTab === 'community') {
+      setLoading(false);
       // 공동체영상일 땐 API 호출 안 함
-      setList([]);
       return;
     }
+    let cancelled = false;
+    setLoading(true);
     axios.get('/api/sermons', {
       params: {
         page: 0,
         size: 1000,
         includeDeleted: false,
+        worshipType: worshipTypeForTab(activeTab),
         keyword: ''
       }
     })
     .then(res => {
-      const items = res.data.content
-        .slice()
-        .sort((a, b) => b.id - a.id);
-      setList(items);
+      if (!cancelled) setList(res.data.content || []);
     })
-    .catch(console.error);
+    .catch(() => {
+      if (!cancelled) setError('영상 목록을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');
+    })
+    .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
   }, [activeTab]);
 
   // 탭에 따른 배너 설정 (예배미디어 첫 진입 배너와 동일: 배경색 + 우측 일러스트)
@@ -49,6 +56,12 @@ export default function AllSermonsPage() {
       bgClass: 'banner-worship-sunday',
       title: '주일예배',
       subtitle: '방화침례교회 설교 영상을 시청하세요\n하나님의 말씀으로 은혜받는 시간'
+    },
+    afternoon: {
+      decoImg: bannerImg5,
+      bgClass: 'banner-worship-afternoon',
+      title: '오후예배',
+      subtitle: '오후예배 말씀을 함께 나눕니다\n하나님의 말씀으로 은혜받는 시간'
     },
     community: {
       decoImg: bannerImg6,
@@ -65,7 +78,7 @@ export default function AllSermonsPage() {
       {/* ─── 상단 배너 박스 (배경색 + 우측 일러스트) ─── */}
       <div className="intro-banner">
         <div className={`intro-banner-inner ${currentBanner.bgClass}`}>
-          <img src={currentBanner.decoImg} alt="" className="banner-deco-img" fetchpriority="high" loading="eager" />
+          <img src={currentBanner.decoImg} alt="" className="banner-deco-img" fetchPriority="high" loading="eager" />
           <div className="banner-text-overlay">
             <h1 className="banner-overlay-title">{currentBanner.title}</h1>
             <p className="banner-overlay-subtitle">
@@ -80,14 +93,15 @@ export default function AllSermonsPage() {
         </div>
       </div>
 
-      {/* ─── 탭 메뉴 (주일예배/공동체영상) ─── */}
+      {/* ─── 탭 메뉴 (주일예배/오후예배/공동체영상) ─── */}
       <nav className="intro-tabs">
         <div className="intro-tabs-inner">
           {TABS.map(tab => (
             <button
               key={tab.key}
               className={activeTab === tab.key ? 'tab-item active' : 'tab-item'}
-              onClick={() => setActiveTab(tab.key)}
+              onClick={() => setSearchParams({ tab: tab.key })}
+              aria-current={activeTab === tab.key ? 'page' : undefined}
             >
               {tab.label}
             </button>
@@ -97,8 +111,13 @@ export default function AllSermonsPage() {
 
       {/* ─── 콘텐츠 영역 (흰색 박스) ─── */}
       <div className="intro-container page-container">
-        {/* ─── 주일예배 목록 ─── */}
-        {activeTab === 'sunday' && (
+        {/* ─── 선택한 예배의 영상 목록 ─── */}
+        {activeTab !== 'community' && loading && <p role="status">로딩 중…</p>}
+        {activeTab !== 'community' && error && <p role="alert">{error}</p>}
+        {activeTab !== 'community' && !loading && !error && list.length === 0 && (
+          <p className="worship-empty">아직 등록된 {activeTab === 'afternoon' ? '오후예배' : '주일예배'} 영상이 없습니다.</p>
+        )}
+        {activeTab !== 'community' && !loading && !error && (
           <ul className="sermon-list">
             {list.map(item => (
               <li
@@ -136,6 +155,14 @@ export default function AllSermonsPage() {
               유튜브 &gt; 재생목록 &gt; 공동체활동 영상에서 확인 할 수 있습니다.
             </p>
             <p>감사합니다.</p>
+            <a
+              href="https://www.youtube.com/@%EB%B0%A9%ED%99%94%EC%B9%A8%EB%A1%80%EA%B5%90%ED%9A%8C/videos"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="community-youtube-btn"
+            >
+              공동체영상 바로가기
+            </a>
           </div>
         )}
       </div>

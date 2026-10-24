@@ -20,10 +20,10 @@ export default function SermonSection() {
   // 설교 데이터 가져오기
   useEffect(() => {
     axios.get('/api/sermons', {
-      params: { page: 0, size: 1000, includeDeleted: false }
+      params: { page: 0, size: 1, includeDeleted: false, worshipType: 'SUNDAY' }
     })
     .then(res => {
-      const sortedSermons = res.data.content.slice().sort((a, b) => b.id - a.id);
+      const sortedSermons = res.data.content;
       setSermons(sortedSermons);
 
       // 최신 설교의 유튜브 썸네일 추출
