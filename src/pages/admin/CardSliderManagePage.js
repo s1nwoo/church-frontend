@@ -1,6 +1,6 @@
 // src/pages/admin/CardSliderManagePage.js
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import AdminBackButton from '../../components/AdminBackButton';
 import './CardSliderManagePage.css';
 import { resolveImageSrc, handleImageError, handleImageLoad } from '../../utils/cardImageMap';
 
@@ -22,7 +22,6 @@ const EMPTY_FORM = {
 };
 
 const CardSliderManagePage = () => {
-  const navigate = useNavigate();
   const fileInputRef = useRef(null);
 
   const [cards, setCards]         = useState([]);
@@ -210,7 +209,7 @@ const CardSliderManagePage = () => {
   return (
     <div className="csm-container page-container">
       <div className="csm-header">
-        <button className="csm-back-btn" onClick={() => navigate('/admin')}>← 관리자 메뉴</button>
+        <AdminBackButton />
         <h2 className="csm-title">카드 슬라이더 관리</h2>
         <p className="csm-desc">메인 페이지에 표시되는 카드 슬라이더를 관리합니다.</p>
       </div>

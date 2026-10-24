@@ -2,12 +2,18 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AdminDashboardPage.css';
-import { FaUsers, FaChalkboardTeacher, FaNewspaper, FaImages } from 'react-icons/fa';
+import { FaUsers, FaChalkboardTeacher, FaNewspaper, FaImages, FaBible } from 'react-icons/fa';
 
 const AdminDashboardPage = () => {
   const navigate = useNavigate();
 
   const cards = [
+    {
+      title: '성경 PPT 만들기',
+      description: '성경 구절을 입력하고 미리보기와 편집 후 PPT를 다운로드합니다.',
+      icon: <FaBible size={32} />,
+      path: '/admin/bible-ppt',
+    },
     {
       title: '성도 관리',
       description: '교인 정보 등록/수정/삭제 기능을 제공합니다.',

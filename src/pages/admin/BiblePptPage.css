@@ -1,0 +1,45 @@
+.bible-ppt { max-width: 1320px; margin: auto; padding: 32px 24px; color: #243b48; }
+.bible-ppt * { box-sizing: border-box; }
+.bp-heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 24px; }
+.bp-heading h1 { margin: 12px 0; font-size: 28px; }
+.bp-heading p, .bp-help { color: #586a75; line-height: 1.6; }
+.bp-panel { background: #fff; border: 1px solid #dce4e8; border-radius: 12px; padding: 24px; margin-bottom: 24px; min-width: 0; }
+.bible-ppt fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.bible-ppt legend, .bible-ppt h2 { font-size: 19px; font-weight: 700; margin-bottom: 18px; }
+.bible-ppt h2 { margin-top: 0; }
+.bible-ppt label { display: block; font-size: 14px; font-weight: 600; }
+.bible-ppt input:not([type=checkbox]), .bible-ppt textarea { display: block; width: 100%; border: 1px solid #bac9d2; border-radius: 6px; padding: 10px 12px; margin: 8px 0 14px; font: inherit; color: #243b48; background: #fff; }
+.bible-ppt textarea { resize: vertical; line-height: 1.65; }
+.bible-ppt button { border: 1px solid #bac9d2; border-radius: 6px; padding: 10px 14px; font: inherit; background: #f7fafb; color: #243b48; cursor: pointer; }
+.bible-ppt button:hover { background: #eaf0f3; }
+.bible-ppt button:disabled { opacity: .5; cursor: default; }
+.bible-ppt .bp-primary { background: #344955; border-color: #344955; color: white; }
+.bible-ppt :focus-visible { outline: 3px solid #3a8dba; outline-offset: 2px; }
+.bp-help { font-size: 13px; font-weight: 400; }
+.bp-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 14px; }
+.bp-actions input[type=number] { max-width: 110px; margin-bottom: 0; }
+.bp-books { display: flex; gap: 6px; flex-wrap: wrap; padding-top: 14px; }
+.bp-books button { font-size: 12px; padding: 7px; }
+.bible-ppt summary { cursor: pointer; font-size: 14px; }
+.bp-error, .bp-notice { padding: 14px; border-radius: 6px; line-height: 1.6; }
+.bp-error { background: #fff0ee; color: #942d24; margin-bottom: 16px; }
+.bp-notice { background: #eaf6ef; color: #24623d; }
+.bp-workspace { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 24px; align-items: start; }
+.bp-list ol { list-style: none; padding: 0; max-height: 760px; overflow-y: auto; }
+.bp-list li { display: flex; gap: 8px; align-items: start; padding: 10px 6px; border-bottom: 1px solid #e4ebee; }
+.bp-list li.is-active { background: #edf4f7; border-left: 3px solid #344955; }
+.bp-list input { margin-top: 12px; }
+.bp-list li button { border: 0; background: transparent; text-align: left; padding: 8px 2px; width: 100%; min-width: 0; }
+.bp-list li span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.6; font-size: 13px; margin-top: 6px; white-space: pre-line; }
+.bp-list small { color: #536f7e; }
+.bp-preview { position: relative; width: 100%; background: #e7ecef; margin-bottom: 20px; overflow: hidden; }
+.bp-preview img { width: 100%; height: 100%; display: block; }
+.bp-preview-status { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.bp-drag { position: absolute; border: 1px dashed #4b9dcc; cursor: move; touch-action: none; }
+.bp-drag:hover { background: #4b9dcc18; }
+.bible-ppt .bp-check { display: flex; align-items: center; gap: 8px; margin: 18px 0; }
+.bp-style-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+.bp-style-grid fieldset { border: 1px solid #dce4e8; padding: 14px; border-radius: 8px; }
+.bp-style-grid legend { font-size: 15px; margin: 0; }
+@media (max-width: 900px) { .bp-workspace { grid-template-columns: 1fr; } .bp-list ol { max-height: 260px; } }
+@media (max-width: 540px) { .bible-ppt { padding: 20px 12px; } .bp-panel { padding: 16px; } .bp-heading { align-items: start; flex-direction: column; } .bp-style-grid { grid-template-columns: 1fr; } }

@@ -3,6 +3,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { WORSHIP_TYPES, worshipTypeLabel } from '../../utils/worshipTypes';
 import './SermonManagePage.css';
+import AdminBackButton from '../../components/AdminBackButton';
 
 // 설교자 옵션 정의
 const PREACHER_OPTIONS = [
@@ -276,6 +277,7 @@ const SermonManagePage = () => {
 
   return (
     <div className="sermon-manage-container page-container">
+      <AdminBackButton />
       <h2 className="sermon-title">영상 관리</h2>
 
       <div className="sermon-manage-top">

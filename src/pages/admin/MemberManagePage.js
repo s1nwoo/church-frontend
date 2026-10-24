@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import './MemberManagePage.css';
+import AdminBackButton from '../../components/AdminBackButton';
 
 // 역할 옵션
 const ROLE_OPTIONS = [
@@ -151,6 +152,7 @@ const MemberManagePage = () => {
 
   return (
     <div className="member-manage-container page-container">
+      <AdminBackButton />
       <h2 className="member-title">성도 관리</h2>
 
       <div className="member-manage-top">

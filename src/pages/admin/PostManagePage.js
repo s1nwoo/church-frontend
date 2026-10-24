@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import './PostManagePage.css';
+import AdminBackButton from '../../components/AdminBackButton';
 
 // 카테고리 옵션 정의
 const CATEGORY_OPTIONS = [
@@ -123,6 +124,7 @@ const PostManagePage = () => {
 
   return (
     <div className="post-manage-container page-container">
+      <AdminBackButton />
       <h2 className="post-title">소식 관리</h2>
 
       <div className="post-manage-top">
