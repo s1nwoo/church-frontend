@@ -1,9 +1,10 @@
 // src/pages/LoginPage.js
 import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import './LoginPage.css';
+import { isAdminUser } from '../utils/auth';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -14,6 +15,7 @@ const LoginPage = () => {
 
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
+  const adminLogin = useLocation().state?.adminLogin === true;
 
   // 입력 필드가 모두 채워졌는지 확인
   const isFormValid = username.trim() !== '' && password.trim() !== '';
@@ -32,17 +34,15 @@ const LoginPage = () => {
 
       // 서버에서 받은 전체 응답 데이터
       const userData = response.data;
-      console.log('로그인 응답', userData);
-
-      // localStorage에 저장
-      localStorage.setItem('accessToken', userData.accessToken);
-      localStorage.setItem('user', JSON.stringify(userData));
+      if (adminLogin && !isAdminUser(userData)) {
+        setError('관리자 계정으로 로그인해 주세요.');
+        return;
+      }
 
       // Context에 전달
       login(userData);
 
-      // 성공 후 메인 페이지로 이동
-      navigate('/');
+      navigate(isAdminUser(userData) ? '/admin' : '/', { replace: true });
     } catch (error) {
       console.error(error);
       setError('아이디 또는 비밀번호를 확인해주세요.');
@@ -71,6 +71,7 @@ const LoginPage = () => {
 
         {/* 로그인 폼 */}
         <form className="login-form" onSubmit={handleLogin}>
+          {adminLogin && <h2>관리자 로그인</h2>}
           {/* 아이디 입력 */}
           <div className="input-wrapper">
             <input

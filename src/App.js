@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import './App.css';
 import ScrollToTop from './components/ScrollToTop';
+import AdminRoute from './components/AdminRoute';
 
 import Header from './components/Header';
 import MainIntroSection from './components/MainIntroSection';
@@ -65,12 +66,14 @@ function App() {
             <Route path="/bible-practice" element={<div className="page-container"><BibleTypingPage /></div>} />
             <Route path="/logo-gallery" element={<div className="page-container"><LogoGalleryPage /></div>} />
             <Route path="/sermons/:id" element={<div className="page-container"><SermonDetailPage /></div>} />
-            <Route path="/admin" element={<div className="page-container"><AdminDashboardPage /></div>} />
-            <Route path="/admin/sermons" element={<div className="page-container"><SermonManagePage /></div>} />
-            <Route path="/admin/posts" element={<div className="page-container"><PostManagePage /></div>} />
-            <Route path="/admin/members" element={<div className="page-container"><MemberManagePage /></div>} />
-            <Route path="/admin/card-slider" element={<CardSliderManagePage />} />
-            <Route path="/admin/bible-ppt" element={<BiblePptPage />} />
+            <Route path="/admin" element={<AdminRoute />}>
+              <Route index element={<div className="page-container"><AdminDashboardPage /></div>} />
+              <Route path="sermons" element={<div className="page-container"><SermonManagePage /></div>} />
+              <Route path="posts" element={<div className="page-container"><PostManagePage /></div>} />
+              <Route path="members" element={<div className="page-container"><MemberManagePage /></div>} />
+              <Route path="card-slider" element={<CardSliderManagePage />} />
+              <Route path="bible-ppt" element={<BiblePptPage />} />
+            </Route>
             <Route path="/worship-info" element={<div className="page-container"><WorshipInfoPage /></div>} />
             <Route path="/church-intro" element={<div className="page-container"><ChurchIntroPage /></div>} />
             <Route path="/church-history" element={<div className="page-container"><ChurchHistoryPage /></div>} />
