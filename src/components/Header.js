@@ -196,7 +196,7 @@ const Header = () => {
                   예배 미디어
                 </Link>
               ) : (
-                <Link to="/worship-media/all" className="menu-item">
+                <Link to="/worship-media" className="menu-item">
                   예배 미디어
                 </Link>
               )}
@@ -234,7 +234,7 @@ const Header = () => {
                 예배 미디어
               </Link>
             ) : (
-              <Link to="/worship-media/all" className="mobile-nav-item">
+              <Link to="/worship-media" className="mobile-nav-item">
                 예배 미디어
               </Link>
             )}

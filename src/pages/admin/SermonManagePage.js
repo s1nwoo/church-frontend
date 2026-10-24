@@ -71,10 +71,10 @@ const BIBLE_ABBREVIATIONS = [
 
 // 필드 설정: content를 메인 제목으로 사용 (title 제거)
 const fieldConfig = [
-  { key: 'worshipType', label: '예배 구분', type: 'select', editable: true, required: true, options: WORSHIP_TYPES },
-  { key: 'content',      label: '말씀 제목',    type: 'text',   editable: true, required: true },
+  { key: 'worshipType', label: '영상 구분', type: 'select', editable: true, required: true, options: WORSHIP_TYPES },
+  { key: 'content',      label: '영상 제목',    type: 'text',   editable: true, required: true },
   { key: 'preacher',     label: '설교자',       type: 'preacher-select', editable: true, required: true },
-  { key: 'sermonDate',   label: '설교 날짜',    type: 'date',   editable: true, required: true },
+  { key: 'sermonDate',   label: '영상 날짜',    type: 'date',   editable: true, required: true },
   { key: 'youtubeUrl',   label: '유튜브 링크',  type: 'text',   editable: true, required: true },
   { key: 'bibleText',    label: '성경봉독',     type: 'text',   editable: true, required: false },
   {
@@ -98,6 +98,8 @@ const SermonManagePage = () => {
   const [form, setForm] = useState({});
   const [search, setSearch] = useState('');
   const [worshipType, setWorshipType] = useState('');
+  const isCommunity = form.worshipType === 'COMMUNITY';
+  const visibleFields = fieldConfig.filter(field => !isCommunity || !['preacher', 'bibleText'].includes(field.key));
 
   // 페이지네이션 상태
   const [page, setPage] = useState(0);           // 현재 페이지(0-based)
@@ -225,7 +227,7 @@ const SermonManagePage = () => {
 
   const handleSubmit = async () => {
     // 필수 필드 검사
-    const requiredFields = fieldConfig.filter(f => f.required);
+    const requiredFields = visibleFields.filter(f => f.required);
     for (const field of requiredFields) {
       if (!form[field.key]) {
         alert(`${field.label}을(를) 입력해주세요.`);
@@ -234,14 +236,14 @@ const SermonManagePage = () => {
     }
 
     // 직접입력 모드에서 설교자명이 비어있는지 체크
-    if (isCustomPreacher && !customPreacherValue.trim()) {
+    if (!isCommunity && isCustomPreacher && !customPreacherValue.trim()) {
       alert('설교자 이름을 입력해주세요.');
       return;
     }
 
     try {
       // title 제거 - content만 전송
-      const submitData = { ...form };
+      const submitData = { ...form, ...(isCommunity ? { preacher: '', bibleText: null } : {}) };
 
       if (editingId) {
         await axios.put(`/api/sermons/${editingId}`, submitData);
@@ -270,18 +272,18 @@ const SermonManagePage = () => {
 
   return (
     <div className="sermon-manage-container page-container">
-      <h2 className="sermon-title">설교 관리</h2>
+      <h2 className="sermon-title">영상 관리</h2>
 
       <div className="sermon-manage-top">
-        <select aria-label="예배 구분 필터" value={worshipType} onChange={e => setWorshipType(e.target.value)}>
-          <option value="">전체 예배</option>
+        <select aria-label="영상 구분 필터" value={worshipType} onChange={e => setWorshipType(e.target.value)}>
+          <option value="">전체 영상</option>
           {WORSHIP_TYPES.map(option => (
             <option key={option.value} value={option.value}>{option.label}</option>
           ))}
         </select>
         <input
           type="text"
-          placeholder="말씀 제목 또는 설교자 검색"
+          placeholder="영상 제목 또는 설교자 검색"
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
@@ -292,7 +294,7 @@ const SermonManagePage = () => {
       <table className="sermon-table">
         <thead>
           <tr>
-            <th>예배 구분</th><th>말씀 제목</th><th>설교자</th><th>날짜</th><th>성경봉독</th>
+            <th>영상 구분</th><th>영상 제목</th><th>설교자</th><th>날짜</th><th>성경봉독</th>
             <th>삭제 여부</th><th>관리</th>
           </tr>
         </thead>
@@ -368,9 +370,9 @@ const SermonManagePage = () => {
       {modalOpen && (
         <div className="modal-overlay">
           <div className="modal">
-            <h3>{editingId ? '설교 수정' : '설교 등록'}</h3>
+            <h3>{editingId ? '영상 수정' : '영상 등록'}</h3>
 
-            {fieldConfig.map(({ key, label, type, editable, options, required }) => {
+            {visibleFields.map(({ key, label, type, editable, options, required }) => {
               // 설교자 필드: 특별 처리
               if (key === 'preacher') {
                 return (
@@ -476,7 +478,7 @@ const SermonManagePage = () => {
                       placeholder={
                         key === 'youtubeUrl' ? 'https://www.youtube.com/watch?v=...' :
                         key === 'bibleText' ? '예: 요3:16 또는 요3:16-21 또는 요3:16, 요5:14-15' :
-                        key === 'content' ? '말씀의 제목을 입력하세요' :
+                        key === 'content' ? '영상 제목을 입력하세요' :
                         ''
                       }
                     />

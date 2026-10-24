@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { WORSHIP_TABS as TABS, worshipTypeForTab } from '../utils/worshipTypes';
+import { WORSHIP_TABS as TABS, worshipTypeForTab, worshipTypeLabel } from '../utils/worshipTypes';
 import axios from 'axios';
 import bannerImg5 from '../components/images/top_banner_img5.png'; /* 주일예배 배너 우측 일러스트 */
 import bannerImg6 from '../components/images/top_banner_img6.png'; /* 공동체영상 배너 우측 일러스트 */
@@ -11,7 +11,7 @@ import './ChurchIntroPage.css';
 
 
 export default function AllSermonsPage() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const requestedTab = searchParams.get('tab');
   const activeTab = TABS.some(tab => tab.key === requestedTab) ? requestedTab : 'sunday';
   const [loading, setLoading] = useState(true);
@@ -23,11 +23,6 @@ export default function AllSermonsPage() {
   useEffect(() => {
     setList([]);
     setError('');
-    if (activeTab === 'community') {
-      setLoading(false);
-      // 공동체영상일 땐 API 호출 안 함
-      return;
-    }
     let cancelled = false;
     setLoading(true);
     axios.get('/api/sermons', {
@@ -100,7 +95,7 @@ export default function AllSermonsPage() {
             <button
               key={tab.key}
               className={activeTab === tab.key ? 'tab-item active' : 'tab-item'}
-              onClick={() => setSearchParams({ tab: tab.key })}
+              onClick={() => navigate(`/worship-media?tab=${tab.key}`)}
               aria-current={activeTab === tab.key ? 'page' : undefined}
             >
               {tab.label}
@@ -112,12 +107,12 @@ export default function AllSermonsPage() {
       {/* ─── 콘텐츠 영역 (흰색 박스) ─── */}
       <div className="intro-container page-container">
         {/* ─── 선택한 예배의 영상 목록 ─── */}
-        {activeTab !== 'community' && loading && <p role="status">로딩 중…</p>}
-        {activeTab !== 'community' && error && <p role="alert">{error}</p>}
-        {activeTab !== 'community' && !loading && !error && list.length === 0 && (
-          <p className="worship-empty">아직 등록된 {activeTab === 'afternoon' ? '오후예배' : '주일예배'} 영상이 없습니다.</p>
+        {loading && <p role="status">로딩 중…</p>}
+        {error && <p role="alert">{error}</p>}
+        {!loading && !error && list.length === 0 && (
+          <p className="worship-empty">아직 등록된 {worshipTypeLabel(worshipTypeForTab(activeTab))} 영상이 없습니다.</p>
         )}
-        {activeTab !== 'community' && !loading && !error && (
+        {!loading && !error && (
           <ul className="sermon-list">
             {list.map(item => (
               <li
@@ -127,7 +122,7 @@ export default function AllSermonsPage() {
                 <div className="left">
                   <p className="title">
                     {item.content}
-                    {item.bibleText && (
+                    {activeTab !== 'community' && item.bibleText && (
                       <span className="ref">({item.bibleText})</span>
                     )}
                   </p>
@@ -139,7 +134,7 @@ export default function AllSermonsPage() {
                       month:  '2-digit',
                       day:    '2-digit'
                     })}
-                    &nbsp;|&nbsp;{item.preacher}
+                    {activeTab !== 'community' && item.preacher && ` | ${item.preacher}`}
                   </p>
                 </div>
               </li>
@@ -147,24 +142,6 @@ export default function AllSermonsPage() {
           </ul>
         )}
 
-        {/* ─── 공동체영상 탭: 준비중 안내 ─── */}
-        {activeTab === 'community' && (
-          <div className="community-notice">
-            <h2>공동체영상 콘텐츠는 준비중입니다.</h2>
-            <p>
-              유튜브 &gt; 재생목록 &gt; 공동체활동 영상에서 확인 할 수 있습니다.
-            </p>
-            <p>감사합니다.</p>
-            <a
-              href="https://www.youtube.com/@%EB%B0%A9%ED%99%94%EC%B9%A8%EB%A1%80%EA%B5%90%ED%9A%8C/videos"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="community-youtube-btn"
-            >
-              공동체영상 바로가기
-            </a>
-          </div>
-        )}
       </div>
     </>
   );

@@ -15,8 +15,8 @@ const AdminDashboardPage = () => {
       path: '/admin/members',
     },
     {
-      title: '설교 관리',
-      description: '설교 내용을 등록하고 관리할 수 있습니다.',
+      title: '영상 관리',
+      description: '주일예배, 오후예배, 공동체영상을 등록하고 관리합니다.',
       icon: <FaChalkboardTeacher size={32} />,
       path: '/admin/sermons',
     },

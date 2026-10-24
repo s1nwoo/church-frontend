@@ -1,7 +1,7 @@
 // src/pages/WorshipMediaPage.js
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { WORSHIP_TABS as TABS, tabForWorshipType } from '../utils/worshipTypes';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { WORSHIP_TABS as TABS, tabForWorshipType, worshipTypeForTab, worshipTypeLabel } from '../utils/worshipTypes';
 import axios from 'axios';
 import bannerImg5 from '../components/images/top_banner_img5.png'; /* 주일예배 배너 우측 일러스트 */
 import bannerImg6 from '../components/images/top_banner_img6.png'; /* 공동체영상 배너 우측 일러스트 */
@@ -12,7 +12,7 @@ import './ChurchIntroPage.css';
 // YouTube URL에서 11자리 ID만 추출
 function extractYoutubeId(url) {
   const regex = /(?:\?v=|\/embed\/|youtu\.be\/)([\w-]{11})/;
-  const match = url.match(regex);
+  const match = (url || '').match(regex);
   return match ? match[1] : '';
 }
 
@@ -22,7 +22,8 @@ export default function WorshipMediaPage() {
   const scrollPositionRef = useRef(0); // 스크롤 위치 저장
   const isNavigatingRef = useRef(false); // 네비게이션 중인지 체크
 
-  const [activeTab, setActiveTab] = useState('sunday');
+  const [searchParams] = useSearchParams();
+  const requestedTab = TABS.some(tab => tab.key === searchParams.get('tab')) ? searchParams.get('tab') : 'sunday';
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [allItems,   setAllItems] = useState([]);   // 전체 데이터
@@ -30,9 +31,12 @@ export default function WorshipMediaPage() {
   const [selected,   setSelected] = useState(null); // 상세 데이터
 
   // 같은 예배 구분의 영상만 관련 목록에 표시한다.
-  const selectedWorshipType = selected?.worshipType || 'SUNDAY';
+  const activeTab = id && selected ? tabForWorshipType(selected.worshipType) : requestedTab;
+  const selectedWorshipType = id ? (selected ? selected.worshipType || 'SUNDAY' : null) : worshipTypeForTab(activeTab);
+  const isCommunity = activeTab === 'community';
   useEffect(() => {
     let cancelled = false;
+    if (!selectedWorshipType) return;
     setAllItems([]);
     setList([]);
     axios.get('/api/sermons', {
@@ -43,18 +47,26 @@ export default function WorshipMediaPage() {
     return () => { cancelled = true; };
   }, [selectedWorshipType]);
 
-  // 2) URL id가 바뀔 때 상세 데이터 로드
+  // 탭 진입은 해당 유형의 최신 영상, ID 링크는 지정한 영상을 재생한다.
   useEffect(() => {
-    if (!id) return;
     let cancelled = false;
     setLoading(true);
     setError('');
-    axios.get(`/api/sermons/${id}`)
-      .then(res => {
+    setSelected(null);
+    const loadVideo = async () => {
+      let videoId = id;
+      if (!videoId) {
+        const response = await axios.get('/api/sermons', {
+          params: { page: 0, size: 1, includeDeleted: false, worshipType: worshipTypeForTab(requestedTab) }
+        });
         if (cancelled) return;
-        setSelected(res.data);
-        setActiveTab(tabForWorshipType(res.data.worshipType));
-      })
+        videoId = response.data.content?.[0]?.id;
+      }
+      if (!videoId) return;
+      const response = await axios.get(`/api/sermons/${videoId}`);
+      if (!cancelled) setSelected(response.data);
+    };
+    loadVideo()
       .catch(() => {
         if (!cancelled) {
           setSelected(null);
@@ -63,7 +75,7 @@ export default function WorshipMediaPage() {
       })
       .finally(() => { if (!cancelled) setLoading(false); });
     return () => { cancelled = true; };
-  }, [id]);
+  }, [id, requestedTab]);
 
   // 3) selected가 변경되면 스크롤 복원
   useEffect(() => {
@@ -95,7 +107,7 @@ export default function WorshipMediaPage() {
 
     if (currentIndex === -1) {
       // 현재 글을 찾지 못한 경우 최신 4개
-      setList(sorted.slice().reverse().slice(0, 4).reverse());
+      setList(sorted.slice().reverse().slice(0, 4));
       return;
     }
 
@@ -183,7 +195,7 @@ export default function WorshipMediaPage() {
             <button
               key={tab.key}
               className={activeTab === tab.key ? 'tab-item active' : 'tab-item'}
-              onClick={() => navigate(`/worship-media/all?tab=${tab.key}`)}
+              onClick={() => navigate(`/worship-media?tab=${tab.key}`)}
               aria-current={activeTab === tab.key ? 'page' : undefined}
             >
               {tab.label}
@@ -196,17 +208,23 @@ export default function WorshipMediaPage() {
         {/* ─── 예배 영상 상세 + 같은 예배의 리스트 ─── */}
         {loading && <p role="status">로딩 중…</p>}
         {error && <p role="alert">{error}</p>}
+        {!loading && !error && !selected && (
+          <div className="worship-empty">
+            <p>아직 등록된 {worshipTypeLabel(worshipTypeForTab(activeTab))} 영상이 없습니다.</p>
+            <button className="view-all" onClick={() => navigate(`/worship-media/all?tab=${activeTab}`)}>전체목록</button>
+          </div>
+        )}
         {!loading && !error && selected && (
           <>
             {/* 설교 헤더 */}
             <div className="sermon-header">
               <h2 className="sermon-title">
-                {selected.content} <span className="ref">({selected.bibleText})</span>
+                {selected.content} {!isCommunity && selected.bibleText && <span className="ref">({selected.bibleText})</span>}
               </h2>
               <p className="sermon-meta">
                 {new Date(selected.sermonDate).toLocaleDateString('ko-KR', {
                   year: 'numeric', month: '2-digit', day: '2-digit'
-                })} | {selected.preacher}
+                })}{!isCommunity && selected.preacher && ` | ${selected.preacher}`}
               </p>
             </div>
 
@@ -244,7 +262,7 @@ export default function WorshipMediaPage() {
                       </span>
                       <div className="item">
                         <strong>{item.content}</strong>
-                        <small>{item.preacher}</small>
+                        {!isCommunity && <small>{item.preacher}</small>}
                       </div>
                     </li>
                   ))}
@@ -258,7 +276,8 @@ export default function WorshipMediaPage() {
               </aside>
             </div>
 
-            {/* 스크립트 + 성경구절 */}
+            {/* 공동체영상에는 설교본문을 표시하지 않는다. */}
+            {!isCommunity && <>
             <div className="media-transcript">
               <h3>설교본문 | {selected.bibleText} 말씀</h3>
               {selected.transcriptLines?.map((line, i) => (
@@ -271,28 +290,10 @@ export default function WorshipMediaPage() {
                 : <p>성경구절 정보가 없습니다.</p>
               }
             </div>
+            </>}
           </>
         )}
 
-        {/* ─── 공동체영상 탭: 준비중 안내 ─── */}
-        {activeTab === 'community' && (
-          <div className="community-notice">
-            <h2>공동체영상 콘텐츠는 준비중입니다.</h2>
-            <p>
-              유튜브 &gt; 재생목록 &gt; 공동체활동 영상에서 확인 할 수 있습니다.
-            </p>
-            <p>감사합니다.</p>
-            {/* 유튜브 바로가기 버튼 */}
-            <a
-              href="https://www.youtube.com/@%EB%B0%A9%ED%99%94%EC%B9%A8%EB%A1%80%EA%B5%90%ED%9A%8C/videos"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="community-youtube-btn"
-            >
-              공동체영상 바로가기
-            </a>
-          </div>
-        )}
       </div>
     </>
   );

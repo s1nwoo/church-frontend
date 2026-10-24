@@ -1,6 +1,6 @@
 // src/App.js
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import './App.css';
 import ScrollToTop from './components/ScrollToTop';
@@ -76,7 +76,7 @@ function App() {
             <Route path="/posts/:id" element={<div className="page-container"><PostDetailPage/></div>} />
             {/* ──────────────────────────────────────────── */}
             {/* 예배와 훈련 (설교 영상) 전체목록 / 상세 */}
-            <Route path="/worship-media" element={<Navigate to="all" replace />} />
+            <Route path="/worship-media" element={<div className="page-container"><WorshipMediaPage /></div>} />
             <Route path="/worship-media/all" element={<div className="page-container"><AllSermonsPage /></div>} />
             <Route path="/worship-media/:id" element={<div className="page-container"><WorshipMediaPage /></div>} />
             {/* ──────────────────────────────────────────── */}
