@@ -5,6 +5,7 @@ import axios from 'axios';
 import topBanner7 from '../components/images/top_banner7.png';
 import './PostDetailPage.css';
 import './ChurchIntroPage.css';
+import PostAttachments from '../components/PostAttachments';
 
 const TABS = [
   { key: '공지사항', label: '공지사항' },
@@ -16,18 +17,22 @@ export default function PostDetailPage() {
 
   const [post, setPost]           = useState(null);
   const [activeTab, setActiveTab] = useState('');
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    axios.get(`/api/posts/${id}`)
+    setError('');
+    setPost(null);
+    const token = localStorage.getItem('accessToken');
+    axios.get(`/api/posts/${id}`, { headers: token ? { Authorization: `Bearer ${token}` } : {} })
       .then(res => {
         setPost(res.data);
         setActiveTab(res.data.category);
       })
-      .catch(console.error);
+      .catch(() => setError('게시글을 찾을 수 없거나 열람 권한이 없습니다.'));
   }, [id]);
 
   if (!post) {
-    return <div className="page-container">로딩 중…</div>;
+    return <div className="page-container">{error || '로딩 중…'}</div>;
   }
 
   const goToTab = (tabKey) => {
@@ -86,6 +91,7 @@ export default function PostDetailPage() {
               <p key={i}>{line || <br />}</p>
             ))}
           </div>
+          <PostAttachments post={post} />
 
           {/* 목록으로 버튼 */}
           <button
