@@ -1,0 +1,55 @@
+.yut-display{position:relative;padding:16px 20px 48px;min-height:500px;gap:8px}
+.yut-display-setup{height:auto;min-height:100dvh}
+.yut-display-setup .yut-setup{width:100%;max-width:950px;margin:16px auto 30px}
+.yut-display-setup .yut-setup-fields:disabled{opacity:1}
+.yut-display-setup .yut-display-fullscreen{position:fixed}
+.yut-display-layout{flex:1;min-height:0;display:grid;grid-template-columns:minmax(150px,1fr) minmax(0,3.8fr) minmax(180px,1.15fr);gap:20px;align-items:stretch}
+.yut-display .yut-display-board{min-width:0;margin:0;container-type:size}
+.yut-display .yut-board{width:min(100cqw,100cqh);max-width:none;min-width:0}
+.yut-display .yut-scoreboard{display:grid;grid-template-columns:1fr;grid-auto-rows:1fr;gap:12px;margin:0;align-self:stretch}
+.yut-display .yut-score{position:relative;flex-wrap:wrap;align-content:center;gap:10px;padding:16px;border-top:0;border-left:5px solid var(--team)}
+.yut-display .yut-score h2{font-size:clamp(24px,2.2vw,36px)}
+.yut-display .yut-score>strong{width:100%;margin-left:0;padding-left:45px;font-size:clamp(28px,3vw,46px);line-height:1.2}
+.yut-display .yut-score small{font-size:18px}
+.yut-display .yut-score div>span{font-size:18px}
+.yut-display .yut-score>strong{padding-left:0;font-size:clamp(36px,3.4vw,54px)}
+.yut-display .yut-display-update{position:absolute;bottom:10px;left:20px;right:125px;min-height:28px;padding:0;font-size:22px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.yut-display .yut-display-fullscreen{position:absolute;right:20px;bottom:9px;min-height:30px;padding:4px 10px;font-size:12px;background:transparent;z-index:3}
+.yut-finish{display:grid;grid-auto-rows:1fr;gap:12px;min-height:0}
+.yut-finish-team{min-height:0;border:1px solid #dfd7cd;border-radius:16px;background:#ebe5db80;overflow:hidden;display:flex;flex-direction:column}
+.yut-finish-team h2{font-size:clamp(22px,1.9vw,30px);padding:10px 12px 0;line-height:1.3;color:var(--team);overflow-wrap:anywhere}
+.yut-finish-team h2 span{display:block;margin-top:3px;font-size:18px;font-weight:500;color:var(--muted)}
+.yut-finish-pile{position:relative;flex:1;min-height:70px}
+.yut-finish-empty{position:absolute;inset:0;display:grid;place-items:center;font-size:16px;color:#8c847a;text-align:center}
+.yut-finished-piece{position:absolute;width:clamp(36px,4vw,62px);aspect-ratio:1;border-radius:50%;border:3px solid white;background:var(--team);color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;box-shadow:0 4px 0 #0002,0 7px 12px #43362730;transform:translate(-50%,-50%) rotate(var(--tilt));animation:yut-finish-land .65s cubic-bezier(.22,.8,.35,1) both}
+.yut-finished-piece b{font-size:clamp(19px,2.2vw,32px)}
+.yut-finished-piece small{font-size:14px}
+@keyframes yut-finish-land{0%{opacity:0;transform:translate(70%,-150%) rotate(calc(var(--tilt) + 70deg)) scale(1.25)}55%{opacity:1;transform:translate(-50%,-60%) rotate(calc(var(--tilt) - 12deg)) scale(.95)}78%{transform:translate(-50%,-65%) rotate(calc(var(--tilt) + 5deg)) scale(1.04)}100%{opacity:1;transform:translate(-50%,-50%) rotate(var(--tilt)) scale(1)}}
+@media(max-width:900px) and (min-width:601px){.yut-display-layout{grid-template-columns:130px minmax(0,1fr) 150px;gap:10px}.yut-display .yut-score{padding:10px;gap:6px}.yut-display .yut-score>strong{padding-left:0}.yut-display .yut-score h2{font-size:17px}}
+@media(max-width:600px){.yut-display{height:auto;min-height:100dvh}.yut-display-layout{grid-template-columns:1fr 1fr;gap:12px}.yut-display .yut-display-board{grid-column:1/-1;grid-row:1;container-type:normal}.yut-display .yut-board{width:100%}.yut-finish,.yut-display .yut-scoreboard{grid-template-columns:1fr;grid-auto-rows:minmax(135px,auto)}.yut-display .yut-score>strong{padding-left:0}.yut-display .yut-score small{display:inline}.yut-display .yut-display-update{font-size:12px}.yut-finished-piece{width:42px}}
+@media(prefers-reduced-motion:reduce){.yut-finished-piece{animation:none}}
+.yut-manager-layout{grid-template-columns:170px minmax(0,1fr) 300px;gap:20px}
+.yut-manager-layout .yut-finish{align-self:stretch;max-height:740px;min-height:520px}
+.yut-manager-layout .yut-finish-team h2{font-size:20px}
+.yut-manager-layout .yut-finish-empty{padding:8px;font-size:14px}
+.yut-manager-layout .yut-board{max-width:100%;min-width:0}
+.yut-app [draggable=true]{cursor:grab}
+.yut-app [draggable=true]:active{cursor:grabbing}
+.yut-reserve-drop{margin-top:10px;padding:12px 8px;border:2px dashed var(--line);border-radius:10px;text-align:center;font-size:13px;color:var(--muted)}
+.yut-dragging .yut-cell{background:#315f8915;box-shadow:inset 0 0 0 2px #315f8940}
+.yut-dragging .yut-finish-team,.yut-dragging .yut-reserve-drop{outline:2px dashed var(--accent);outline-offset:2px}
+@media(max-width:1000px){.yut-manager-layout{grid-template-columns:140px minmax(0,1fr)}.yut-manager-layout>.yut-controls{grid-column:1/-1;grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.yut-manager-layout{grid-template-columns:1fr}.yut-manager-layout>.yut-finish{grid-template-columns:1fr 1fr;min-height:0;grid-auto-rows:180px}.yut-manager-layout>.yut-controls{grid-template-columns:1fr}.yut-manager-layout>.yut-stage{grid-row:1}}
+.yut-many-players .yut-manager-layout .yut-finish{overflow:auto;grid-auto-rows:145px;min-height:0;max-height:740px}
+.yut-display.yut-many-players .yut-display-layout{grid-template-columns:minmax(220px,1.25fr) minmax(0,3.5fr) minmax(220px,1.25fr);gap:14px}
+.yut-display.yut-many-players .yut-scoreboard,.yut-display.yut-many-players .yut-finish{grid-template-columns:1fr 1fr;gap:8px}
+.yut-display.yut-many-players .yut-score{padding:8px;gap:5px}
+.yut-display.yut-many-players .yut-score h2,.yut-display.yut-many-players .yut-finish-team h2{font-size:18px;line-height:1.2}
+.yut-display.yut-many-players .yut-score>strong{font-size:26px}
+.yut-display.yut-many-players .yut-score small,.yut-display.yut-many-players .yut-score div>span,.yut-display.yut-many-players .yut-finish-team h2 span{font-size:13px}
+.yut-display.yut-many-players .yut-finish-pile{min-height:42px}
+.yut-display.yut-many-players .yut-finish-empty{font-size:12px;padding:4px}
+.yut-display.yut-many-players .yut-finished-piece{width:34px;left:50%!important;top:50%!important}
+.yut-display.yut-many-players .yut-finished-piece b{font-size:20px}
+.yut-display.yut-many-players .yut-finished-piece small{font-size:10px}
+@media(max-width:800px){.yut-display.yut-many-players{height:auto;min-height:100dvh}.yut-display.yut-many-players .yut-display-layout{grid-template-columns:1fr 1fr}.yut-display.yut-many-players .yut-display-board{grid-column:1/-1;grid-row:1;container-type:normal}.yut-display.yut-many-players .yut-board{width:100%}.yut-display.yut-many-players .yut-finish,.yut-display.yut-many-players .yut-scoreboard{grid-auto-rows:minmax(130px,auto)}}

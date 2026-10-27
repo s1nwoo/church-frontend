@@ -1,6 +1,6 @@
 // src/App.js
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import './App.css';
 import ScrollToTop from './components/ScrollToTop';
@@ -31,11 +31,18 @@ import MemberManagePage from './pages/admin/MemberManagePage'
 import ProfilePage from './pages/ProfilePage'; // ✅ 내 정보 페이지
 import CardSliderManagePage from './pages/admin/CardSliderManagePage';
 import BiblePptPage from './pages/admin/BiblePptPage';
+import YutPage from './pages/admin/YutPage';
+import YutDisplayPage from './pages/admin/YutDisplayPage';
 
 // 전체목록 페이지 컴포넌트
 import AllSermonsPage from './pages/AllSermonsPage';
 // 상세페이지 컴포넌트 (파라미터 기반)
 import WorshipMediaPage from './pages/WorshipMediaPage';
+
+function SiteChrome({ children }) {
+  const { pathname } = useLocation();
+  return /^\/admin\/yut(?:\/|$)/.test(pathname) ? null : children;
+}
 
 function App() {
   return (
@@ -43,7 +50,7 @@ function App() {
       <BrowserRouter>
         <ScrollToTop />
         <div className="app-wrapper">
-          <Header />
+          <SiteChrome><Header /></SiteChrome>
 
           <Routes>
             <Route
@@ -73,6 +80,8 @@ function App() {
               <Route path="members" element={<div className="page-container"><MemberManagePage /></div>} />
               <Route path="card-slider" element={<CardSliderManagePage />} />
               <Route path="bible-ppt" element={<BiblePptPage />} />
+              <Route path="yut" element={<YutPage />} />
+              <Route path="yut/display" element={<YutDisplayPage />} />
             </Route>
             <Route path="/worship-info" element={<div className="page-container"><WorshipInfoPage /></div>} />
             <Route path="/church-intro" element={<div className="page-container"><ChurchIntroPage /></div>} />
@@ -88,7 +97,7 @@ function App() {
 
           </Routes>
 
-          <Footer />
+          <SiteChrome><Footer /></SiteChrome>
         </div>
       </BrowserRouter>
     </AuthProvider>

@@ -9,6 +9,12 @@ const AdminDashboardPage = () => {
 
   const cards = [
     {
+      title: '함께하는 윷놀이',
+      description: '큰 윷판으로 함께 보고, 팀별 말을 옮기며 경기를 진행합니다.',
+      icon: <span style={{ fontSize: 32 }} aria-hidden="true">윷</span>,
+      path: '/admin/yut',
+    },
+    {
       title: '성경 PPT 만들기',
       description: '성경 구절을 입력하고 미리보기와 편집 후 PPT를 다운로드합니다.',
       icon: <FaBible size={32} />,

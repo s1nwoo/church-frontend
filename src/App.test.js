@@ -30,7 +30,7 @@ test('the admin menu opens the Bible PPT editor through the registered route', a
   expect(window.location.pathname).toBe('/admin/bible-ppt');
 });
 
-test.each(['/admin', '/admin/members', '/admin/sermons', '/admin/posts', '/admin/card-slider', '/admin/bible-ppt'])(
+test.each(['/admin', '/admin/members', '/admin/sermons', '/admin/posts', '/admin/card-slider', '/admin/bible-ppt', '/admin/yut', '/admin/yut/display'])(
   'opening %s anonymously goes directly to administrator login', async path => {
   window.history.replaceState({}, '', path);
   render(<App />);
@@ -45,6 +45,25 @@ function submitLogin() {
   fireEvent.change(screen.getByPlaceholderText('비밀번호 입력'), { target: { value: 'test-password' } });
   fireEvent.click(screen.getByRole('button', { name: '로그인', exact: true }));
 }
+
+test('administrator menu opens the yut game through the guarded route', async () => {
+  window.history.replaceState({}, '', '/admin');
+  localStorage.setItem('user', JSON.stringify({ role: 'ROLE_ADMIN' }));
+  localStorage.setItem('accessToken', 'admin-token');
+  render(<App />);
+  fireEvent.click(screen.getByText('함께하는 윷놀이'));
+  expect(await screen.findByRole('heading', { name: '윷놀이 경기 설정' })).toBeInTheDocument();
+  expect(window.location.pathname).toBe('/admin/yut');
+});
+
+test('a normal member cannot open the yut game directly', async () => {
+  window.history.replaceState({}, '', '/admin/yut');
+  localStorage.setItem('user', JSON.stringify({ role: 'ROLE_USER' }));
+  localStorage.setItem('accessToken', 'member-token');
+  render(<App />);
+  expect(await screen.findByRole('heading', { name: '관리자 권한이 필요합니다.' })).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: '경기 시작' })).not.toBeInTheDocument();
+});
 
 test.each(['/admin', '/login'])('successful administrator login from %s opens the admin menu', async path => {
   window.history.replaceState({}, '', path);
