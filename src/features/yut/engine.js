@@ -46,10 +46,10 @@ export function placePieces(state, selection, position, birthPiece) {
     });
   }
   indices.forEach(index => { team.pieces[index].position = hell ? null : position; });
-  let effect = hell ? ` · 지옥! ${indices.length}개 말 대기석으로` : '';
+  let effect = hell ? ` · 처음으로! ${indices.length}개 말 대기석으로` : '';
   if (isBoardPosition(position) && game.specials?.birth === position) {
-    if (candidates.length) { team.pieces[birthPiece].position = position; effect = ` · 잉태! ${birthPiece + 1}번 말 합류`; }
-    else effect = ' · 잉태 · 대기 말 없음';
+    if (candidates.length) { team.pieces[birthPiece].position = position; effect = ` · 한 명 더! ${birthPiece + 1}번 말 합류`; }
+    else effect = ' · 한 명 더! · 대기 말 없음';
   }
   if (hell || candidates.length) game.lastAction = {
     kind: hell ? 'hell' : 'birth', team: selection.team, piece: selection.piece,
@@ -67,5 +67,5 @@ export function setSpecialTile(state, kind, position) {
   const specials = { birth: null, hell: null, ...state.specials, [kind]: position };
   const other = kind === 'birth' ? 'hell' : 'birth';
   if (position !== null && specials[other] === position) specials[other] = null;
-  return { ...state, lastAction: null, specials, log: [`${kind === 'birth' ? '잉태' : '지옥'} 발판 ${position === null ? '해제' : `${positionLabel(position)}에 설정`}`, ...state.log].slice(0, 60) };
+  return { ...state, lastAction: null, specials, log: [`${kind === 'birth' ? '한 명 더!' : '처음으로!'} 발판 ${position === null ? '해제' : `${positionLabel(position)}에 설정`}`, ...state.log].slice(0, 60) };
 }

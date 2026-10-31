@@ -116,12 +116,12 @@ test('special markers drag onto the board and birth effects undo as one placemen
   const dataTransfer = { setData: jest.fn() };
   expect(screen.queryByText('업힌 말 함께 옮기기')).not.toBeInTheDocument();
   expect(screen.queryByRole('button', { name: '완주로 보내기' })).not.toBeInTheDocument();
-  fireEvent.dragStart(screen.getByRole('img', { name: '잉태 발판 표식' }), { dataTransfer });
+  fireEvent.dragStart(screen.getByRole('img', { name: '한 명 더! 발판 표식' }), { dataTransfer });
   fireEvent.drop(screen.getByRole('button', { name: '중앙에 놓기', exact: true }), { dataTransfer });
   expect(snapshot().game.specials.birth).toBe('center');
   fireEvent.click(screen.getByRole('button', { name: '사랑팀 1번 말 · 대기석' }));
   fireEvent.click(screen.getByRole('button', { name: '중앙에 놓기', exact: true }));
-  expect(screen.getByRole('dialog', { name: '잉태 · 합류할 말을 골라 주세요' })).toBeInTheDocument();
+  expect(screen.getByRole('dialog', { name: '한 명 더! · 합류할 말을 골라 주세요' })).toBeInTheDocument();
   expect(screen.queryByRole('button', { name: '1번 말 합류' })).not.toBeInTheDocument();
   fireEvent.click(screen.getByRole('button', { name: '2번 말 합류' }));
   expect(snapshot().game.teams[0].pieces.slice(0, 2).map(p => p.position)).toEqual(['center', 'center']);
@@ -133,7 +133,7 @@ test('special markers drag onto the board and birth effects undo as one placemen
   fireEvent.click(screen.getByRole('button', { name: '중앙에 놓기', exact: true }));
   fireEvent.click(screen.getByRole('button', { name: '이동 취소' }));
   expect(localStorage.getItem(STORAGE_KEY)).toBe(before);
-  fireEvent.click(screen.getByRole('button', { name: '잉태 발판 해제' }));
+  fireEvent.click(screen.getByRole('button', { name: '한 명 더! 발판 해제' }));
   expect(snapshot().game.specials.birth).toBeNull();
 });
 

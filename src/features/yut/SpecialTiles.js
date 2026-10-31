@@ -2,7 +2,7 @@ import React from 'react';
 import { positionLabel } from './boardModel';
 import './specialTiles.css';
 
-export const SPECIAL_TILES = [{ kind: 'birth', name: '잉태' }, { kind: 'hell', name: '지옥' }];
+export const SPECIAL_TILES = [{ kind: 'birth', name: '한 명 더!' }, { kind: 'hell', name: '처음으로!' }];
 
 export function SpecialIcon({ kind }) {
   return <svg viewBox="0 0 80 80" aria-hidden="true">
@@ -24,8 +24,8 @@ export default function SpecialTiles({ game, drag, setSpecial }) {
       <small>{game.specials?.[kind] != null ? positionLabel(game.specials[kind]) : '미설정'}</small>
       <button disabled={game.specials?.[kind] == null} onClick={() => setSpecial(kind, null)} aria-label={`${name} 발판 해제`}>해제</button>
     </div>)}</div>
-    <p><b>잉태</b> · 도착하면 합류할 대기 말 1개 선택</p>
-    <p><b>지옥</b> · 도착한 말 전부 대기석으로</p>
+    <p><b>한 명 더!</b> · 도착하면 합류할 대기 말 1개 선택</p>
+    <p><b>처음으로!</b> · 도착한 말 전부 대기석으로</p>
     <p>각 1칸씩 설정합니다. 같은 칸에 놓으면 기존 표식을 교체합니다. 설정만 바꿀 때는 말에 효과가 적용되지 않습니다.</p>
   </section>;
 }

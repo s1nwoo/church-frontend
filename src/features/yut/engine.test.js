@@ -55,7 +55,7 @@ test('hell returns the arriving stack, with no effect when configuring an occupi
   game = setSpecialTile(game, 'hell', 'center');
   game = placePieces(game, { team: 0, piece: 0 }, 'center');
   expect(game.teams[0].pieces.every(p => p.position === null)).toBe(true);
-  expect(game.log[0]).toContain('지옥');
+  expect(game.log[0]).toContain('처음으로!');
 });
 
 test('special tile settings roundtrip and overlap replaces the other marker', () => {

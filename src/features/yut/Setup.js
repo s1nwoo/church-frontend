@@ -24,7 +24,7 @@ export default function Setup({ onStart, onCancel, initialGame, onDraftChange, r
         <input type="radio" name="game-mode" checked={mode === option.value} onChange={() => { setMode(option.value); if (option.value === 'team') setCount(Math.min(count, 4)); }} />{option.label}
       </label>)}</fieldset>
       <div className="yut-form-row"><label>{individual ? '참가 인원' : '참가 팀'}<select value={count} onChange={e => { setCount(Number(e.target.value)); setColors(uniqueTeamColors); }}>{Array.from({ length: individual ? 9 : 3 }, (_, i) => i + 2).map(n => <option key={n} value={n}>{n}{individual ? '명' : '팀'}</option>)}</select></label>
-        {individual ? <p className="yut-individual-help">한 사람당 말 1개<br />대기 말이 없어 잉태 효과는 적용되지 않습니다.</p> : <label>팀마다 말<select value={pieces} onChange={e => setPieces(Number(e.target.value))}>{[2, 3, 4].map(n => <option key={n} value={n}>{n}개</option>)}</select></label>}</div>
+        {individual ? <p className="yut-individual-help">한 사람당 말 1개<br />대기 말이 없어 ‘한 명 더!’ 효과는 적용되지 않습니다.</p> : <label>팀마다 말<select value={pieces} onChange={e => setPieces(Number(e.target.value))}>{[2, 3, 4].map(n => <option key={n} value={n}>{n}개</option>)}</select></label>}</div>
       <div className="yut-team-inputs">{names.slice(0, count).map((name, i) => <div key={i}>
         <label><span style={{ color: colors[i] }}>{i + 1}{unit}</span>
           <input aria-label={`${i + 1}${unit} 이름`} value={name} maxLength={12} onChange={e => setNameSets(current => ({ ...current, [mode]: names.map((v, index) => index === i ? e.target.value : v) }))} /></label>
