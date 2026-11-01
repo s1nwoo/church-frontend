@@ -16,7 +16,7 @@ function BibleTypingPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('accessToken');
+    const token = sessionStorage.getItem('accessToken');
     if (!token) navigate('/login');
   }, [navigate]);
 
@@ -27,7 +27,7 @@ function BibleTypingPage() {
   useEffect(() => {
     axios.get('/api/bible-practice/books', {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+        Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
       }
     })
       .then(res => setBooks(res.data))
@@ -39,7 +39,7 @@ function BibleTypingPage() {
 
     axios.get(`/api/bible-practice/progress?bookCode=${encodeURIComponent(selectedBook)}`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+        Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
       }
     })
       .then(res => {
@@ -58,7 +58,7 @@ function BibleTypingPage() {
   const fetchAndReset = (book, chapter, verse) => {
     axios.get(`/api/bible-practice/verse?bookCode=${encodeURIComponent(book)}&chapter=${chapter}&verse=${verse}`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+        Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
       }
     })
       .then(res => {
@@ -96,7 +96,7 @@ function BibleTypingPage() {
         verse: next
       }, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
         }
       });
 

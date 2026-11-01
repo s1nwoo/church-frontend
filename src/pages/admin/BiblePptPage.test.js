@@ -20,7 +20,7 @@ async function enter(value = '창1:1-2') {
 }
 function openEditor() { fireEvent.click(screen.getByText('본문 편집 · 위치와 상자 크기 직접 입력')); }
 beforeEach(() => {
-  jest.clearAllMocks(); localStorage.clear(); localStorage.setItem('accessToken', 'admin-token');
+  jest.clearAllMocks(); localStorage.clear(); sessionStorage.clear(); sessionStorage.setItem('accessToken', 'admin-token');
   delete window.showSaveFilePicker;
   URL.createObjectURL = jest.fn(() => 'blob:preview'); URL.revokeObjectURL = jest.fn();
   axios.get.mockImplementation(url => Promise.resolve({ data: url.endsWith('/ranges') ? { 1: [1, 2, 3], 2: [1, 2] } : {

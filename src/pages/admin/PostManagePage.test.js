@@ -10,7 +10,7 @@ const document = { id: 7, title: '주일 예배자료', writer: '관리자', cat
 function page() { render(<MemoryRouter><PostManagePage /></MemoryRouter>); }
 function blobText(blob) { return new Promise(resolve => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.readAsText(blob); }); }
 beforeEach(() => {
-  jest.clearAllMocks(); localStorage.clear(); localStorage.setItem('accessToken', 'admin-token');
+  jest.clearAllMocks(); sessionStorage.clear(); sessionStorage.setItem('accessToken', 'admin-token');
   axios.get.mockResolvedValue({ data: { content: [document], totalPages: 1 } });
   axios.post.mockResolvedValue({ data: {} }); axios.put.mockResolvedValue({ data: {} }); axios.delete.mockResolvedValue({});
   jest.spyOn(window, 'confirm').mockReturnValue(true); jest.spyOn(window, 'alert').mockImplementation(() => {});

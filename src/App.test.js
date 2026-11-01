@@ -12,20 +12,23 @@ jest.mock('./components/MainIntroSection', () => () => '홈 화면');
 jest.mock('./components/SermonSection', () => () => null);
 
 beforeEach(() => {
+  sessionStorage.clear();
   localStorage.clear();
   jest.clearAllMocks();
   global.fetch = jest.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve([]) }));
-  axios.get.mockResolvedValue({ data: { content: [], users: [], totalPages: 0, books: [], width: 720, height: 540,
+  axios.get.mockImplementation(url => Promise.resolve({ data: url === '/api/profile'
+    ? { username: 'test-account', name: '검증된 관리자', role: 'ROLE_ADMIN' }
+    : { content: [], users: [], totalPages: 0, books: [], width: 720, height: 540,
     defaultStyle: { titleFontSize: 21, bodyFontSize: 50,
-      title: { x: 20, y: 20, width: 680, height: 40 }, body: { x: 20, y: 80, width: 680, height: 420 } } } });
+      title: { x: 20, y: 20, width: 680, height: 40 }, body: { x: 20, y: 80, width: 680, height: 420 } } } }));
 });
 
 test('the admin menu opens the Bible PPT editor through the registered route', async () => {
   window.history.replaceState({}, '', '/admin');
-  localStorage.setItem('user', JSON.stringify({ role: 'ROLE_ADMIN' }));
-  localStorage.setItem('accessToken', 'admin-token');
+  sessionStorage.setItem('user', JSON.stringify({ role: 'ROLE_ADMIN' }));
+  sessionStorage.setItem('accessToken', 'admin-token');
   render(<App />);
-  fireEvent.click(screen.getByText('성경 PPT 만들기'));
+  fireEvent.click(await screen.findByText('성경 PPT 만들기'));
   expect(await screen.findByLabelText('성경 구절')).toBeInTheDocument();
   expect(window.location.pathname).toBe('/admin/bible-ppt');
 });
@@ -48,18 +51,19 @@ function submitLogin() {
 
 test('administrator menu opens the yut game through the guarded route', async () => {
   window.history.replaceState({}, '', '/admin');
-  localStorage.setItem('user', JSON.stringify({ role: 'ROLE_ADMIN' }));
-  localStorage.setItem('accessToken', 'admin-token');
+  sessionStorage.setItem('user', JSON.stringify({ role: 'ROLE_ADMIN' }));
+  sessionStorage.setItem('accessToken', 'admin-token');
   render(<App />);
-  fireEvent.click(screen.getByText('함께하는 윷놀이'));
+  fireEvent.click(await screen.findByText('함께하는 윷놀이'));
   expect(await screen.findByRole('heading', { name: '윷놀이 경기 설정' })).toBeInTheDocument();
   expect(window.location.pathname).toBe('/admin/yut');
 });
 
 test('a normal member cannot open the yut game directly', async () => {
+  axios.get.mockResolvedValueOnce({ data: { username: 'test-account', role: 'ROLE_USER' } });
   window.history.replaceState({}, '', '/admin/yut');
-  localStorage.setItem('user', JSON.stringify({ role: 'ROLE_USER' }));
-  localStorage.setItem('accessToken', 'member-token');
+  sessionStorage.setItem('user', JSON.stringify({ role: 'ROLE_USER' }));
+  sessionStorage.setItem('accessToken', 'member-token');
   render(<App />);
   expect(await screen.findByRole('heading', { name: '관리자 권한이 필요합니다.' })).toBeInTheDocument();
   expect(screen.queryByRole('button', { name: '경기 시작' })).not.toBeInTheDocument();
@@ -73,7 +77,7 @@ test.each(['/admin', '/login'])('successful administrator login from %s opens th
   submitLogin();
   expect(await screen.findByRole('heading', { name: '관리자 메뉴' })).toBeInTheDocument();
   expect(window.location.pathname).toBe('/admin');
-  expect(localStorage.getItem('accessToken')).toBe('new-admin-token');
+  expect(sessionStorage.getItem('accessToken')).toBe('new-admin-token');
 });
 
 test('administrator entry rejects a normal member account without opening the admin menu', async () => {
@@ -83,7 +87,7 @@ test('administrator entry rejects a normal member account without opening the ad
   await screen.findByPlaceholderText('아이디 입력'); submitLogin();
   expect(await screen.findByText('관리자 계정으로 로그인해 주세요.')).toBeInTheDocument();
   expect(window.location.pathname).toBe('/login');
-  expect(localStorage.getItem('accessToken')).toBeNull();
+  expect(sessionStorage.getItem('accessToken')).toBeNull();
   expect(screen.queryByRole('heading', { name: '관리자 메뉴' })).not.toBeInTheDocument();
 });
 
@@ -96,46 +100,50 @@ test('normal member login on the regular login page still opens the home page', 
 });
 
 test('a stored administrator without a token must log in again', async () => {
-  localStorage.setItem('user', JSON.stringify({ role: 'ROLE_ADMIN' }));
+  sessionStorage.setItem('user', JSON.stringify({ role: 'ROLE_ADMIN' }));
   window.history.replaceState({}, '', '/admin'); render(<App />);
   expect(await screen.findByRole('heading', { name: '관리자 로그인' })).toBeInTheDocument();
   expect(window.location.pathname).toBe('/login');
 });
 
 test('malformed saved user data falls back to login instead of crashing', async () => {
-  localStorage.setItem('user', '{invalid');
+  sessionStorage.setItem('user', '{invalid');
   window.history.replaceState({}, '', '/admin'); render(<App />);
   expect(await screen.findByRole('heading', { name: '관리자 로그인' })).toBeInTheDocument();
 });
 
 test('a logged-in normal member cannot open admin screens', async () => {
-  localStorage.setItem('user', JSON.stringify({ role: 'ROLE_USER' }));
-  localStorage.setItem('accessToken', 'member-token');
+  axios.get.mockResolvedValueOnce({ data: { username: 'test-account', role: 'ROLE_USER' } });
+  sessionStorage.setItem('user', JSON.stringify({ role: 'ROLE_USER' }));
+  sessionStorage.setItem('accessToken', 'member-token');
   window.history.replaceState({}, '', '/admin/members'); render(<App />);
   expect(await screen.findByRole('heading', { name: '관리자 권한이 필요합니다.' })).toBeInTheDocument();
-  expect(axios.get).not.toHaveBeenCalled();
+  expect(axios.get).toHaveBeenCalledTimes(1);
+  expect(axios.get).toHaveBeenCalledWith('/api/profile', expect.anything());
 });
 
 test('an expired token clears the stale login and returns to administrator login', async () => {
-  localStorage.setItem('user', JSON.stringify({ role: 'ROLE_ADMIN' }));
-  localStorage.setItem('accessToken', 'old-token');
+  sessionStorage.setItem('user', JSON.stringify({ role: 'ROLE_ADMIN' }));
+  sessionStorage.setItem('accessToken', 'old-token');
   window.history.replaceState({}, '', '/admin'); render(<App />);
+  await screen.findByRole('heading', { name: '관리자 메뉴' });
   const expired = { config: { url: '/api/admin/bible-ppt/metadata', headers: { Authorization: 'Bearer old-token' } }, response: { status: 401 } };
   const onError = axios.interceptors.response.use.mock.calls[0][1];
   await act(async () => { await expect(onError(expired)).rejects.toBe(expired); });
   expect(await screen.findByRole('heading', { name: '관리자 로그인' })).toBeInTheDocument();
-  expect(localStorage.getItem('accessToken')).toBeNull();
-  expect(localStorage.getItem('user')).toBeNull();
+  expect(sessionStorage.getItem('accessToken')).toBeNull();
+  expect(sessionStorage.getItem('user')).toBeNull();
 });
 
 test('a rejected request using an old token does not clear a newer login', async () => {
-  localStorage.setItem('user', JSON.stringify({ role: 'ROLE_ADMIN' }));
-  localStorage.setItem('accessToken', 'new-token');
+  sessionStorage.setItem('user', JSON.stringify({ role: 'ROLE_ADMIN' }));
+  sessionStorage.setItem('accessToken', 'new-token');
   window.history.replaceState({}, '', '/admin'); render(<App />);
+  await screen.findByRole('heading', { name: '관리자 메뉴' });
   const expired = { config: { url: '/api/admin/bible-ppt/metadata', headers: { Authorization: 'Bearer old-token' } }, response: { status: 401 } };
   const onError = axios.interceptors.response.use.mock.calls[0][1];
   await act(async () => { await expect(onError(expired)).rejects.toBe(expired); });
-  expect(localStorage.getItem('accessToken')).toBe('new-token');
+  expect(sessionStorage.getItem('accessToken')).toBe('new-token');
   expect(screen.getByRole('heading', { name: '관리자 메뉴' })).toBeInTheDocument();
 });
 
@@ -147,8 +155,8 @@ test.each([
   ['/admin/bible-ppt', '성경 PPT 만들기'],
 ])('a direct visit to %s can return to the admin list', async (path, title) => {
   window.history.replaceState({}, '', path);
-  localStorage.setItem('user', JSON.stringify({ role: 'ROLE_ADMIN' }));
-  localStorage.setItem('accessToken', 'admin-token');
+  sessionStorage.setItem('user', JSON.stringify({ role: 'ROLE_ADMIN' }));
+  sessionStorage.setItem('accessToken', 'admin-token');
   render(<App />);
   expect(await screen.findByRole('heading', { name: title })).toBeInTheDocument();
   fireEvent.click(screen.getByRole('link', { name: '이전: 관리자 목록으로' }));

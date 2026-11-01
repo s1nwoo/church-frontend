@@ -19,7 +19,7 @@ const PostForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    axios.post('/api/posts', form, { withCredentials: true })
+    axios.post('/api/posts', form)
       .then(response => {
         alert('게시글이 등록되었습니다!');
         window.location.href = '/';

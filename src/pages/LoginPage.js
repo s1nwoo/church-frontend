@@ -13,7 +13,7 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const { login } = useContext(AuthContext);
+  const { login, logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const adminLogin = useLocation().state?.adminLogin === true;
 
@@ -25,6 +25,7 @@ const LoginPage = () => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
+    logout();
 
     try {
       const response = await axios.post('/api/auth/login', {
@@ -44,7 +45,6 @@ const LoginPage = () => {
 
       navigate(isAdminUser(userData) ? '/admin' : '/', { replace: true });
     } catch (error) {
-      console.error(error);
       setError('아이디 또는 비밀번호를 확인해주세요.');
     } finally {
       setIsLoading(false);

@@ -22,7 +22,7 @@ export default function PostDetailPage() {
   useEffect(() => {
     setError('');
     setPost(null);
-    const token = localStorage.getItem('accessToken');
+    const token = sessionStorage.getItem('accessToken');
     axios.get(`/api/posts/${id}`, { headers: token ? { Authorization: `Bearer ${token}` } : {} })
       .then(res => {
         setPost(res.data);

@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
+import { isAdminUser } from '../utils/auth';
 
 const PostList = () => {
   const [posts, setPosts] = useState([]);
 
-  // 📌 localStorage에서 사용자 역할 확인
-  const userRole = localStorage.getItem('userRole');
+  const { user } = useContext(AuthContext);
 
     useEffect(() => {
-      axios.get('/api/posts', { withCredentials: true })
+      axios.get('/api/posts')
         .then(res => {
-          console.log('📦 서버 응답:', res.data); // ← 콘솔 확인!
           const data = res.data;
 
           // 유연하게 처리: content가 있으면 그걸, 아니면 그냥 배열
@@ -31,7 +31,7 @@ const PostList = () => {
       <h2>📋 게시글 목록</h2>
 
       {/* ✍ 관리자만 글쓰기 버튼 표시 */}
-      {userRole === 'ADMIN' && (
+      {isAdminUser(user) && (
         <div className="mb-3 text-end">
           <Link to="/posts/new" className="btn btn-primary">✍ 글쓰기</Link>
         </div>

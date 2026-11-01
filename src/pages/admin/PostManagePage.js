@@ -4,7 +4,7 @@ import axios from 'axios';
 import './PostManagePage.css';
 import AdminBackButton from '../../components/AdminBackButton';
 import PostAttachments, { fileSize } from '../../components/PostAttachments';
-const headers = () => ({ Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}` });
+const headers = () => ({ Authorization: `Bearer ${sessionStorage.getItem('accessToken') || ''}` });
 
 // 카테고리 옵션 정의
 const CATEGORY_OPTIONS = [

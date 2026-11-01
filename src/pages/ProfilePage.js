@@ -7,7 +7,7 @@ import './ProfilePage.css';
 
 const ProfilePage = () => {
   const navigate = useNavigate();
-  const { user, login } = useContext(AuthContext);
+  const { user, login, logout } = useContext(AuthContext);
 
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -22,18 +22,10 @@ const ProfilePage = () => {
     confirmPassword: ''
   });
 
-  // ✅ axios 기본 헤더 설정 (JWT 토큰 포함)
-  useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    }
-  }, []);
-
   // ✅ 로그인 체크 - user가 로드될 때까지 기다림
   useEffect(() => {
-    // localStorage에 토큰이 있으면 user가 로드될 때까지 기다림
-    const token = localStorage.getItem('accessToken');
+    // sessionStorage에 토큰이 있으면 user가 로드될 때까지 기다림
+    const token = sessionStorage.getItem('accessToken');
     if (!token) {
       alert('로그인이 필요합니다.');
       navigate('/login');
@@ -57,7 +49,7 @@ const ProfilePage = () => {
   // 내 정보 불러오기
   useEffect(() => {
     const fetchMyInfo = async () => {
-      const token = localStorage.getItem('accessToken');
+      const token = sessionStorage.getItem('accessToken');
       if (!token) {
         setLoading(false);
         return;
@@ -92,8 +84,7 @@ const ProfilePage = () => {
         // 401 에러인 경우에만 로그인 페이지로 이동
         if (err.response?.status === 401) {
           alert('세션이 만료되었습니다. 다시 로그인해주세요.');
-          localStorage.removeItem('accessToken');
-          localStorage.removeItem('user');
+          logout();
           navigate('/login');
         } else {
           alert('정보를 불러오는 중 오류가 발생했습니다.');
@@ -104,7 +95,7 @@ const ProfilePage = () => {
     };
 
     fetchMyInfo();
-  }, []); // ✅ 의존성 배열에서 user 제거
+  }, [logout, navigate]);
 
   const handleChange = (key, value) => {
     // 전화번호는 숫자만 입력 가능
@@ -136,7 +127,7 @@ const ProfilePage = () => {
     }
 
     try {
-      const token = localStorage.getItem('accessToken');
+      const token = sessionStorage.getItem('accessToken');
 
       const updateData = {
         username: form.username,

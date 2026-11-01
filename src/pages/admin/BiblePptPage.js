@@ -9,7 +9,7 @@ import './BiblePptPage.css';
 const API = '/api/admin/bible-ppt';
 const STYLE_KEY = 'banghwa-bible-ppt-style-v1';
 const PPT_TYPE = 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
-const headers = () => ({ Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}` });
+const headers = () => ({ Authorization: `Bearer ${sessionStorage.getItem('accessToken') || ''}` });
 const clone = value => JSON.parse(JSON.stringify(value));
 const today = () => new Intl.DateTimeFormat('sv-SE', { timeZone: 'Asia/Seoul' }).format(new Date());
 async function errorMessage(error) {

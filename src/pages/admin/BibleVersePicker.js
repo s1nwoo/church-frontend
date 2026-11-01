@@ -14,7 +14,7 @@ export default function BibleVersePicker({ book, onAdd, onClose }) {
     else dialog.current.setAttribute('open', '');
     const controller = new AbortController();
     axios.get(`/api/admin/bible-ppt/books/${encodeURIComponent(book.abbreviation)}/ranges`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}` }, signal: controller.signal
+      headers: { Authorization: `Bearer ${sessionStorage.getItem('accessToken') || ''}` }, signal: controller.signal
     }).then(({ data }) => {
       if (controller.signal.aborted) return;
       const first = Object.keys(data)[0];

@@ -5,7 +5,7 @@ export function fileSize(bytes) {
   return bytes >= 1024 * 1024 ? `${(bytes / 1024 / 1024).toFixed(1)} MB` : `${Math.max(1, Math.ceil(bytes / 1024))} KB`;
 }
 export async function downloadAttachment(postId, file) {
-  const token = localStorage.getItem('accessToken');
+  const token = sessionStorage.getItem('accessToken');
   const { data } = await axios.get(`/api/posts/${postId}/attachments/${file.id}`, {
     headers: token ? { Authorization: `Bearer ${token}` } : {}, responseType: 'blob'
   });

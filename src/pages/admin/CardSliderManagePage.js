@@ -45,7 +45,7 @@ const CardSliderManagePage = () => {
     setLoading(true);
     setError('');
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('accessToken');
       const res = await fetch(`${API_BASE}/api/admin/banner-cards`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -80,7 +80,7 @@ const CardSliderManagePage = () => {
     setUploading(true);
     setUploadError('');
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('accessToken');
       const fd = new FormData();
       fd.append('file', uploadFile);
       const res = await fetch(`${API_BASE}/api/admin/upload/image`, {
@@ -119,7 +119,7 @@ const CardSliderManagePage = () => {
 
     setSaving(true);
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('accessToken');
       const isEdit = formMode === 'edit';
       const res = await fetch(
         isEdit ? `${API_BASE}/api/admin/banner-cards/${editId}` : `${API_BASE}/api/admin/banner-cards`,
@@ -171,7 +171,7 @@ const CardSliderManagePage = () => {
   const handleDelete = async (id, title) => {
     if (!window.confirm(`"${title}" 카드를 삭제하시겠습니까?`)) return;
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('accessToken');
       const res = await fetch(`${API_BASE}/api/admin/banner-cards/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
       if (!res.ok) throw new Error('삭제 실패');
       await fetchCards();
@@ -181,7 +181,7 @@ const CardSliderManagePage = () => {
   /* 토글 */
   const handleToggle = async (id) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('accessToken');
       const res = await fetch(`${API_BASE}/api/admin/banner-cards/${id}/toggle`, { method: 'PATCH', headers: { Authorization: `Bearer ${token}` } });
       if (!res.ok) throw new Error('상태 변경 실패');
       await fetchCards();
@@ -195,7 +195,7 @@ const CardSliderManagePage = () => {
     if (swapIdx < 0 || swapIdx >= newCards.length) return;
     [newCards[index].sortOrder, newCards[swapIdx].sortOrder] = [newCards[swapIdx].sortOrder, newCards[index].sortOrder];
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('accessToken');
       const res = await fetch(`${API_BASE}/api/admin/banner-cards/order`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
