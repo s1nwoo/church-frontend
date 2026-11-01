@@ -32,9 +32,39 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     clearLegacyAuth(); clearDefaultAuthorization(axios);
     let active = true;
-    async function verify() {
+    let renewal = null;
+    let activityTimer;
+    let activityDeadlineTimer;
+    async function renewSession() {
+      if (renewal) return renewal;
       const token = getAccessToken();
-      const requestGeneration = ++generation.current;
+      if (!token || verifiedToken.current !== token) return;
+      if (tokenExpiresAt(token) <= Date.now()) { logout(); return; }
+      const epoch = generation.current;
+      renewal = (async () => {
+        try {
+          const { data } = await axios.post('/api/auth/renew', null, {
+            headers: { Authorization: `Bearer ${token}` }, withCredentials: false, timeout: 10000,
+          });
+          if (!active || epoch !== generation.current || token !== getAccessToken()) return;
+          if (!data?.username || !data?.role || tokenClaims(token)?.sub !== data.username
+              || tokenClaims(data.accessToken)?.sub !== data.username || tokenExpiresAt(data.accessToken) <= Date.now()) {
+            logout(); return;
+          }
+          generation.current += 1;
+          verifiedToken.current = data.accessToken;
+          setUser(storeAuthSession(data)); setAuthLoading(false);
+        } catch (error) {
+          if (active && epoch === generation.current && token === getAccessToken()
+              && [401, 403].includes(error.response?.status)) logout();
+          // A failed renewal never extends the locally displayed deadline.
+        } finally { renewal = null; }
+      })();
+      return renewal;
+    }
+    async function verify(renewAfterVerification = false) {
+      const token = getAccessToken();
+      const requestGeneration = generation.current;
       if (!token) { clearAuthSession(); setUser(null); setAuthLoading(false); return; }
       const claims = tokenClaims(token);
       if (tokenExpiresAt(token) <= Date.now()) { logout(); return; }
@@ -50,13 +80,28 @@ export const AuthProvider = ({ children }) => {
         }
         verifiedToken.current = token;
         setUser(storeAuthSession({ ...data, accessToken: token })); setAuthLoading(false);
+        if (renewAfterVerification === true) await renewSession();
       } catch {
         if (active && requestGeneration === generation.current && token === getAccessToken()) logout();
       }
     }
-    verify();
+    verify(true);
+    function flushActivity() {
+      clearTimeout(activityTimer); clearTimeout(activityDeadlineTimer);
+      activityDeadlineTimer = null;
+      renewSession();
+    }
+    function onActivity(event) {
+      if (event.target?.closest?.('[data-auth-logout]') || !getAccessToken() || document.visibilityState !== 'visible') return;
+      clearTimeout(activityTimer);
+      // Coalesce a click's pointer/input events and rapid typing into one renewal.
+      activityTimer = setTimeout(flushActivity, 500);
+      if (!activityDeadlineTimer) activityDeadlineTimer = setTimeout(flushActivity, 5000);
+    }
     function onStorage(event) { if (event.key === AUTH_LOGOUT_EVENT) logout(false); }
     function onVisibility() { if (document.visibilityState === 'visible') verify(); }
+    const activityEvents = ['pointerdown', 'click', 'keydown', 'input', 'scroll'];
+    activityEvents.forEach(name => document.addEventListener(name, onActivity, { capture: true, passive: true }));
     window.addEventListener('storage', onStorage);
     window.addEventListener('focus', verify);
     window.addEventListener('pageshow', verify);
@@ -74,6 +119,9 @@ export const AuthProvider = ({ children }) => {
     });
     return () => {
       active = false;
+      clearTimeout(activityTimer);
+      clearTimeout(activityDeadlineTimer);
+      activityEvents.forEach(name => document.removeEventListener(name, onActivity, true));
       window.removeEventListener('storage', onStorage);
       window.removeEventListener('focus', verify);
       window.removeEventListener('pageshow', verify);

@@ -6,7 +6,7 @@ import { AUTH_LOGOUT_EVENT } from '../utils/authSession';
 import { MemoryRouter } from 'react-router-dom';
 import Header from '../components/Header';
 
-jest.mock('axios', () => ({ get: jest.fn(), defaults: { headers: { common: {} } },
+jest.mock('axios', () => ({ get: jest.fn(), post: jest.fn(), defaults: { headers: { common: {} } },
   interceptors: { response: { use: jest.fn(), eject: jest.fn() } } }));
 
 const token = (sub = 'account-a', exp = Math.floor(Date.now() / 1000) + 3600) => `header.${btoa(JSON.stringify({ sub, exp }))}.signature`;
@@ -17,7 +17,12 @@ function Probe() {
     <button onClick={() => logout()}>로그아웃</button></>;
 }
 const mount = () => render(<AuthProvider><Probe /></AuthProvider>);
-beforeEach(() => { localStorage.clear(); sessionStorage.clear(); jest.clearAllMocks(); axios.defaults.headers.common = {}; });
+beforeEach(() => {
+  localStorage.clear(); sessionStorage.clear(); jest.clearAllMocks(); axios.defaults.headers.common = {};
+  axios.post.mockImplementation((url, body, config) => Promise.resolve({ data: {
+    ...JSON.parse(sessionStorage.getItem('user')), accessToken: config.headers.Authorization.slice(7),
+  } }));
+});
 afterEach(() => jest.useRealTimers());
 
 test('an unverified cached name is never rendered, and only server identity replaces it', async () => {
@@ -114,6 +119,53 @@ test('server invalidation is noticed while staying idle on a public page', async
   mount(); expect(await screen.findByText('서버 만료 전 이름')).toBeInTheDocument();
   axios.get.mockRejectedValueOnce({ response: { status: 401 } });
   await act(async () => jest.advanceTimersByTime(30000));
+  expect(screen.getByText('익명')).toBeInTheDocument();
+  expect(sessionStorage.getItem('accessToken')).toBeNull();
+});
+
+test('reload renews with the server, while idle verification never renews the session', async () => {
+  jest.useFakeTimers();
+  const before = token('account-a', Math.floor(Date.now() / 1000) + 300);
+  const renewed = token('account-a');
+  sessionStorage.setItem('accessToken', before);
+  axios.get.mockResolvedValue({ data: { username: 'account-a', name: '활동 중', role: 'USER' } });
+  axios.post.mockResolvedValueOnce({ data: { username: 'account-a', name: '활동 중', role: 'USER', accessToken: renewed } });
+  mount(); await waitFor(() => expect(sessionStorage.getItem('accessToken')).toBe(renewed));
+  expect(axios.post).toHaveBeenCalledTimes(1);
+  expect(axios.post).toHaveBeenCalledWith('/api/auth/renew', null, expect.objectContaining({ headers: { Authorization: `Bearer ${before}` } }));
+  await act(async () => jest.advanceTimersByTime(30000));
+  expect(axios.post).toHaveBeenCalledTimes(1);
+});
+
+test('plain header shows countdown and activity updates it only after successful server renewal', async () => {
+  jest.useFakeTimers();
+  sessionStorage.setItem('accessToken', token('account-a', Math.floor(Date.now() / 1000) + 60));
+  axios.get.mockImplementation(url => Promise.resolve({ data: url === '/api/profile'
+    ? { username: 'account-a', name: '테스트 관리자', role: 'ADMIN' } : { content: [] } }));
+  const { container } = render(<MemoryRouter><AuthProvider><Header /></AuthProvider></MemoryRouter>);
+  expect(await screen.findByText('테스트 관리자님')).toBeInTheDocument();
+  await act(async () => {});
+  expect(container.querySelector('.user-menu-trigger')).toBeNull();
+  expect(screen.getByRole('link', { name: '내 정보', exact: true })).toBeVisible();
+  act(() => jest.advanceTimersByTime(10000));
+  expect(screen.getByRole('timer')).toHaveTextContent('00:50');
+  const newToken = token();
+  axios.post.mockResolvedValueOnce({ data: { username: 'account-a', name: '테스트 관리자', role: 'ADMIN', accessToken: newToken } });
+  fireEvent.click(screen.getByRole('link', { name: '교회소개', exact: true }));
+  expect(screen.getByRole('timer')).toHaveTextContent('00:50');
+  await act(async () => jest.advanceTimersByTime(500));
+  expect(sessionStorage.getItem('accessToken')).toBe(newToken);
+  expect(screen.getByRole('timer')).toHaveTextContent('60:00');
+});
+
+test('a late renewal response cannot resurrect a logged-out session', async () => {
+  let resolve;
+  sessionStorage.setItem('accessToken', token());
+  axios.get.mockResolvedValueOnce({ data: { username: 'account-a', name: '갱신 전', role: 'USER' } });
+  axios.post.mockImplementationOnce(() => new Promise(done => { resolve = done; }));
+  mount(); await screen.findByText('갱신 전');
+  fireEvent.click(screen.getByRole('button', { name: '로그아웃' }));
+  await act(async () => resolve({ data: { username: 'account-a', name: '갱신 전', role: 'USER', accessToken: token() } }));
   expect(screen.getByText('익명')).toBeInTheDocument();
   expect(sessionStorage.getItem('accessToken')).toBeNull();
 });

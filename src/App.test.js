@@ -18,6 +18,9 @@ beforeEach(() => {
   sessionStorage.clear();
   localStorage.clear();
   jest.clearAllMocks();
+  axios.post.mockImplementation((url, body, config) => Promise.resolve({ data: {
+    ...JSON.parse(sessionStorage.getItem('user')), accessToken: config?.headers?.Authorization?.slice(7),
+  } }));
   global.fetch = jest.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve([]) }));
   axios.get.mockImplementation(url => Promise.resolve({ data: url === '/api/profile'
     ? { username: 'test-account', name: '검증된 관리자', role: 'ROLE_ADMIN' }

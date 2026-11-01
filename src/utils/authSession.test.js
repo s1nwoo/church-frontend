@@ -26,6 +26,7 @@ test('requests use only the current session token and never carry it to another 
   });
   expect(authorize({ url: 'https://other.example.invalid/api/profile', headers: { Authorization: 'Bearer session-token' } }).headers.Authorization).toBeUndefined();
   expect(authorize({ url: '/api/auth/login', headers: {} }).headers.Authorization).toBeUndefined();
+  expect(authorize({ url: '/api/auth/renew', headers: {} }).headers.Authorization).toBe('Bearer session-token');
   clearAuthSession();
   expect(authorize({ url: '/api/profile', headers: { Authorization: 'Bearer stale-token' } }).headers.Authorization).toBeUndefined();
 });

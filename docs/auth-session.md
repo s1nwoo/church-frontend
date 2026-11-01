@@ -8,6 +8,8 @@
 - Requests use the current session token only for the configured API origin. Login requests, third-party URLs, and requests after logout do not inherit an old authorization header. API requests do not send session cookies.
 - The server uses stateless JWT authentication and disables the saved-request session cache. An old `JSESSIONID` cannot authenticate a request without its Bearer token.
 - Every `/api/admin/**` request requires the ADMIN role. JSR-250 method security is explicitly enabled so existing `@RolesAllowed("ADMIN")` declarations, including sermon mutations, are enforced.
+- `POST /api/auth/renew` requires a still-valid Bearer token and an enabled account. It issues a new 60-minute token for that authenticated account, ignoring account/role claims in request bodies. Reload renews after identity verification; click, keyboard, input, and scroll activity requests a renewal after a short debounce (at most five seconds during continuous activity). Background polling and focus events only verify, so idle pages still expire. A failed renewal never extends the displayed deadline or restores a logged-out account.
+- The header shows plain account links and a countdown derived from the token's actual expiration. It does not simulate extra time on the client.
 
 ## Verification
 

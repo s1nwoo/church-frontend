@@ -53,7 +53,7 @@ export function installSessionAuthorization(client) {
     const base = new URL(client.defaults.baseURL || window.location.origin, window.location.origin);
     const target = new URL(config.url || '', config.baseURL || base.href);
     const isApi = target.origin === base.origin && target.pathname.startsWith('/api/');
-    const token = isApi && !target.pathname.startsWith('/api/auth/') ? getAccessToken() : null;
+    const token = isApi && (target.pathname === '/api/auth/renew' || !target.pathname.startsWith('/api/auth/')) ? getAccessToken() : null;
     config.withCredentials = false;
     config.headers = config.headers || {};
     delete config.headers.Authorization; delete config.headers.authorization;
