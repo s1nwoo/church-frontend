@@ -3,6 +3,8 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import axios from 'axios';
 import { AuthContext, AuthProvider } from './AuthContext';
 import { AUTH_LOGOUT_EVENT } from '../utils/authSession';
+import { MemoryRouter } from 'react-router-dom';
+import Header from '../components/Header';
 
 jest.mock('axios', () => ({ get: jest.fn(), defaults: { headers: { common: {} } },
   interceptors: { response: { use: jest.fn(), eject: jest.fn() } } }));
@@ -75,6 +77,43 @@ test('token expiry removes the header identity without requiring a protected API
   axios.get.mockResolvedValueOnce({ data: { username: 'account-a', name: '만료 전 이름', role: 'USER' } });
   mount(); await waitFor(() => expect(screen.getByText('만료 전 이름')).toBeInTheDocument());
   act(() => jest.advanceTimersByTime(2100));
+  expect(screen.getByText('익명')).toBeInTheDocument();
+  expect(sessionStorage.getItem('accessToken')).toBeNull();
+});
+
+test('the real homepage header loses the account name at expiry with no click or navigation', async () => {
+  jest.useFakeTimers();
+  sessionStorage.setItem('accessToken', token('account-a', Math.floor(Date.now() / 1000) + 2));
+  axios.get.mockImplementation(url => Promise.resolve({ data: url === '/api/profile'
+    ? { username: 'account-a', name: '우측 상단 이름', role: 'ADMIN' } : { content: [] } }));
+  const { container } = render(<MemoryRouter><AuthProvider><Header /></AuthProvider></MemoryRouter>);
+  expect(await screen.findByText('우측 상단 이름님')).toBeInTheDocument();
+  const requestsBeforeExpiry = axios.get.mock.calls.length;
+  act(() => jest.advanceTimersByTime(2100));
+  expect(container.querySelector('.user-name')).toBeNull();
+  expect(axios.get).toHaveBeenCalledTimes(requestsBeforeExpiry);
+  expect(sessionStorage.getItem('user')).toBeNull();
+});
+
+test('returning from sleep clears expired identity immediately before any profile call', async () => {
+  jest.useFakeTimers();
+  sessionStorage.setItem('accessToken', token('account-a', Math.floor(Date.now() / 1000) + 60));
+  axios.get.mockResolvedValue({ data: { username: 'account-a', name: '복귀 전 이름', role: 'USER' } });
+  mount(); expect(await screen.findByText('복귀 전 이름')).toBeInTheDocument();
+  const calls = axios.get.mock.calls.length;
+  jest.setSystemTime(Date.now() + 61000);
+  act(() => window.dispatchEvent(new Event('focus')));
+  expect(screen.getByText('익명')).toBeInTheDocument();
+  expect(axios.get).toHaveBeenCalledTimes(calls);
+});
+
+test('server invalidation is noticed while staying idle on a public page', async () => {
+  jest.useFakeTimers();
+  sessionStorage.setItem('accessToken', token());
+  axios.get.mockResolvedValueOnce({ data: { username: 'account-a', name: '서버 만료 전 이름', role: 'USER' } });
+  mount(); expect(await screen.findByText('서버 만료 전 이름')).toBeInTheDocument();
+  axios.get.mockRejectedValueOnce({ response: { status: 401 } });
+  await act(async () => jest.advanceTimersByTime(30000));
   expect(screen.getByText('익명')).toBeInTheDocument();
   expect(sessionStorage.getItem('accessToken')).toBeNull();
 });

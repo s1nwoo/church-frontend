@@ -4,6 +4,7 @@
 - Authentication data uses `sessionStorage`. Previously persistent `user`, `accessToken`, `refreshToken`, `token`, and `userRole` entries are removed without migrating credentials. Existing users must log in again once after this release.
 - Game records and saved PPT layout settings remain in local storage.
 - A logout clears account state, tokens, and Axios default authorization headers. Other open tabs receive an anonymous logout notification containing no account data. Token expiry also clears the visible identity.
+- Expiry has a deadline timer and a one-second watchdog. Focus, restored-page, and visibility events check the expiry before contacting the API. Visible public pages revalidate the account with the server every 30 seconds, so server invalidation does not depend on opening a protected screen. Tokens without a usable expiry are rejected.
 - Requests use the current session token only for the configured API origin. Login requests, third-party URLs, and requests after logout do not inherit an old authorization header. API requests do not send session cookies.
 - The server uses stateless JWT authentication and disables the saved-request session cache. An old `JSESSIONID` cannot authenticate a request without its Bearer token.
 - Every `/api/admin/**` request requires the ADMIN role. JSR-250 method security is explicitly enabled so existing `@RolesAllowed("ADMIN")` declarations, including sermon mutations, are enforced.

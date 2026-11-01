@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
-import { AUTH_LOGOUT_EVENT, clearAuthSession, clearDefaultAuthorization, clearLegacyAuth, getAccessToken, storeAuthSession, tokenClaims } from '../utils/authSession';
+import { AUTH_LOGOUT_EVENT, clearAuthSession, clearDefaultAuthorization, clearLegacyAuth, getAccessToken, storeAuthSession, tokenClaims, tokenExpiresAt } from '../utils/authSession';
 
 export const AuthContext = createContext();
 
@@ -19,11 +19,15 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
   const login = useCallback(data => {
+    if (tokenExpiresAt(data?.accessToken) <= Date.now()) {
+      logout();
+      throw new Error('로그인 정보가 만료되었습니다. 다시 로그인해 주세요.');
+    }
     generation.current += 1;
     verifiedToken.current = data.accessToken;
     clearDefaultAuthorization(axios);
     setUser(storeAuthSession(data)); setAuthLoading(false);
-  }, []);
+  }, [logout]);
 
   useEffect(() => {
     clearLegacyAuth(); clearDefaultAuthorization(axios);
@@ -33,13 +37,14 @@ export const AuthProvider = ({ children }) => {
       const requestGeneration = ++generation.current;
       if (!token) { clearAuthSession(); setUser(null); setAuthLoading(false); return; }
       const claims = tokenClaims(token);
-      if (claims?.exp && claims.exp * 1000 <= Date.now()) { logout(); return; }
+      if (tokenExpiresAt(token) <= Date.now()) { logout(); return; }
       if (verifiedToken.current !== token) { setUser(null); setAuthLoading(true); }
       try {
         const { data } = await axios.get('/api/profile', {
           headers: { Authorization: `Bearer ${token}`, 'Cache-Control': 'no-cache' }, withCredentials: false,
         });
         if (!active || requestGeneration !== generation.current || token !== getAccessToken()) return;
+        if (tokenExpiresAt(token) <= Date.now()) { logout(); return; }
         if (!data?.username || !data?.role || (claims?.sub && claims.sub !== data.username)) {
           logout(); return;
         }
@@ -53,7 +58,13 @@ export const AuthProvider = ({ children }) => {
     function onStorage(event) { if (event.key === AUTH_LOGOUT_EVENT) logout(false); }
     function onVisibility() { if (document.visibilityState === 'visible') verify(); }
     window.addEventListener('storage', onStorage);
+    window.addEventListener('focus', verify);
+    window.addEventListener('pageshow', verify);
     document.addEventListener('visibilitychange', onVisibility);
+    // Detect server-side invalidation while the user stays on a public page.
+    const verificationTimer = setInterval(() => {
+      if (document.visibilityState === 'visible' && getAccessToken()) verify();
+    }, 30000);
     const interceptor = axios.interceptors.response.use(response => response, error => {
       const authorization = error.config?.headers?.Authorization || error.config?.headers?.authorization;
       const token = getAccessToken();
@@ -64,16 +75,25 @@ export const AuthProvider = ({ children }) => {
     return () => {
       active = false;
       window.removeEventListener('storage', onStorage);
+      window.removeEventListener('focus', verify);
+      window.removeEventListener('pageshow', verify);
       document.removeEventListener('visibilitychange', onVisibility);
+      clearInterval(verificationTimer);
       axios.interceptors.response.eject(interceptor);
     };
   }, [logout]);
 
   useEffect(() => {
-    const expiry = tokenClaims(getAccessToken())?.exp;
-    if (!user || !expiry) return;
-    const timer = setTimeout(logout, Math.max(0, Math.min(expiry * 1000 - Date.now(), 2147483647)));
-    return () => clearTimeout(timer);
+    if (!user) return;
+    function checkExpiry() {
+      const token = getAccessToken();
+      if (token !== user.accessToken || tokenExpiresAt(token) <= Date.now()) logout();
+    }
+    checkExpiry();
+    const timer = setTimeout(checkExpiry, Math.max(0, Math.min(tokenExpiresAt(user.accessToken) - Date.now(), 2147483647)));
+    // Browsers may delay timers during sleep or while a tab is in the background.
+    const watchdog = setInterval(checkExpiry, 1000);
+    return () => { clearTimeout(timer); clearInterval(watchdog); };
   }, [user, logout]);
 
   return <AuthContext.Provider value={{ user, authLoading, login, logout }}>{children}</AuthContext.Provider>;

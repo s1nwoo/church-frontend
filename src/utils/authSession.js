@@ -20,6 +20,11 @@ export function tokenClaims(token) {
   catch { return null; }
 }
 
+export function tokenExpiresAt(token) {
+  const exp = tokenClaims(token)?.exp;
+  return typeof exp === 'number' && Number.isFinite(exp) && exp > 0 ? exp * 1000 : 0;
+}
+
 export function clearAuthSession() {
   AUTH_KEYS.forEach(key => { try { window.sessionStorage.removeItem(key); } catch {} });
   clearLegacyAuth();
