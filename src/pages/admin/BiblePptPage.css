@@ -141,6 +141,15 @@
 .bp-live-head h2 { margin: 0; }
 .bp-live-state { margin-left: 8px; font-size: 13px; font-weight: 600; color: #7a8c97; }
 .bp-live.is-on .bp-live-state { color: #2f8a5f; }
+/* 성경 송출: 로그인 유지·송출 준비 상태, 로그인이 끊겼을 때 경고와 그 자리 다시 로그인 */
+.bp-session { margin: 0 0 8px; font-size: 12.5px; color: #5d707c; }
+.bp-prep { color: #8a6d1f; font-weight: 600; }
+.bp-prep.is-done { color: #2f8a5f; }
+.bp-session-lost { margin: 0 0 10px; padding: 10px 14px; border-radius: 6px; background: #fff3e0; border: 1px solid #f0b46a; color: #7a4310; font-size: 13.5px; line-height: 1.5; }
+.bp-session-lost p { margin: 0 0 8px; }
+.bp-session-lost .bp-validation { margin: 6px 0 0; min-height: 0; }
+.bp-relogin { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.bp-relogin input { flex: 1 1 140px; min-width: 0; max-width: 220px; padding: 6px 10px; border: 1px solid #d8c3a5; border-radius: 6px; font-size: 14px; }
 .bp-live-body { display: grid; grid-template-columns: minmax(180px, 260px) minmax(0, 1fr); gap: 18px; margin-top: 14px; align-items: start; }
 .bp-live-screen { position: relative; width: 100%; background: #000; border-radius: 4px; overflow: hidden; display: flex; align-items: center; justify-content: center; color: #8b9aa3; font-size: 13px; }
 .bp-live-screen img { width: 100%; height: 100%; object-fit: contain; display: block; }

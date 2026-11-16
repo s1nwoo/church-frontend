@@ -485,10 +485,72 @@ describe('projector (빔 화면)', () => {
     expect(storedSlides()).toEqual([verses[0], { title: '요3:16', body: '16 하나님이 세상을' }, verses[1], { title: '요3:16', body: '16 하나님이 세상을' }]);
   });
 
+  test('once the projector is connected every slide is drawn ahead without being sent', async () => {
+    broadcastPage(); await addLive();
+    fireEvent.click(screen.getByRole('button', { name: '빔 화면 열기' })); connect();
+    const drawn = title => axios.post.mock.calls.some(([url, body, opts]) => url.endsWith('/preview') && body.title === title && opts?.params?.width === 1600);
+    await waitFor(() => expect(drawn('창1:1') && drawn('창1:2')).toBe(true));
+    expect(shown()).toHaveLength(0);
+    await waitFor(() => expect(screen.getByText(/송출 준비 완료 2장/)).toBeInTheDocument());
+  });
+
   test('a blocked popup explains how to allow it', async () => {
     window.open = jest.fn(() => null);
     broadcastPage(); await addLive();
     fireEvent.click(screen.getByRole('button', { name: '빔 화면 열기' }));
     expect(screen.getByRole('alert')).toHaveTextContent('팝업이 차단되었습니다');
+  });
+});
+
+describe('성경 송출 login', () => {
+  const view = (user, login = jest.fn()) =>
+    <MemoryRouter><AuthContext.Provider value={{ user, login }}><BibleBroadcastPage /></AuthContext.Provider></MemoryRouter>;
+  afterEach(() => jest.useRealTimers());
+
+  test('asks for an administrator only on the way in', () => {
+    render(view({ role: 'USER' }));
+    expect(screen.getByRole('heading', { name: '관리자 권한이 필요합니다.' })).toBeInTheDocument();
+    expect(axios.get).not.toHaveBeenCalled();
+  });
+
+  test('stays open when the login runs out, and lets you sign in again right there', async () => {
+    const login = jest.fn();
+    const { rerender } = render(view({ role: 'ADMIN', username: 'admin' }, login)); await addLive();
+    // 로그인이 끊겨도 로그인 화면으로 넘어가지 않고 목록과 송출 패널이 그대로 남는다.
+    rerender(view(null, login));
+    expect(screen.getByText(/로그인이 만료됐습니다/)).toBeInTheDocument();
+    expect(titles()).toEqual(['창1:1', '창1:2']);
+    expect(screen.getByRole('button', { name: '빔 화면 열기' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '목록에 추가' })).toBeDisabled();
+    // 관리자가 아닌 계정은 거절하고, 관리자 계정이면 그 자리에서 다시 로그인한다.
+    const account = { id: 1, username: 'admin', name: '관리자', email: 'a@b.c', accessToken: 'new-token' };
+    axios.post.mockImplementation((url, body) => Promise.resolve({ data: url === '/api/auth/login'
+      ? { ...account, role: body.username === 'admin' ? 'ROLE_ADMIN' : 'ROLE_USER' } : new Blob(['test']) }));
+    fireEvent.change(screen.getByLabelText('아이디'), { target: { value: 'member' } });
+    fireEvent.change(screen.getByLabelText('비밀번호'), { target: { value: 'pw' } });
+    fireEvent.click(screen.getByRole('button', { name: '다시 로그인' }));
+    expect(await screen.findByText('관리자 계정으로 로그인해 주세요.')).toBeInTheDocument();
+    expect(login).not.toHaveBeenCalled();
+    fireEvent.change(screen.getByLabelText('아이디'), { target: { value: 'admin' } });
+    fireEvent.click(screen.getByRole('button', { name: '다시 로그인' }));
+    await waitFor(() => expect(login).toHaveBeenCalledWith(expect.objectContaining({ username: 'admin', role: 'ROLE_ADMIN' })));
+    expect(axios.post).toHaveBeenCalledWith('/api/auth/login', { username: 'admin', password: 'pw' });
+    rerender(view({ role: 'ADMIN', username: 'admin' }, login));
+    expect(screen.queryByText(/로그인이 만료됐습니다/)).not.toBeInTheDocument();
+    expect(screen.getByText(/로그인 유지 중/)).toBeInTheDocument();
+  });
+
+  test('renews the login every 10 minutes while the page is open', async () => {
+    jest.useFakeTimers();
+    const login = jest.fn();
+    axios.post.mockImplementation(url => Promise.resolve({ data: url === '/api/auth/renew'
+      ? { id: 1, username: 'admin', name: '관리자', email: 'a@b.c', role: 'ADMIN', accessToken: 'renewed-token' } : new Blob(['test']) }));
+    render(view({ role: 'ADMIN', username: 'admin' }, login));
+    await act(async () => { jest.advanceTimersByTime(9 * 60 * 1000); });
+    expect(axios.post.mock.calls.filter(([url]) => url === '/api/auth/renew')).toHaveLength(0);
+    await act(async () => { jest.advanceTimersByTime(2 * 60 * 1000); });
+    expect(axios.post).toHaveBeenCalledWith('/api/auth/renew', null, expect.objectContaining({
+      headers: { Authorization: 'Bearer admin-token' } }));
+    expect(login).toHaveBeenCalledWith(expect.objectContaining({ accessToken: 'renewed-token' }));
   });
 });

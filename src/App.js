@@ -88,6 +88,8 @@ function SiteLayout() {
             <Route path="/bible-practice" element={<div className="page-container"><BibleTypingPage /></div>} />
             <Route path="/logo-gallery" element={<div className="page-container"><LogoGalleryPage /></div>} />
             <Route path="/sermons/:id" element={<div className="page-container"><SermonDetailPage /></div>} />
+            {/* 성경 송출은 예배 중 로그인이 끊겨도 화면이 닫히지 않도록 들어올 때만 관리자 확인을 한다(BibleBroadcastPage 안에서). */}
+            <Route path="/admin/bible-broadcast" element={<BibleBroadcastPage />} />
             <Route path="/admin" element={<AdminRoute />}>
               <Route index element={<div className="page-container"><AdminDashboardPage /></div>} />
               <Route path="sermons" element={<div className="page-container"><SermonManagePage /></div>} />
@@ -95,7 +97,6 @@ function SiteLayout() {
               <Route path="members" element={<div className="page-container"><MemberManagePage /></div>} />
               <Route path="card-slider" element={<CardSliderManagePage />} />
               <Route path="bible-ppt" element={<BiblePptPage />} />
-              <Route path="bible-broadcast" element={<BibleBroadcastPage />} />
               <Route path="yut" element={<YutPage />} />
               <Route path="yut/display" element={<YutDisplayPage />} />
             </Route>

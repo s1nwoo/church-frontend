@@ -2,6 +2,8 @@ import React, { useCallback, useContext, useEffect, useRef, useState } from 'rea
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
+import { isAdminUser } from '../../utils/auth';
+import { getAccessToken } from '../../utils/authSession';
 import AdminBackButton from '../../components/AdminBackButton';
 import BibleVersePicker from './BibleVersePicker';
 import SlideSplitDialog from './SlideSplitDialog';
@@ -49,6 +51,17 @@ const WIDGET_KEY = 'banghwa-bible-ppt-widget-v1';
 const THUMB_WIDTH = 400;
 const THUMB_SIZES = [140, 180, 220, 280, 360];   // 크기 슬라이더 1~5단계의 카드 최소 폭(px)
 const THUMB_CONCURRENCY = 3;
+// 성경 송출: 설교 중 오래 손대지 않아도 로그아웃되지 않도록 10분마다 로그인을 연장한다.
+// 마지막으로 조작한 뒤 최대 6시간까지만 연장한다(노트북을 두고 자리를 비운 경우 대비).
+const KEEPALIVE_EVERY = 10 * 60 * 1000;
+const KEEPALIVE_MAX = 6 * 60 * 60 * 1000;
+// 빔 화면이 연결되면 목록의 모든 슬라이드를 미리 그려 노트북에 보관한다(로그아웃·인터넷 끊김에도 넘길 수 있게).
+const PRERENDER_CONCURRENCY = 2;
+const RENDER_CACHE_MAX = 400;
+function formatLeft(ms) {
+  const minutes = Math.max(0, Math.ceil(ms / 60000)), h = Math.floor(minutes / 60), m = minutes % 60;
+  return h ? `${h}시간${m ? ` ${m}분` : ''}` : `${m}분`;
+}
 function loadWidget() {
   try {
     const w = JSON.parse(localStorage.getItem(WIDGET_KEY));
@@ -111,9 +124,14 @@ export default function BiblePptPage() {
  */
 export function BibleSlideStudio({ mode = 'ppt' }) {
   const broadcast = mode === 'broadcast';
-  const { user } = useContext(AuthContext);
-  const role = typeof user?.role === 'string' ? user.role : user?.role?.name || user?.role?.value;
-  const admin = role === 'ADMIN' || role === 'ROLE_ADMIN';
+  const { user, login } = useContext(AuthContext);
+  const adminNow = isAdminUser(user);
+  // 성경 송출은 들어올 때만 관리자 확인을 한다. 송출 중에 로그인이 끊겨도(만료·다른 탭에서 로그아웃) 화면을 닫지 않고
+  // 미리 그려 둔 슬라이드로 계속 넘길 수 있게 하며, 그 자리에서 다시 로그인하도록 안내한다.
+  const wasAdmin = useRef(false);
+  if (adminNow) wasAdmin.current = true;
+  const admin = adminNow || (broadcast && wasAdmin.current);
+  const sessionLost = broadcast && admin && !adminNow;
   const [metadata, setMetadata] = useState(null), [globalStyle, setGlobalStyle] = useState(null);
   const [reference, setReference] = useState(''), [lineLimit, setLineLimit] = useState('');
   const [search, setSearch] = useState(''), [book, setBook] = useState(null), [pickerBook, setPickerBook] = useState(null);
@@ -140,6 +158,12 @@ export function BibleSlideStudio({ mode = 'ppt' }) {
   const [liveId, setLiveId] = useState(null), [black, setBlack] = useState(false), [resend, setResend] = useState(0);
   const [liveImage, setLiveImage] = useState(''), [liveError, setLiveError] = useState('');
   const [autoSend, setAutoSend] = useState(true);
+  // 로그인 유지: keepUntil까지 자동 연장한다(조작할 때마다 6시간 뒤로 미룸). clock은 남은 시간 표시용.
+  const keepUntil = useRef(Date.now() + KEEPALIVE_MAX), lastRenew = useRef(Date.now());
+  const [clock, setClock] = useState(() => Date.now());
+  // 미리 그려 둔 송출 그림(내용별 key)과 다시 시도 신호. 로그인이 끊겼을 때 그 자리에서 다시 로그인하는 칸.
+  const readyKeys = useRef(new Set()), [, setPrepTick] = useState(0), [prepRetry, setPrepRetry] = useState(0);
+  const [relogin, setRelogin] = useState({ username: '', password: '', busy: false, error: '' });
   // 슬라이드 목록 위젯: 지운 목록 되돌리기, 끌어서 순서 이동, 위젯 위치·크기·접힘
   const [undo, setUndo] = useState(null), [dropAt, setDropAt] = useState(null), [dragFrom, setDragFrom] = useState(null);
   const [widget, setWidget] = useState(loadWidget), [tip, setTip] = useState(null), [ghost, setGhost] = useState(null);
@@ -413,9 +437,10 @@ export function BibleSlideStudio({ mode = 'ppt' }) {
     if (!cache.has(key)) {
       const request = axios.post(`${API}/preview`, { title: slide.title, body: slide.body, style: slide.style || globalStyle },
         { headers: headers(), params: { width: PROJECTOR_WIDTH }, responseType: 'blob' }).then(r => r.data);
-      request.catch(() => cache.delete(key));
+      request.then(() => { if (cache.get(key) === request) { readyKeys.current.add(key); setPrepTick(v => v + 1); } },
+        () => { if (cache.get(key) === request) cache.delete(key); });
       cache.set(key, request);
-      if (cache.size > 60) cache.delete(cache.keys().next().value);
+      if (cache.size > RENDER_CACHE_MAX) { const oldest = cache.keys().next().value; cache.delete(oldest); readyKeys.current.delete(oldest); }
     }
     return cache.get(key);
   }, [globalStyle]);
@@ -444,6 +469,84 @@ export function BibleSlideStudio({ mode = 'ppt' }) {
     return () => clearTimeout(timer);
   }, [liveIndex, slides, projectorOpen, renderSlide]);
 
+  // 빔 화면이 연결되어 있으면 목록 전체를 미리 그려 둔다. 송출 중인 슬라이드부터 뒤쪽, 그다음 앞쪽 순서로 동시에 2장씩.
+  // 이미 그린 슬라이드는 다시 그리지 않고, 로그인이 끊긴 동안에는 쉬었다가 다시 로그인하면 이어서 그린다.
+  useEffect(() => {
+    if (!broadcast || !projectorOpen || !globalStyle || sessionLost) return undefined;
+    let cancelled = false;
+    const timer = setTimeout(() => {
+      const { slides: list, liveId: onAir } = latest.current;
+      const liveAt = list.findIndex(s => s.id === onAir), start = liveAt >= 0 ? liveAt : 0;
+      const queue = [...list.slice(start), ...list.slice(0, start).reverse()]
+        .filter(s => !readyKeys.current.has(renderKey(s, globalStyle)));
+      const worker = async () => {
+        while (!cancelled && queue.length) {
+          try { await renderSlide(queue.shift()); } catch { /* 실패한 장은 다음 기회에 다시 그린다. */ }
+        }
+      };
+      for (let i = 0; i < PRERENDER_CONCURRENCY; i += 1) worker();
+    }, 800);
+    return () => { cancelled = true; clearTimeout(timer); };
+  }, [broadcast, projectorOpen, slides, globalStyle, sessionLost, renderSlide, prepRetry]);
+  // 인터넷이 다시 연결되면 못 그린 슬라이드를 이어서 그린다.
+  useEffect(() => {
+    if (!broadcast) return undefined;
+    const online = () => setPrepRetry(v => v + 1);
+    window.addEventListener('online', online);
+    return () => window.removeEventListener('online', online);
+  }, [broadcast]);
+
+  // 로그인 유지(성경 송출): 이 화면이나 빔 화면 창에서 조작할 때마다 자동 연장 기한을 6시간 뒤로 미루고,
+  // 1분마다 확인해 마지막 연장 후 10분이 지났으면 로그인을 연장한다. 실패하면 다음 확인 때 다시 시도한다.
+  useEffect(() => {
+    if (!broadcast) return undefined;
+    const touch = () => { keepUntil.current = Date.now() + KEEPALIVE_MAX; };
+    document.addEventListener('pointerdown', touch, true); document.addEventListener('keydown', touch, true);
+    return () => { document.removeEventListener('pointerdown', touch, true); document.removeEventListener('keydown', touch, true); };
+  }, [broadcast]);
+  const username = user?.username;
+  useEffect(() => {
+    if (!broadcast || !adminNow) return undefined;
+    lastRenew.current = Date.now();
+    let busy = false;
+    const tick = async () => {
+      const now = Date.now(), token = getAccessToken();
+      setClock(now);
+      if (busy || !token || now > keepUntil.current || now - lastRenew.current < KEEPALIVE_EVERY) return;
+      busy = true;
+      try {
+        const { data } = await axios.post('/api/auth/renew', null, { headers: { Authorization: `Bearer ${token}` }, timeout: 10000 });
+        // 그사이 다른 계정으로 바뀌었거나 이미 새 토큰을 받았으면 덮어쓰지 않는다.
+        if (getAccessToken() === token && data?.accessToken && data.username === username) { login?.(data); lastRenew.current = Date.now(); }
+      } catch { /* 다음 확인(1분 뒤) 때 다시 시도한다. */ }
+      finally { busy = false; }
+    };
+    const timer = setInterval(tick, 60 * 1000);
+    return () => clearInterval(timer);
+  }, [broadcast, adminNow, username, login]);
+  // 다시 로그인하면 실패했던 송출·썸네일·미리 그리기를 이어서 한다.
+  const firstSession = useRef(true);
+  useEffect(() => {
+    if (firstSession.current) { firstSession.current = false; return; }
+    if (sessionLost) return;
+    setLiveError(''); setResend(v => v + 1); setPrepRetry(v => v + 1);
+    thumbFailed.current.clear(); setThumbTick(v => v + 1);
+    keepUntil.current = Date.now() + KEEPALIVE_MAX; setClock(Date.now());
+  }, [sessionLost]);
+  async function submitRelogin(event) {
+    event.preventDefault();
+    if (relogin.busy) return;
+    setRelogin(r => ({ ...r, busy: true, error: '' }));
+    try {
+      const { data } = await axios.post('/api/auth/login', { username: relogin.username, password: relogin.password });
+      if (!isAdminUser(data)) { setRelogin(r => ({ ...r, busy: false, error: '관리자 계정으로 로그인해 주세요.' })); return; }
+      login(data);
+      setRelogin({ username: '', password: '', busy: false, error: '' });
+    } catch {
+      setRelogin(r => ({ ...r, busy: false, error: '아이디 또는 비밀번호를 확인해 주세요.' }));
+    }
+  }
+
   useEffect(() => { if (projectorOpen) channel.current?.postMessage({ type: 'black', on: black }); }, [black, projectorOpen, resend]);
   // 넘길 때마다(또는 구절을 추가하면) 해당 슬라이드가 목록 가운데에 보이도록 목록 상자 안에서만 스크롤한다(페이지는 움직이지 않음).
   const scrollIntoList = useCallback(id => {
@@ -465,6 +568,7 @@ export function BibleSlideStudio({ mode = 'ppt' }) {
     goLive(liveIndex < 0 ? Math.min(active, slides.length - 1) : Math.max(0, Math.min(slides.length - 1, liveIndex + delta)));
   }
   keyAction.current = action => {
+    keepUntil.current = Date.now() + KEEPALIVE_MAX;   // 빔 화면 창에서 누른 키도 조작으로 본다.
     if (action === 'next') step(1); else if (action === 'prev') step(-1); else if (action === 'black') setBlack(v => !v);
   };
   // 빔 화면이 켜져 있을 때 프레젠터(클리커)·키보드로 넘긴다. 글자를 입력하는 중에는 동작하지 않는다.
@@ -672,6 +776,9 @@ export function BibleSlideStudio({ mode = 'ppt' }) {
   const widgetStyle = { ...(widget.x != null ? { left: widget.x, top: widget.y, right: 'auto' } : {}),
     ...(!widget.collapsed && widget.w && widget.h ? { width: widget.w, height: widget.h } : {}) };
   const pageTitle = broadcast ? '성경 송출' : '성경 PPT 만들기';
+  // 송출 준비: 목록 중 빔 화면용 그림을 미리 그려 둔 장 수
+  const prepTotal = broadcast && projectorOpen && globalStyle ? slides.length : 0;
+  const prepared = prepTotal ? slides.filter(s => readyKeys.current.has(renderKey(s, globalStyle))).length : 0;
   if (!admin) return <main className="bible-ppt page-container"><AdminBackButton /><h1>{pageTitle}</h1>
     <p>관리자 로그인 후 이용할 수 있습니다.</p><Link to="/login">로그인하기</Link></main>;
   // 성경 송출에서는 알림·오류를 화면 아래 송출 패널 안에 보여 준다(페이지 위쪽은 슬라이드 목록이 차지한다).
@@ -692,7 +799,7 @@ export function BibleSlideStudio({ mode = 'ppt' }) {
           <input id="bp-line-limit" className="bp-limit-input" type="number" min="0" max="12" value={lineLimit} disabled={saving}
             onChange={e => { setLineLimit(e.target.value); setValidation(''); }} placeholder="없음" />
         </>}
-        <button type="submit" className="bp-primary" disabled={!reference.trim() || saving || adding}>{adding ? '추가 중…' : '목록에 추가'}</button>
+        <button type="submit" className="bp-primary" disabled={!reference.trim() || saving || adding || sessionLost}>{adding ? '추가 중…' : '목록에 추가'}</button>
       </div>
       {broadcast && projectorOpen && <label className="bp-check"><input type="checkbox" checked={autoSend} onChange={e => setAutoSend(e.target.checked)} />추가하면 바로 송출</label>}
     </form>
@@ -720,6 +827,24 @@ export function BibleSlideStudio({ mode = 'ppt' }) {
               : <button className="bp-primary" onClick={openProjector}>빔 화면 열기</button>}
           </div>
         </div>
+        {sessionLost ? <div className="bp-session-lost" role="alert">
+          <p><strong>로그인이 만료됐습니다.</strong> {prepTotal ? `미리 그려 둔 슬라이드(${prepared}/${prepTotal}장)는 계속 넘길 수 있습니다.` : '빔 화면에 띄운 화면은 그대로 유지됩니다.'}
+            {' '}구절 추가·새 슬라이드 송출은 다시 로그인해야 합니다.</p>
+          <form className="bp-relogin" onSubmit={submitRelogin}>
+            <input aria-label="아이디" autoComplete="username" placeholder="아이디" value={relogin.username}
+              onChange={e => setRelogin(r => ({ ...r, username: e.target.value, error: '' }))} />
+            <input aria-label="비밀번호" type="password" autoComplete="current-password" placeholder="비밀번호" value={relogin.password}
+              onChange={e => setRelogin(r => ({ ...r, password: e.target.value, error: '' }))} />
+            <button type="submit" className="bp-primary" disabled={relogin.busy || !relogin.username.trim() || !relogin.password}>
+              {relogin.busy ? '로그인 중…' : '다시 로그인'}</button>
+          </form>
+          {relogin.error && <p className="bp-validation is-invalid">{relogin.error}</p>}
+        </div> : <p className="bp-session">
+          {keepUntil.current > clock ? `로그인 유지 중 · 앞으로 ${formatLeft(keepUntil.current - clock)} 자동 연장 (화면을 조작하면 다시 6시간)`
+            : '자동 연장 시간이 지났습니다. 화면을 한 번 누르면 다시 6시간 동안 로그인을 유지합니다.'}
+          {prepTotal > 0 && <span className={`bp-prep ${prepared >= prepTotal ? 'is-done' : ''}`}>
+            {prepared >= prepTotal ? ` · 송출 준비 완료 ${prepTotal}장 (인터넷이 끊겨도 넘길 수 있음)` : ` · 송출 준비 ${prepared}/${prepTotal}장`}</span>}
+        </p>}
         {projectorError && <p role="alert" className="bp-validation is-invalid">{projectorError}</p>}
         <div className="bp-live-body">
           <div className="bp-live-screen" style={{ aspectRatio: `${metadata.width}/${metadata.height}` }}>
