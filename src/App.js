@@ -33,6 +33,9 @@ import CardSliderManagePage from './pages/admin/CardSliderManagePage';
 import BiblePptPage from './pages/admin/BiblePptPage';
 import YutPage from './pages/admin/YutPage';
 import YutDisplayPage from './pages/admin/YutDisplayPage';
+import BibleBroadcastPage from './pages/admin/BibleBroadcastPage';
+import BibleProjectorPage from './pages/BibleProjectorPage';
+import { PROJECTOR_PATH } from './pages/admin/bibleProjector';
 
 // 전체목록 페이지 컴포넌트
 import AllSermonsPage from './pages/AllSermonsPage';
@@ -49,6 +52,18 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <ScrollToTop />
+        <Routes>
+          {/* 빔 프로젝터 창: 머리말·꼬리말 없이 슬라이드만 표시 */}
+          <Route path={PROJECTOR_PATH} element={<BibleProjectorPage />} />
+          <Route path="*" element={<SiteLayout />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  );
+}
+
+function SiteLayout() {
+  return (
         <div className="app-wrapper">
           <SiteChrome><Header /></SiteChrome>
 
@@ -80,6 +95,7 @@ function App() {
               <Route path="members" element={<div className="page-container"><MemberManagePage /></div>} />
               <Route path="card-slider" element={<CardSliderManagePage />} />
               <Route path="bible-ppt" element={<BiblePptPage />} />
+              <Route path="bible-broadcast" element={<BibleBroadcastPage />} />
               <Route path="yut" element={<YutPage />} />
               <Route path="yut/display" element={<YutDisplayPage />} />
             </Route>
@@ -99,8 +115,6 @@ function App() {
 
           <SiteChrome><Footer /></SiteChrome>
         </div>
-      </BrowserRouter>
-    </AuthProvider>
   );
 }
 

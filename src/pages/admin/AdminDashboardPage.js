@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AdminDashboardPage.css';
-import { FaUsers, FaChalkboardTeacher, FaNewspaper, FaImages, FaBible } from 'react-icons/fa';
+import { FaUsers, FaChalkboardTeacher, FaNewspaper, FaImages, FaBible, FaTv } from 'react-icons/fa';
 
 const AdminDashboardPage = () => {
   const navigate = useNavigate();
@@ -15,8 +15,14 @@ const AdminDashboardPage = () => {
       path: '/admin/yut',
     },
     {
+      title: '성경 송출',
+      description: '예배 중 노트북에서 빔 프로젝터로 성경 구절을 띄우고 넘깁니다.',
+      icon: <FaTv size={32} />,
+      path: '/admin/bible-broadcast',
+    },
+    {
       title: '성경 PPT 만들기',
-      description: '성경 구절을 입력하고 미리보기와 편집 후 PPT를 다운로드합니다.',
+      description: '성경 구절을 입력하고 미리보기와 편집 후 PPT를 다운로드합니다. 송출과 같은 슬라이드 목록을 씁니다.',
       icon: <FaBible size={32} />,
       path: '/admin/bible-ppt',
     },
