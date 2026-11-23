@@ -3,8 +3,8 @@ import './MainIntroSection.css';
 import CardSlider from './CardSlider';
 
 // hero 일러스트 import
-import heroImage from './images/hero-illustration7.png';       // 데스크톱용 (가로형)
-import heroImageMobile from './images/hero-illustration8.png'; // 모바일용 (세로형)
+import heroImage from './images/hero-illustration9.png';       // 데스크톱용 (가로형, 원본 7460px → 3730px)
+import heroImageMobile from './images/hero-illustration9-mobile.png'; // 모바일용 (세로형)
 
 const MainIntroSection = () => (
   <section className="intro-section">
