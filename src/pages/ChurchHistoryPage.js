@@ -5,6 +5,15 @@ import bannerImg from '../components/images/top_banner_img2.png'; /* 배너 우�
 import './ChurchHistoryPage.css';
 import './ChurchIntroPage.css';
 
+/* 연혁 데이터 — 항목 추가 시 여기에만 추가하면 됩니다 */
+const HISTORY = [
+  { year: 1987, date: '3월 2일', lines: ['서석우 목사 군목 제대 후', '기독교한국침례회', '방화침례교회 개척'] },
+  { year: 2017, date: '9월',     lines: ['임주빈 강도사 부임 및', '서석우 목사 안식년', '필리핀 선교 파송'] },
+  { year: 2018, date: '9월 9일', lines: ['임주빈 목사 안수', '(방화침례교회)'] },
+  { year: 2021, date: '1월 3일', lines: ['임주빈 담임목사 취임 및', '서석우 목사 은퇴'] },
+  { year: 2022, date: '3월',     lines: ['김성휘 목사 부임 및', '임주빈 목사와', '공동담임목사 사역 시작'] },
+];
+
 export default function ChurchHistoryPage() {
   return (
     <>
@@ -55,63 +64,26 @@ export default function ChurchHistoryPage() {
       {/* ─── 콘텐츠 영역 ─── */}
       <div className="intro-container page-container">
 
-        {/* ─── 교회 연혁 타임라인 ─── */}
-        <div className="history-timeline">
-
-          {/* 1987년 */}
-          <div className="timeline-item">
-            <div className="timeline-year">1987</div>
-            <div className="timeline-content">
-              <p>3월 2일</p>
-              <p>서석우 목사 군목 제대 후</p>
-              <p>기독교한국침례회</p>
-              <p>방화침례교회 개척</p>
-            </div>
-          </div>
-
-          {/* 2017년 */}
-          <div className="timeline-item">
-            <div className="timeline-year">2017</div>
-            <div className="timeline-content">
-              <p>9월</p>
-              <p>임주빈 강도사 부임 및</p>
-              <p>서석우 목사 안식년</p>
-              <p>필리핀 선교 파송</p>
-            </div>
-          </div>
-
-          {/* 2018년 */}
-          <div className="timeline-item">
-            <div className="timeline-year">2018</div>
-            <div className="timeline-content">
-              <p>9월 9일</p>
-              <p>임주빈 목사 안수</p>
-              <p>(방화침례교회)</p>
-            </div>
-          </div>
-
-          {/* 2021년 */}
-          <div className="timeline-item">
-            <div className="timeline-year">2021</div>
-            <div className="timeline-content">
-              <p>1월 3일</p>
-              <p>임주빈 담임목사 취임 및</p>
-              <p>서석우 목사 은퇴</p>
-            </div>
-          </div>
-
-          {/* 2022년 */}
-          <div className="timeline-item">
-            <div className="timeline-year">2022</div>
-            <div className="timeline-content">
-              <p>3월</p>
-              <p>김성휘 목사 부임 및</p>
-              <p>임주빈 목사와</p>
-              <p>공동담임목사 사역 시작</p>
-            </div>
-          </div>
-
-        </div>
+        {/* ─── 교회 연혁 타임라인 (가로: 선 + 원 마커 + 점선, 모바일: 세로) ─── */}
+        <ol className="history-track" aria-label="방화침례교회 연혁">
+          {HISTORY.map(({ year, date, lines }, i) => (
+            <li className="history-item" key={year} style={{ '--i': i }}>
+              <span className="history-marker" aria-hidden="true" />
+              <div className="history-body">
+                <p className="history-year">{year}<span>년</span></p>
+                <p className="history-date">{date}</p>
+                <p className="history-desc">
+                  {lines.map((line, j) => (
+                    <React.Fragment key={j}>{line}{j < lines.length - 1 && <br />}</React.Fragment>
+                  ))}
+                </p>
+              </div>
+            </li>
+          ))}
+          <li className="history-arrow" aria-hidden="true">
+            <svg viewBox="0 0 52 24"><path d="M4 3 L13 12 L4 21 M18 3 L27 12 L18 21 M32 3 L41 12 L32 21" /></svg>
+          </li>
+        </ol>
       </div>
     </>
   );

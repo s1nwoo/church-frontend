@@ -1,107 +1,204 @@
 /* src/pages/ChurchHistoryPage.css */
+/* (상단 배너/탭 메뉴는 ChurchIntroPage.css 공유) */
 
-.history-container {
-  max-width: 1200px;
-  padding: 2rem;
-}
+/* ================================================================
+   교회 연혁 타임라인
+   PC : 가로 선 + 원 마커 + 아래로 점선, 큰 연도 / 날짜 / 설명
+   모바일 : 세로 선 + 원 마커
+   ================================================================ */
+.history-track {
+  --c-main: #7D4CFC;       /* 선·연도 */
+  --c-soft: #C9B6FE;       /* 점선 */
+  --marker: 20px;          /* 원 지름 */
+  --draw: 1.2s;            /* 선이 끝까지 그려지는 시간 */
+  --step: calc(var(--draw) / 5.15); /* 선이 다음 마커에 닿기까지 걸리는 시간 (5칸 + 화살표 여백) */
 
-/* (상단 제목/소메뉴는 ChurchIntroPage.css에서 가져옵니다) */
-
-.history-description p {
-  margin: 0.5rem 0;
-  line-height: 1.6;
-}
-
-/* ─── 타임라인 컨테이너 ─── */
-.history-timeline {
   position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin: 3rem 0;
-  padding-top: 2rem; /* 연도들이 올라갈 공간 */
+  display: grid;
+  grid-template-columns: repeat(5, 1fr) 56px; /* 연혁 5칸 + 화살표 칸 */
+  list-style: none;
+  margin: 3rem 0 2rem;
+  padding: 0;
 }
 
-/* ─── 중앙 가로 선 ─── */
-.history-timeline::before {
+/* 가로 선 (마커 중심 높이) */
+.history-track::before {
   content: '';
   position: absolute;
-  top: 2rem;     /* dot와 동일한 높이 */
+  top: calc(var(--marker) / 2 - 1px);
   left: 0;
-  right: 0;
+  right: 28px;
   height: 2px;
-  background: #ccc;
-  z-index: 1;
+  background: var(--c-main);
+  transform-origin: left center;
+  animation: history-line var(--draw) linear both;
 }
 
-/* ─── 각 연혁 아이템 ─── */
-.timeline-item {
+.history-item {
   position: relative;
-  z-index: 2;
-  text-align: center;
-  padding: 0 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  padding-top: calc(var(--marker) + 22px);
+  min-width: 0;
 }
 
-/* ─── 각 아이템의 점 (dot) ─── */
-.timeline-item::before {
+/* 원 마커 */
+.history-marker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--marker);
+  height: var(--marker);
+  box-sizing: border-box;
+  border: 3px solid var(--c-main);
+  border-radius: 50%;
+  background: #fff;
+  z-index: 1;
+  animation: history-pop 0.4s ease-out both;
+  animation-delay: calc(var(--i, 0) * var(--step));
+}
+
+/* 마커 아래로 내려오는 점선 */
+.history-item::before {
   content: '';
   position: absolute;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 8px;
-  height: 8px;
-  background: #7D4CFC;
-  border-radius: 50%;
+  top: var(--marker);
+  bottom: 0;
+  left: calc(var(--marker) / 2 - 1px);
+  border-left: 2px dotted var(--c-soft);
+  transform-origin: top center;
+  animation: history-drop 0.45s ease-out both;
+  animation-delay: calc(var(--i, 0) * var(--step) + 0.1s);
 }
 
-/* ─── 연도 텍스트 ─── */
-.timeline-year {
-  font-size: 1.125rem;
+.history-body {
+  padding-left: calc(var(--marker) + 4px);
+  padding-right: 12px;
+  animation: history-text 0.5s ease-out both;
+  animation-delay: calc(var(--i, 0) * var(--step) + 0.15s);
+}
+
+.history-year {
+  margin: 0 0 12px;
+  font-family: 'A2z', 'Pretendard', sans-serif;
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--c-main);
+}
+.history-year span {
+  margin-left: 2px;
+  font-size: 20px;
   font-weight: 700;
 }
 
-/* ─── 연혁 내용 ─── */
-.timeline-content {
-  max-width: 200px;
-}
-.timeline-content p {
-  margin: 0.25rem 0;
-  font-size: 18px;
-  color: #555;
-  line-height: 1.4;
+.history-date {
+  display: inline-block;
+  margin: 0 0 8px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #F1EBFF;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--c-main);
 }
 
-/* ─── 반응형 (≤768px) ─── */
+.history-desc {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.65;
+  color: #444;
+  word-break: keep-all;
+}
+
+/* 선 끝 >>> 화살표 */
+.history-arrow {
+  position: relative;
+}
+.history-arrow svg {
+  position: absolute;
+  top: calc(var(--marker) / 2 - 12px);
+  right: 0;
+  width: 52px;
+  height: 24px;
+  fill: none;
+  stroke: var(--c-main);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  animation: history-pop 0.4s ease-out both;
+  animation-delay: calc(var(--draw) - 0.1s);
+}
+
+@keyframes history-line {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+@keyframes history-drop {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+@keyframes history-text {
+  from { opacity: 0; transform: translateX(-10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes history-pop {
+  from { transform: scale(0.3); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+/* 좁은 PC/태블릿: 연도 크기 축소 */
+@media (max-width: 1100px) {
+  .history-year { font-size: 34px; }
+  .history-year span { font-size: 16px; }
+  .history-desc { font-size: 14px; }
+}
+
+/* ─── 모바일 (≤768px): 세로 타임라인 ─── */
 @media screen and (max-width: 768px) {
-  .history-timeline {
-    flex-direction: column;
-    align-items: flex-start;
-    padding-top: 0;
+  .history-track {
+    display: block;
+    margin: 1.5rem 0;
   }
-  .history-timeline::before {
-    top: 0;
-    left: 1rem;
+  /* 세로 선 */
+  .history-track::before {
+    top: 4px;
+    bottom: 40px;
+    left: calc(var(--marker) / 2 - 1px);
+    right: auto;
     width: 2px;
-    height: 100%;
+    height: auto;
+    transform-origin: top center;
+    animation-name: history-line-v;
+    animation-timing-function: linear;
   }
-  .timeline-item {
-    width: auto;
-    margin-bottom: 2rem;
-    text-align: left;
-    padding-left: 2rem;
+  .history-item {
+    padding: 0 0 28px;
   }
-  /* 연도 텍스트도 왼쪽 정렬 (기본 text-align:center 덮어쓰기) */
-  .timeline-year {
-    text-align: left;
-    width: 100%;
+  .history-item::before { display: none; } /* 세로 선이 대신함 */
+  .history-body { padding-left: calc(var(--marker) + 16px); }
+  .history-year { font-size: 32px; margin-bottom: 10px; }
+  .history-year span { font-size: 16px; }
+  .history-desc { font-size: 15px; }
+
+  /* 화살표는 아래 방향으로 */
+  .history-arrow { height: 56px; }
+  .history-arrow svg {
+    top: 14px;
+    left: calc(var(--marker) / 2 - 26px); /* 52px 폭 svg의 중심을 세로선에 맞춤 */
+    right: auto;
+    transform: rotate(90deg);              /* >>> 를 아래 방향으로 */
+    animation: none;
   }
-  .timeline-item::before {
-    /* 연도 텍스트(1.125rem) 수직 중앙에 dot 위치 */
-    top: 0.7rem;
-    left: 1rem;
-    transform: translate(-50%, 0);
-  }
+}
+@keyframes history-line-v {
+  from { transform: scaleY(0); }
+  to   { transform: scaleY(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .history-track::before,
+  .history-marker,
+  .history-arrow svg,
+  .history-item::before,
+  .history-body { animation: none; }
 }
