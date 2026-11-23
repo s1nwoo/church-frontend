@@ -1,0 +1,136 @@
+/* src/components/VisionCards.css — 교회소개 "다섯 가지 소망" 카드 섹션 */
+
+.vision-section {
+  background: #f5f4f8;            /* 참고 레이아웃의 연회색 띠 */
+  border-radius: 20px;
+  padding: 48px 32px;
+  margin: 8px 0 40px;
+}
+
+/* PC: 6열 트랙에 카드 1장 = 2칸 → 윗줄 3장, 아랫줄 2장 가운데 정렬 */
+.vision-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+.vision-card { grid-column: span 2; }
+.vision-card:nth-child(4) { grid-column: 2 / span 2; }
+.vision-card:nth-child(5) { grid-column: 4 / span 2; }
+
+/* ── 카드 ── */
+.vision-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(60, 40, 120, 0.06);
+  padding: 32px 26px 0;
+  text-align: center;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+/* 등장 애니메이션: JS가 준비된 경우(.reveal-ready)에만 숨김 → JS 실패 시에도 내용은 항상 보임 */
+.vision-grid.reveal-ready .vision-card:not(.is-visible) {
+  opacity: 0;
+  translate: 0 24px;
+}
+.vision-grid.reveal-ready .vision-card.is-visible {
+  opacity: 1;
+  translate: 0 0;
+  transition: opacity 0.6s ease var(--delay, 0ms), translate 0.6s ease var(--delay, 0ms),
+              transform 0.25s ease, box-shadow 0.25s ease;
+}
+.vision-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(125, 76, 252, 0.14);
+}
+
+.vision-card-text { flex: 1; }
+
+/* 영문 타이틀 + 노란 형광펜 밑줄 (기존 이미지 디자인 계승) */
+.vision-en {
+  margin: 0 0 14px;
+  font-family: 'A2z', 'Pretendard', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: #7D4CFC;
+}
+.vision-en span {
+  background: linear-gradient(transparent 58%, #FFE27A 58%);
+  padding: 0 4px;
+}
+
+.vision-ko {
+  margin: 0 0 12px;
+  font-size: 16px;
+  color: #333;
+  word-break: keep-all;
+}
+.vision-ko strong {
+  color: #7D4CFC;
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.vision-verse {
+  margin: 0 0 10px;
+  font-size: 14.5px;
+  font-weight: 700;
+  line-height: 1.6;
+  color: #222;
+  word-break: keep-all;
+}
+.vision-ref {
+  font-weight: 500;
+  color: #7D4CFC;
+  white-space: nowrap;
+}
+
+.vision-body {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.75;
+  color: #666;
+  word-break: keep-all;
+}
+
+/* 하단 일러스트 — 카드 높이가 달라도 바닥에 붙도록 */
+.vision-card-illust {
+  margin: 20px -26px 0;            /* 카드 좌우 패딩을 무시하고 바닥까지 꽉 차게 (참고 레이아웃) */
+  height: 200px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.vision-card-illust img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+}
+
+/* ── 태블릿: 2열 (마지막 카드는 가운데) ── */
+@media (max-width: 1023px) {
+  .vision-grid { grid-template-columns: repeat(2, 1fr); }
+  .vision-card,
+  .vision-card:nth-child(4) { grid-column: auto; }
+  .vision-card:nth-child(5) { grid-column: 1 / -1; justify-self: center; width: calc(50% - 10px); }
+}
+
+/* ── 모바일: 1열 ── */
+@media (max-width: 768px) {
+  .vision-section { padding: 28px 14px; border-radius: 14px; }
+  .vision-grid { grid-template-columns: 1fr; gap: 14px; }
+  .vision-card:nth-child(5) { grid-column: auto; width: auto; }
+  .vision-card { padding: 26px 20px 0; }
+  .vision-en { font-size: 20px; }
+  .vision-card-illust { height: 180px; margin: 18px -20px 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vision-grid.reveal-ready .vision-card { opacity: 1; translate: none; transition: none; }
+}

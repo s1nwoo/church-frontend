@@ -3,12 +3,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import bannerImg from '../components/images/top_banner_img.png'; /* 배너 우측 일러스트 이미지 */
-import churchIllust from '../components/images/intro.png';
-import churchIllustApp1 from '../components/images/intro_app1.png'; /* 모바일용 이미지 1 */
-import churchIllustApp2 from '../components/images/intro_app2.png'; /* 모바일용 이미지 2 */
-import churchIllustApp3 from '../components/images/intro_app3.png'; /* 모바일용 이미지 3 */
-import churchIllustApp4 from '../components/images/intro_app4.png'; /* 모바일용 이미지 4 */
-import churchIllustApp5 from '../components/images/intro_app5.png'; /* 모바일용 이미지 5 */
+import VisionCards from '../components/VisionCards'; /* 다섯 가지 소망 카드 (기존 intro.png / intro_app1~5.png 대체) */
 import pastorImage from '../components/images/intro2.png';
 import './ChurchIntroPage.css';
 
@@ -75,23 +70,8 @@ function ChurchIntroPage() {
           <h2 className="section-subtitle">방화침례교회는 다섯 가지 소망을 품고 사역합니다.</h2>
         </section>
 
-        {/* ─── 다섯 가지 비전 섹션 (큰 이미지 1장) ─── */}
-        <section className="vision-hero-section">
-          <div className="vision-full-image">
-            {/* 데스크톱(769px 이상): intro.png 1장 */}
-            <picture className="vision-desktop-img">
-              <img src={churchIllust} alt="방화침례교회 다섯 가지 소망" />
-            </picture>
-            {/* 모바일(768px 이하): intro_app1~5 세로 나열 */}
-            <div className="vision-mobile-imgs">
-              <img src={churchIllustApp1} alt="방화침례교회 다섯 가지 소망 1" />
-              <img src={churchIllustApp2} alt="방화침례교회 다섯 가지 소망 2" />
-              <img src={churchIllustApp3} alt="방화침례교회 다섯 가지 소망 3" />
-              <img src={churchIllustApp4} alt="방화침례교회 다섯 가지 소망 4" />
-              <img src={churchIllustApp5} alt="방화침례교회 다섯 가지 소망 5" />
-            </div>
-          </div>
-        </section>
+        {/* ─── 다섯 가지 소망 섹션 (HTML/CSS 카드 — PC·모바일 공용) ─── */}
+        <VisionCards />
 
         {/* ─── 공동담임목사 소개 섹션 (좌 텍스트 / 우 이미지) ─── */}
         <section className="pastor-section">

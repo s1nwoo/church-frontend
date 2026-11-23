@@ -19,7 +19,7 @@ const Footer = () => {
     if (lastVisitDate !== today) {
       // 오늘 아직 방문 안 한 경우 → 카운트 증가 API 호출
       fetch(`${API_BASE}/api/visitor/count`, { method: 'POST' })
-        .then(res => res.json())
+        .then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
         .then(data => {
           setTodayCount(data.today);
           setTotalCount(data.total);
@@ -39,7 +39,7 @@ const Footer = () => {
   // 카운트 증가 없이 현재 수치만 조회
   const fetchCountOnly = (API_BASE) => {
     fetch(`${API_BASE}/api/visitor/count`)
-      .then(res => res.json())
+      .then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
       .then(data => {
         setTodayCount(data.today);
         setTotalCount(data.total);
@@ -63,13 +63,13 @@ const Footer = () => {
         <div className="footer-visitor">
           <span className="visitor-item">
             오늘 방문자
-            <strong>{todayCount !== null ? todayCount.toLocaleString() : '-'}</strong>
+            <strong>{typeof todayCount === 'number' ? todayCount.toLocaleString() : '-'}</strong>
             명
           </span>
           <span className="visitor-divider">|</span>
           <span className="visitor-item">
             전체 방문자
-            <strong>{totalCount !== null ? totalCount.toLocaleString() : '-'}</strong>
+            <strong>{typeof totalCount === 'number' ? totalCount.toLocaleString() : '-'}</strong>
             명
           </span>
         </div>
